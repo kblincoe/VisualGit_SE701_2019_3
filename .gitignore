@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/angular,webstorm,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=angular,webstorm,visualstudiocode
+# Created by https://www.gitignore.io/api/angular,webstorm,visualstudiocode,node
+# Edit at https://www.gitignore.io/?templates=angular,webstorm,visualstudiocode,node
 
 ### Angular ###
 ## Angular ##
@@ -206,9 +206,3 @@ typings/
 .dynamodb/
 
 # End of https://www.gitignore.io/api/angular,webstorm,visualstudiocode,node
-
-
-
-# Additional ignored files
-node_modules/
-typings/
