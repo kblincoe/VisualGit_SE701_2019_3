@@ -100,7 +100,7 @@ function addAndCommit() {
             displayModal(err.message);
         }
         else {
-            updateModalText("Oops, error occours! If u haven't login, please login and try again.");
+            updateModalText("You have not logged in. Please login to commit a change");
         }
     });
 }
