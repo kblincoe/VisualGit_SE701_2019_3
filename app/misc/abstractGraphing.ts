@@ -18,7 +18,7 @@ function populateAbstract() {
 
   // Plot the graph
   for (let i = 0; i < commitHistory.length; i++) {
-    console.log(i + " / " + commitHistory.length);
+    console.log("??????????????" + i + " / " + commitHistory.length);
     let parents: string[] = commitHistory[i].parents();
     let nodeColumn;
     for (let j = 0; j < parents.length; j++) {

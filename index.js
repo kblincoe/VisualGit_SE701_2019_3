@@ -56,7 +56,7 @@ function setMyMenu() {
 			click () {
 				var focusedWindow = BrowserWindow.getFocusedWindow();
 				focusedWindow.webContents.send('change-to-white-style');
-				console.log('white');
+				console.log('The theme has been changed to white');
 			}
 		},
 		{
@@ -64,7 +64,7 @@ function setMyMenu() {
 			click () {
 				var focusedWindow = BrowserWindow.getFocusedWindow();
 				focusedWindow.webContents.send('change-to-pink-style');
-				console.log('pink');
+				console.log('The theme has been changed to pink');
 			}
 		},
 		{
@@ -72,7 +72,7 @@ function setMyMenu() {
 			click () {
 				var focusedWindow = BrowserWindow.getFocusedWindow();
 				focusedWindow.webContents.send('change-to-blue-style');
-				console.log('blue');
+				console.log('The theme has been changed to blue');
 			}
 		},
 		{
@@ -80,7 +80,7 @@ function setMyMenu() {
 			click () {
 				var focusedWindow = BrowserWindow.getFocusedWindow();
 				focusedWindow.webContents.send('change-to-navy-style');
-				console.log('navy');
+				console.log('The theme has been changed to navy');
 			}
 		},
 		{
@@ -88,7 +88,7 @@ function setMyMenu() {
 			click () {
 				var focusedWindow = BrowserWindow.getFocusedWindow();
 				focusedWindow.webContents.send('change-to-green-style');
-				console.log('green');
+				console.log('The theme has been changed to green');
 			}
 		},
 		{
@@ -96,7 +96,7 @@ function setMyMenu() {
 			click () {
 				var focusedWindow = BrowserWindow.getFocusedWindow();
 				focusedWindow.webContents.send('change-to-default-style');
-				console.log('default');
+				console.log('The theme has been changed to default');
 			}
 		}]
 	},

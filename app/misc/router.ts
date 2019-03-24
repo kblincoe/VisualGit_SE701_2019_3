@@ -22,7 +22,7 @@ function switchToMainPanel() {
 }
 
 function switchToAddRepositoryPanel() {
-  console.log("1111111");
+  console.log("??????????????");
   hideAuthenticatePanel();
   hideFilePanel();
   hideGraphPanel();
@@ -124,7 +124,7 @@ function disableDiffPanelEditOnHide(){
 } 
 
 function useSaved() {
-  console.log('button pressed!');
+  console.log('??????????????button pressed!');
   decrypt();
   loginWithSaved(switchToMainPanel);
 }
