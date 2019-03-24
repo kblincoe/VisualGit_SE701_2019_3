@@ -3,6 +3,8 @@ var blue = "#39c0ba";
 var gray = "#5b6969";
 function collpaseSignPanel() {
     $('#nav-collapse1').collapse('hide');
+    document.getElementById("Email1").value = "";
+    document.getElementById("Password1").value = "";
 }
 function switchToMainPanel() {
     hideAuthenticatePanel();
