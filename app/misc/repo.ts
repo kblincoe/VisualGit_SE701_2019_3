@@ -32,7 +32,7 @@ function downloadRepository() {
 }
 
 function downloadFunc(cloneURL, fullLocalPath) {
-  console.log("???????????????downloadFunc().fullLocalPath = " + fullLocalPath);
+  console.log("Path of cloning repo: " + fullLocalPath);
   let options = {};
 
   displayModal("Cloning Repository...");
@@ -61,7 +61,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
   },
   function(err) {
     updateModalText("Clone Failed - " + err);
-    console.log("????????????" + err); // TODO show error on screen
+    console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
   });
 }
 
@@ -90,7 +90,7 @@ function openRepository() {
     repoLocalPath = localPath;
     if (readFile.exists(repoFullPath + "/.git/MERGE_HEAD")) {
       let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
-      console.log("?????????????theirCommit: " + tid);
+      console.log("current HEAD commit: " + tid);
     }
     refreshAll(repository);
     console.log("Repo successfully opened");
@@ -98,7 +98,7 @@ function openRepository() {
   },
   function(err) {
     updateModalText("Opening Failed - " + err);
-    console.log("?????????????????"+err); // TODO show error on screen
+    console.log("repo.ts, line 101, cannot open repository: "+err); // TODO show error on screen
   });
 }
 
@@ -125,10 +125,10 @@ function refreshAll(repository) {
   repository.getCurrentBranch()
   .then(function(reference) {
     let branchParts = reference.name().split("/");
-    console.log(branchParts + "?????????????????");
+    console.log("branch parts: " + branchParts);
     branch = branchParts[branchParts.length - 1];
   },function(err) {
-    console.log(err + "?????????????"); // TODO show error on screen
+    console.log("repo.ts, line 131, cannot refresh repository list: " + err); // TODO show error on screen
   })
   .then(function() {
     return repository.getReferences(Git.Reference.TYPE.LISTALL);
@@ -137,16 +137,16 @@ function refreshAll(repository) {
     let count = 0;
     clearBranchElement();
     for (let i = 0; i < branchList.length; i++) {
-      console.log(branchList[i].name() + "????????????");
+      console.log("branch name: " + branchList[i].name());
       let bp = branchList[i].name().split("/");
       Git.Reference.nameToId(repository, branchList[i].name()).then(function(oid) {
         // Use oid
-        console.log(oid + "??????????????????");
+        console.log("old id " + oid);
         if (branchList[i].isRemote()) {
           remoteName[bp[bp.length-1]] = oid;
         } else {
           branchCommit.push(branchList[i]);
-          console.log(bp[bp.length - 1] + "??????????????" + oid.tostrS());
+          console.log(bp[bp.length - 1] + " adding to end of " + oid.tostrS());
           if (oid.tostrS() in bname) {
             bname[oid.tostrS()].push(branchList[i]);
           } else {
@@ -154,7 +154,7 @@ function refreshAll(repository) {
           }
         }
       }, function(err) {
-        console.log(err + "??????????????");
+        console.log("repo.ts, line 157, could not find referenced branch" + err );
       });
       if (branchList[i].isRemote()) {
         if (localBranches.indexOf(bp[bp.length - 1]) < 0) {
@@ -192,7 +192,7 @@ function getAllBranches() {
       }
       Git.Reference.nameToId(repos, branchList[i]).then(function(oid) {
         // Use oid
-        console.log(oid + "??????????????");
+        console.log("old id " + oid);
       });
     }
   });
@@ -215,7 +215,7 @@ function getOtherBranches() {
   })
   .then(function(ref) {
     let name = ref.name().split("/");
-    console.log("??????????????");
+    console.log("merging remote branch with tracked local branch");
     clearBranchElement();
     for (let i = 0; i < list.length; i++) {
       let bp = list[i].split("/");
@@ -254,13 +254,13 @@ function displayBranch(name, id, onclick) {
 
 function checkoutLocalBranch(element) {
   let bn;
-  console.log(typeof element + "??????????????");
+  console.log(typeof element);
   if (typeof element === "string") {
     bn = element;
   } else {
     bn = element.innerHTML;
   }
-  console.log(bn + "??????????????");
+  console.log("name of branch being checked out: " + bn);
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
     addCommand("git checkout " + bn);
@@ -268,7 +268,7 @@ function checkoutLocalBranch(element) {
     .then(function() {
       refreshAll(repo);
     }, function(err) {
-      console.log(err + "??????????????");
+      console.log("repo.tx, line 271, cannot checkout local branch: " + err);
     });
   })
 }
@@ -280,7 +280,7 @@ function checkoutRemoteBranch(element) {
   } else {
     bn = element.innerHTML;
   }
-  console.log("??????????????1.0  " + bn);
+  console.log("current branch name: " + bn);
   let repos;
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
@@ -288,22 +288,22 @@ function checkoutRemoteBranch(element) {
     addCommand("git fetch");
     addCommand("git checkout -b " + bn);
     let cid = remoteName[bn];
-    console.log("??????????????2.0  " + cid);
+    console.log("name of remote branch:  " + cid);
     return Git.Commit.lookup(repo, cid);
   })
   .then(function(commit) {
-    console.log("??????????????3.0");
+    console.log("commiting");
     return Git.Branch.create(repos, bn, commit, 0);
   })
   .then(function(code) {
-    console.log(bn + "??????????????");
+    console.log("name of local branch " + bn);
     repos.mergeBranches(bn, "origin/" + bn)
     .then(function() {
         refreshAll(repos);
         console.log("Pull successful");
     });
   }, function(err) {
-    console.log(err + "??????????????");
+    console.log("repo.ts, line 306, could not pull from repository" + err);
   })
 }
 
