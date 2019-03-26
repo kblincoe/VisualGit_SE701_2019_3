@@ -643,11 +643,11 @@ function displayModifiedFiles() {
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
         checkbox.onclick = function(event){
-          // Stops click from propagating into the other layers
-          event.stopPropagation();
           if(!checkbox.checked){
             document.getElementById('select-all-checkbox').checked = false;
           }
+          // Stops a click from propagating to the other layers
+          event.stopPropagation();
         }
         fileElement.appendChild(checkbox);
 
