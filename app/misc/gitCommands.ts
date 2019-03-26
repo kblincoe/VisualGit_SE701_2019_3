@@ -6,6 +6,6 @@ function addCommand(command) {
   let footer = document.getElementById("footer");
   if (footer != null) {
     footer.appendChild(gitCommand);
-  // console.log(command);
+    footer.scrollTop = footer.scrollHeight;
   }
 }
