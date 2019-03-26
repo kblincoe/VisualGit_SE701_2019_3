@@ -642,7 +642,9 @@ function displayModifiedFiles() {
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
-        checkbox.onclick = function(){
+        checkbox.onclick = function(event){
+          // Stops click from propagating into the other layers
+          event.stopPropagation();
           if(!checkbox.checked){
             document.getElementById('select-all-checkbox').checked = false;
           }
