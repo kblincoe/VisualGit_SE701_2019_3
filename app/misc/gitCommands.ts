@@ -4,6 +4,8 @@ function addCommand(command) {
   gitCommand.id = "git-command";
   gitCommand.innerHTML = command;
   let footer = document.getElementById("footer");
-  footer.appendChild(gitCommand);
+  if (footer != null) {
+    footer.appendChild(gitCommand);
   // console.log(command);
+  }
 }
