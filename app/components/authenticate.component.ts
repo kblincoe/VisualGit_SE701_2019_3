@@ -70,5 +70,9 @@ export class AuthenticateComponent {
   createNewAccount(): void {
     window.open("https://github.com/join?", "_blank");
   }
+  
+  openGitHubPasswordResetPage() : void {
+    window.open("https://github.com/password_reset", "_blank");
 
+  }
 }
