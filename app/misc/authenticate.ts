@@ -141,7 +141,7 @@ function selectRepo(ele) {
   let butt = document.getElementById("cloneButton");
   butt.innerHTML = 'Clone ' + ele.innerHTML;
   butt.setAttribute('class', 'btn btn-primary');
-  console.log(url + '??????????????????' + ele.innerHTML);
+  console.log("selected " + ele.innerHTML + " as repository");
 }
 
 function cloneRepo() {
@@ -150,13 +150,13 @@ function cloneRepo() {
     return;
   }
 
-  console.log("???????????????cloneRepo().url = " + url);
+  console.log("cloning " + url);
   let splitUrl = url.split("/");
   let local;
   if (splitUrl.length >= 2) {
     local = splitUrl[splitUrl.length - 1];
   }
-  console.log("???????????cloneRepo().local = " + local);
+  console.log("cloning " + local);
 
   if (local == null) {
     updateModalText("Error: could not define name of repo");
