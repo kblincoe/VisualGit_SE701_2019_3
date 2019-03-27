@@ -1,15 +1,18 @@
 let cs = require('color-scheme');
-let before = 'default';;
+let before = 'default';
+
 function changeColor(color) {
-  // let scheme = new cs;
-  // scheme.from_hue(0)
-  //     .scheme('mono')
-  //     .variation('soft');
-  // let colors = scheme.colors();
-  // for (let i = 0; i < colors.length; i++) {
-  //   console.log(colors[i]);
-  // }
-  console.log(color + '   ' + (color === 'white'));
+  const userSettingsDirectory = ".settings/";
+  const userColorFilePath = userSettingsDirectory + "user_color.txt";
+
+  if (!fs.existsSync(userSettingsDirectory)) {
+    fs.mkdir(userSettingsDirectory);
+  }
+  fs.writeFile(userColorFilePath, color, function(err) {
+      if (err) console.log(err);
+      console.log("Written user color to file");
+  });
+
   let head = document.getElementsByClassName('navbar');
   let headButton = document.getElementsByClassName('navbar-btn');
   let fa = document.getElementsByClassName('fa');
