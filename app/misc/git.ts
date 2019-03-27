@@ -654,6 +654,10 @@ function displayModifiedFiles() {
             if (fileElement.className === "file file-created") {
               printNewFile(file.filePath);
             } else {
+
+              let diffCols = document.createElement("div");
+              diffCols.innerText = "Old" + "\t" + "New" + "\t" + "+/-" + "\t" + "Content";
+              document.getElementById("diff-panel-body")!.appendChild(diffCols);
               printFileDiff(file.filePath);
             }
           } else {
