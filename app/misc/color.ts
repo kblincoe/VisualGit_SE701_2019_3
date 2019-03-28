@@ -5,9 +5,12 @@ function changeColor(color) {
   const userSettingsDirectory = ".settings/";
   const userColorFilePath = userSettingsDirectory + "user_color.txt";
 
+  // Check if .settings/ exists and make it if it doesn't
   if (!fs.existsSync(userSettingsDirectory)) {
     fs.mkdir(userSettingsDirectory);
   }
+
+  // Save user color selection
   fs.writeFile(userColorFilePath, color, function(err) {
       if (err) console.log(err);
       console.log("Written user color to file");

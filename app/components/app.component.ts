@@ -22,6 +22,8 @@ import { AuthenticateComponent } from "./authenticate.component"
 export class AppComponent {
   ngOnInit(): void {
     const userColorFilePath = ".settings/user_color.txt";
+
+    // If user has previously saved a color, then set the app to that color
     if (fs.existsSync(userColorFilePath)) {
       fs.readFile(userColorFilePath, function(err, buffer) {
         console.log(buffer.toString());
