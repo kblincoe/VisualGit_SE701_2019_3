@@ -650,7 +650,9 @@ function displayModifiedFiles() {
           if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();
             document.getElementById("diff-panel-body").innerHTML = "";
-
+            let fileName = document.createElement("p");
+            fileName.innerHTML = file.filePath
+            document.getElementById("diff-panel-body").appendChild(fileName);
             if (fileElement.className === "file file-created") {
               printNewFile(file.filePath);
             } else {
