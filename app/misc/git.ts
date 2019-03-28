@@ -647,7 +647,7 @@ function displayModifiedFiles() {
         fileElement.onclick = function() {
           let doc = document.getElementById("diff-panel");
           console.log("width of document: " + doc.style.width);
-          if (doc.style.width === '0px' || doc.style.width === '') {
+          if (doc.style.width === '0px' || doc.style.width === "") {
             displayDiffPanel();
             document.getElementById("diff-panel-body").innerHTML = "";
 
@@ -656,7 +656,17 @@ function displayModifiedFiles() {
             } else {
               printFileDiff(file.filePath);
             }
-          } else {
+          }
+          else if (doc.style.width === '40%'){
+            document.getElementById("diff-panel-body").innerHTML = "";
+            if (fileElement.className === "file file-created") {
+              printNewFile(file.filePath);
+            } else {
+              printFileDiff(file.filePath);
+            }
+          }
+          else {
+            console.log("panel is hidden");
             hideDiffPanel();
           }
         };
