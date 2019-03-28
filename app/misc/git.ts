@@ -317,30 +317,36 @@ function pushToRemote() {
 }
 
 function createBranch() {
-  let branchName = document.getElementById("branchName").value;
-  let repos;
-  console.log(branchName + " is being created");
-  Git.Repository.open(repoFullPath)
-  .then(function(repo) {
-    // Create a new branch on head
-    repos = repo;
-    addCommand("git branch " + branchName);
-    return repo.getHeadCommit()
-    .then(function(commit) {
-      return repo.createBranch(
-        branchName,
-        commit,
-        0,
-        repo.defaultSignature(),
-        "Created new-branch on HEAD");
-    }, function(err) {
-      console.log("git.ts, line 337, error occurred while trying to create a new branch " + err);
+  if (typeof repoFullPath === "undefined") {
+    // repository not selected
+    displayModal("Please select the repository you want to create a branch of/ Disable the Branch Icon");
+  } else {
+    let branchName = document.getElementById("branchName").value;
+    let repos;
+
+    console.log(branchName + "!!!!!!");
+    Git.Repository.open(repoFullPath)
+        .then(function (repo) {
+          // Create a new branch on head
+          repos = repo;
+          addCommand("git branch " + branchName);
+          return repo.getHeadCommit()
+              .then(function (commit) {
+                return repo.createBranch(
+                    branchName,
+                    commit,
+                    0,
+                    repo.defaultSignature(),
+                    "Created new-branch on HEAD");
+              }, function (err) {
+                console.log(err + "LLLLLL");
+              });
+        }).done(function () {
+      refreshAll(repos);
+      console.log("All done!");
     });
-  }).done(function() {
-    refreshAll(repos);
-    console.log("All repositories loaded");
-  });
-  document.getElementById("branchName").value = "";
+    document.getElementById("branchName").value = "";
+  }
 }
 
 function mergeLocalBranches(element) {
