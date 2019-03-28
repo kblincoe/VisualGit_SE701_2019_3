@@ -557,6 +557,7 @@ function Reload(){
 function displayModifiedFiles() {
   modifiedFiles = [];
 
+  let selectedFile = "";
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
     console.log("Is repo merging: " + repo.isMerging());
@@ -644,6 +645,7 @@ function displayModifiedFiles() {
 
         document.getElementById("files-changed").appendChild(fileElement);
 
+
         fileElement.onclick = function() {
           let doc = document.getElementById("diff-panel");
           console.log("width of document: " + doc.style.width);
@@ -652,21 +654,28 @@ function displayModifiedFiles() {
             document.getElementById("diff-panel-body").innerHTML = "";
 
             if (fileElement.className === "file file-created") {
+              selectedFile = file.filePath;
               printNewFile(file.filePath);
             } else {
+              selectedFile = file.filePath;
               printFileDiff(file.filePath);
             }
           }
-          else if (doc.style.width === '40%'){
+          else if (doc.style.width === '40%') {
             document.getElementById("diff-panel-body").innerHTML = "";
-            if (fileElement.className === "file file-created") {
-              printNewFile(file.filePath);
+            if (selectedFile === file.filePath) {
+              hideDiffPanel()
             } else {
-              printFileDiff(file.filePath);
+              if (fileElement.className === "file file-created") {
+                selectedFile = file.filePath;
+                printNewFile(file.filePath);
+              } else {
+                selectedFile = file.filePath;
+                printFileDiff(file.filePath);
+              }
             }
           }
           else {
-            console.log("panel is hidden");
             hideDiffPanel();
           }
         };
