@@ -22,7 +22,7 @@ function switchToMainPanel() {
 }
 
 function switchToAddRepositoryPanel() {
-  console.log("1111111");
+  console.log("Switching to add repo panel");
   hideAuthenticatePanel();
   hideFilePanel();
   hideGraphPanel();
@@ -132,7 +132,7 @@ function disableDiffPanelEditOnHide() {
 }
 
 function useSaved() {
-  console.log("button pressed!");
+  console.log('button has been pressed: logging in with saved credentials');
   decrypt();
   loginWithSaved(switchToMainPanel);
 }
