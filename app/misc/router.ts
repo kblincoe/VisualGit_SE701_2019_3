@@ -1,6 +1,7 @@
 let cred;
 let blue = "#39c0ba";
 let gray = "#5b6969";
+let continuedWithoutSignIn = false;
 
 function collpaseSignPanel() {
   $('#nav-collapse1').collapse('hide');
@@ -19,6 +20,22 @@ function switchToMainPanel() {
   hideAddRepositoryPanel();
   displayFilePanel();
   displayGraphPanel();
+}
+
+function checkSignedIn() {
+  if (continuedWithoutSignIn) {
+    displayModal("You need to sign in");
+    // Don't open the repo modal
+    $('#repo-name').removeAttr("data-target");
+  } else {
+    // Ensure repo modal is connected
+    $('#repo-name').attr("data-target", "#repo-modal");
+  }
+}
+
+function switchToAddRepositoryPanelWhenNotSignedIn() {
+  continuedWithoutSignIn = true;
+  switchToAddRepositoryPanel();
 }
 
 function switchToAddRepositoryPanel() {
