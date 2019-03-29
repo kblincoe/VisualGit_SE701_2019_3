@@ -649,10 +649,13 @@ function displayModifiedFiles() {
         fileElement.onclick = function() {
           let doc = document.getElementById("diff-panel");
           console.log("width of document: " + doc.style.width);
-          if (doc.style.width === '0px' || doc.style.width === "") {
+            // Get the filename being edited and displays on top of the window
+          if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();
             document.getElementById("diff-panel-body").innerHTML = "";
-
+            let fileName = document.createElement("p");
+            fileName.innerHTML = file.filePath
+            document.getElementById("diff-panel-body").appendChild(fileName);
             if (fileElement.className === "file file-created") {
               selectedFile = file.filePath;
               printNewFile(file.filePath);
@@ -729,9 +732,11 @@ function displayModifiedFiles() {
 
         if (line.charAt(0) === "+") {
           element.style.backgroundColor = "#84db00";
+          element.style.display = "table-row";
           line = line.slice(1, line.length);
         } else if (line.charAt(0) === "-") {
           element.style.backgroundColor = "#ff2448";
+          element.style.display = "table-row";
           line = line.slice(1, line.length);
         }
 
