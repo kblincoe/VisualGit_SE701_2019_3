@@ -710,9 +710,11 @@ function displayModifiedFiles() {
 
         if (line.charAt(0) === "+") {
           element.style.backgroundColor = "#84db00";
+          element.style.display = "table-row";
           line = line.slice(1, line.length);
         } else if (line.charAt(0) === "-") {
           element.style.backgroundColor = "#ff2448";
+          element.style.display = "table-row";
           line = line.slice(1, line.length);
         }
 
