@@ -120,6 +120,43 @@ function openRepository() {
   });
 }
 
+function createLocalRepository(){
+  if (document.getElementById("repoCreate").value == null || document.getElementById("repoCreate").value == ""){
+    document.getElementById("dirPickerCreateLocal").click();
+    let localPath = document.getElementById("dirPickerCreateLocal").files[0].webkitRelativePath;
+    let fullLocalPath = document.getElementById("dirPickerCreateLocal").files[0].path;
+    document.getElementById("repoCreate").value = fullLocalPath;
+    document.getElementById("repoCreate").text = fullLocalPath;
+  } else {
+    let localPath = document.getElementById("repoCreate").value;
+    let fullLocalPath;
+    if (checkFile.existsSync(localPath)) {
+      fullLocalPath = localPath;
+    } else {
+      fullLocalPath = require("path").join(__dirname, localPath);
+    }
+  }
+
+  //console.log(require("path").join(fullLocalPath,".git"));
+  if(checkFile.existsSync(require("path").join(fullLocalPath,".git"))){
+    updateModalText("This folder is already a git repository. Please try to open it instead.");
+  }else{
+    displayModal("creating repository at " + require("path").join(fullLocalPath,".git"));
+    Git.Repository.init(fullLocalPath, 0).then(function(repository) {
+      repoFullPath = fullLocalPath;
+      repoLocalPath = localPath;
+      refreshAll(repository);
+      console.log("Repo successfully created");
+      updateModalText("Repository successfully created");
+      switchToMainPanel();
+    },
+    function(err) {
+      updateModalText("Creating Failed - " + err);
+      console.log("repo.ts, line 131, cannot open repository: "+err); // TODO show error on screen
+    });
+  }
+}
+
 function addBranchestoNode(thisB: string) {
   let elem = document.getElementById("otherBranches");
   elem.innerHTML = '';
