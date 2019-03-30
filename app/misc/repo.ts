@@ -1,3 +1,5 @@
+import {BaseException} from "@angular/core";
+
 let Git = require("nodegit");
 let $ = require('jQuery');
 let repoFullPath;
@@ -14,21 +16,24 @@ let span;
 
 function downloadRepository() {
   let fullLocalPath;
-  // Full path is determined by either handwritten directory or selected by file browser
-  if (document.getElementById("repoSave").value != null || document.getElementById("repoSave").value != "") {
-    let localPath = document.getElementById("repoSave").value;
-    fullLocalPath = require("path").join(__dirname, localPath);
+  if (document.getElementById("repoSave").value == null) {
+    throw new BaseException("Cannot find element repoSave");
   } else {
-    fullLocalPath = document.getElementById("dirPickerSaveNew").files[0].path;
+    // Full path is determined by either handwritten directory or selected by file browser
+    if (document.getElementById("repoSave").value != "") {
+      let localPath = document.getElementById("repoSave").value;
+      fullLocalPath = require("path").join(__dirname, localPath);
+    } else {
+      fullLocalPath = document.getElementById("dirPickerSaveNew").files[0].path;
+    }
   }
   let cloneURL = document.getElementById("repoClone").value;
 
   if (!cloneURL || cloneURL.length === 0) {
-      updateModalText("Clone Failed - Empty URL Given");
+    updateModalText("Clone Failed - Empty URL Given");
   } else {
-      downloadFunc(cloneURL, fullLocalPath);
+    downloadFunc(cloneURL, fullLocalPath);
   }
-
 }
 
 function downloadFunc(cloneURL, fullLocalPath) {
