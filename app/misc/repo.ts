@@ -260,7 +260,7 @@ function displayBranch(name, id, onclick) {
   let a = document.createElement("a");
   a.setAttribute("href", "#");
   a.setAttribute("class", "list-group-item");
-  a.setAttribute("onclick", onclick);
+  a.setAttribute("onclick", onclick + ";event.stopPropagation()");
   li.setAttribute("role", "presentation")
   a.appendChild(document.createTextNode(name));
   li.appendChild(a);
@@ -269,10 +269,14 @@ function displayBranch(name, id, onclick) {
 
 function createDropDownFork(name,id,onclick) {
   let ul = document.getElementById(id);
-  let button = document.createElement("a");
-  let div = document.createElement("div");
-  button.appendChild(document.createTextNode(name));
+  let button = document.createElement("div");
+  let div = document.createElement("ul");
+  button.className = name; 
+  button.appendChild(document.createTextNode(name + " (Forked List)"));
   div.setAttribute("id",name);
+  div.setAttribute("role","menu");
+  div.setAttribute("class","list-group")
+  button.setAttribute("onclick",onclick)
   button.appendChild(div);
   ul.appendChild(button);
 }
