@@ -4,11 +4,6 @@ import { Component } from "@angular/core";
   selector: "add-repository-panel",
   template: `
     <div class="add-repository-panel" id="add-repository-panel">
-      <div id="cloneProgressDiv" class="progress" style="visibility: hidden">
-        <div id="cloneProgressBar" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
-             style="width: 0%">
-        </div>
-      </div>
       <img src="./assets/Back.svg" (click)="returnToMainPanel()" class="back-button">
 
       <div class="add-repository-body">

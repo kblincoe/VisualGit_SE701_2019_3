@@ -71,7 +71,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
   console.log("cloning into " + fullLocalPath);
   let repository = Git.Clone.clone(cloneURL, fullLocalPath, options)
   .then(function(repository) {
-    progressDiv.style.visibility = "hidden";
+    progressDiv.style.visibility = 'collapse';
     console.log("Repo successfully cloned");
     refreshAll(repository);
     updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
@@ -88,7 +88,9 @@ function downloadFunc(cloneURL, fullLocalPath) {
 
 function updateProgressBar(ratio) {
   let progressBar = document.getElementById("cloneProgressBar");
-  progressBar.style.width = ratio*100 + "%";
+  let percentage = Math.floor(ratio*100) + "%"
+  progressBar.style.width = percentage;
+  progressBar.innerHTML = percentage;
 }
 
 function openRepository() {
