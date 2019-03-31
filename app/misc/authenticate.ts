@@ -1,5 +1,7 @@
 /// <reference path="git.ts" />
 
+import { Json } from "@angular/core/src/facade/lang";
+
 
 //import * as nodegit from "git";
 //import NodeGit, { Status } from "nodegit";
@@ -112,8 +114,30 @@ function getUserInfo(callback) {
       for (let i = 0; i < data.length; i++) {
         let rep = Object.values(data)[i];
         console.log("url of repo: " + rep['html_url']);
-        displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
-        repoList[rep['full_name']] = rep['html_url'];
+      
+        if(rep['fork'] == false) {
+          if(parseInt(rep['forks_count']) == 0 ) {
+            displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
+            repoList[rep['full_name']] = rep['html_url'];
+          }
+          else {
+            createDropDownFork(rep['full_name'],"repo-dropdown","showDropDown(this)");
+            repoList[rep['full_name']] = rep['html_url'];
+            for(let i = 0; i < data.length; i++) {
+              let rep2 = Object.values(data)[i];
+              if(rep2['fork'] == true) {
+                if(rep2['name'] == rep['name']) {
+                  displayBranch(rep2['full_name'],rep['full_name'],"selectRepo(this)")
+                }
+              }
+            }
+          }
+        }
+
+        // if(rep['html_url']  == "https://github.com/kblincoe/VisualGit_SE701_2019_3") {
+        //   Number.parseFloat(rep['forks_count'])  
+        //   addCommand(rep['forks_count']);
+        // }
       }
     }
   });
@@ -136,6 +160,10 @@ function getUserInfo(callback) {
   // });
 }
 
+
+function showDropDown(ele) {
+  document.getElementById(ele.innerHTML).classList.toggle("show")
+}
 function selectRepo(ele) {
   url = repoList[ele.innerHTML];
   let butt = document.getElementById("cloneButton");

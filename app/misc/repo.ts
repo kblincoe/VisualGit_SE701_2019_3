@@ -267,6 +267,16 @@ function displayBranch(name, id, onclick) {
   ul.appendChild(li);
 }
 
+function createDropDownFork(name,id,onclick) {
+  let ul = document.getElementById(id);
+  let button = document.createElement("a");
+  let div = document.createElement("div");
+  button.appendChild(document.createTextNode(name));
+  div.setAttribute("id",name);
+  button.appendChild(div);
+  ul.appendChild(button);
+}
+
 function checkoutLocalBranch(element) {
   let bn;
   console.log(typeof element);
