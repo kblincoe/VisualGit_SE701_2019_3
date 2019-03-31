@@ -569,11 +569,17 @@ function displayModifiedFiles() {
           filePanelMessage.parentNode.removeChild(filePanelMessage);
         }
       }
+
+      
+      
+
       modifiedFiles.forEach(displayModifiedFile);
 
       // Add modified file to array of modified files 'modifiedFiles'
       function addModifiedFile(file) {
-        // Check if modified file is already being displayed
+
+
+        // Check if modified file (not renamed) is already being displayed
         let filePaths = document.getElementsByClassName('file-path');
         for (let i = 0; i < filePaths.length; i++) {
           if (filePaths[i].innerHTML === file.path()) {
@@ -581,12 +587,31 @@ function displayModifiedFiles() {
           }
         }
 
+        
+
         let path = file.path();
         let modification = calculateModification(file);
+        
+      // If the file is renamed, delete all files in array modifiedFiles that do not exist
+      if (modification === 'RENAMED'){
+        let filePath = repoFullPath + "\\" + file.path();
+        let newFilePath = filePath.replace(/\\/gi, "/");
+        
+       
+        for (var i = modifiedFiles.length - 1; i >= 0; --i) {
+          if (fs.existsSync(newFilePath)) {
+            // exists
+          } else {
+            // doesn't exist
+            modifiedFiles.splice(i,1);
+          }
+        }
+      }
+        
         modifiedFiles.push({
             filePath: path,
             fileModification: modification
-          });
+          })
       }
 
 
@@ -626,7 +651,9 @@ function displayModifiedFiles() {
           fileElement.className = "file file-modified";
         } else if (file.fileModification === "DELETED") {
           fileElement.className = "file file-deleted";
-        } else {
+        }  else if (file.fileModification === "RENAMED") {
+          fileElement.className = "file file-renamed";
+        }else {
           fileElement.className = "file";
         }
 
