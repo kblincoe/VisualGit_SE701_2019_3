@@ -33,6 +33,19 @@ function downloadRepository() {
 
 function downloadFunc(cloneURL, fullLocalPath) {
   console.log("Path of cloning repo: " + fullLocalPath);
+
+  // get size of repository
+  let splitURL = cloneURL.split("/");
+  let repoName = splitURL[splitURL.length-2] + "/" +  splitURL[splitURL.length-1];
+  if (client == null){
+    client = github.client();
+  }
+  let ghrepo = client.repo(repoName);
+  let repoSize;
+  ghrepo.info(function (err,status,body) {
+    repoSize = status.size*1000;
+  });
+
   let options = {};
 
   displayModal("Cloning Repository...");
@@ -43,6 +56,9 @@ function downloadFunc(cloneURL, fullLocalPath) {
         certificateCheck: function() { return 1; },
         credentials: function() {
           return cred;
+        },
+        transferProgress: function (data) {
+          let bytesRatio = data.receivedBytes()/repoSize;
         }
       }
     }
