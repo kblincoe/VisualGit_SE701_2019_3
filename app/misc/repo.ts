@@ -46,6 +46,9 @@ function downloadFunc(cloneURL, fullLocalPath) {
     repoSize = status.size*1000;
   });
 
+  let progressDiv = document.getElementById("cloneProgressDiv");
+  progressDiv.style.visibility = "visible";
+
   let options = {};
 
   displayModal("Cloning Repository...");
@@ -59,6 +62,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
         },
         transferProgress: function (data) {
           let bytesRatio = data.receivedBytes()/repoSize;
+          updateProgressBar(bytesRatio);
         }
       }
     }
@@ -67,6 +71,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
   console.log("cloning into " + fullLocalPath);
   let repository = Git.Clone.clone(cloneURL, fullLocalPath, options)
   .then(function(repository) {
+    progressDiv.style.visibility = "hidden";
     console.log("Repo successfully cloned");
     refreshAll(repository);
     updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
@@ -79,6 +84,11 @@ function downloadFunc(cloneURL, fullLocalPath) {
     updateModalText("Clone Failed - " + err);
     console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
   });
+}
+
+function updateProgressBar(ratio) {
+  let progressBar = document.getElementById("cloneProgressBar");
+  progressBar.style.width = ratio*100 + "%";
 }
 
 function openRepository() {
