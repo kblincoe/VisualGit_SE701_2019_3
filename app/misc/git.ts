@@ -648,12 +648,20 @@ function displayModifiedFiles() {
           let doc = document.getElementById("diff-panel");
           console.log("width of document: " + doc.style.width);
           if (doc.style.width === '0px' || doc.style.width === '') {
+            // Get the filename being edited and displays on top of the window
             displayDiffPanel();
-            document.getElementById("diff-panel-body").innerHTML = "";
 
+            document.getElementById("diff-panel-body")!.innerHTML = "";
+            let fileName = document.createElement("p");
+            fileName.innerHTML = file.filePath
+            document.getElementById("diff-panel-body").appendChild(fileName);
             if (fileElement.className === "file file-created") {
               printNewFile(file.filePath);
             } else {
+
+              let diffCols = document.createElement("div");
+              diffCols.innerText = "Old" + "\t" + "New" + "\t" + "+/-" + "\t" + "Content";
+              document.getElementById("diff-panel-body")!.appendChild(diffCols);
               printFileDiff(file.filePath);
             }
           } else {
@@ -693,7 +701,17 @@ function displayModifiedFiles() {
                       let newFilePath = patch.newFile().path();
                       if (newFilePath === filePath) {
                         lines.forEach(function(line) {
-                          callback(String.fromCharCode(line.origin()) + line.content());
+
+                          // Catch the "no newline at end of file" lines created by git
+                          if (line.origin() != 62) {
+
+                            // include linenumbers and change type
+                            callback( String.fromCharCode(line.origin())
+                            + (line.oldLineno() != -1 ? line.oldLineno() : "") 
+                            + "\t" + (line.newLineno() != -1 ? line.newLineno() : "")
+                            + "\t" + String.fromCharCode(line.origin())
+                            + "\t" + line.content());
+                          }
                         });
                       }
                     });
@@ -710,11 +728,14 @@ function displayModifiedFiles() {
 
         if (line.charAt(0) === "+") {
           element.style.backgroundColor = "#84db00";
-          line = line.slice(1, line.length);
+          element.style.display = "table-row";
         } else if (line.charAt(0) === "-") {
           element.style.backgroundColor = "#ff2448";
-          line = line.slice(1, line.length);
+          element.style.display = "table-row";
         }
+
+        // If not a changed line, origin will be a space character, so still need to slice
+        line = line.slice(1, line.length);
 
         element.innerText = line;
         document.getElementById("diff-panel-body").appendChild(element);
