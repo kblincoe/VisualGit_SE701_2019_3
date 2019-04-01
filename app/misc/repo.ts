@@ -51,8 +51,6 @@ function downloadFunc(cloneURL, fullLocalPath) {
 
   let options = {};
 
-  displayModal("Cloning Repository...");
-
   options = {
     fetchOpts: {
       callbacks: {
@@ -72,6 +70,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
   let repository = Git.Clone.clone(cloneURL, fullLocalPath, options)
   .then(function(repository) {
     progressDiv.style.visibility = 'collapse';
+    updateProgressBar(0);
     console.log("Repo successfully cloned");
     refreshAll(repository);
     updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
@@ -88,7 +87,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
 
 function updateProgressBar(ratio) {
   let progressBar = document.getElementById("cloneProgressBar");
-  let percentage = Math.floor(ratio*100) + "%"
+  let percentage = Math.floor(ratio*100) + "%";
   progressBar.style.width = percentage;
   progressBar.innerHTML = percentage;
 }
