@@ -33,9 +33,11 @@ function downloadRepository() {
 
 function downloadFunc(cloneURL, fullLocalPath) {
   console.log("Path of cloning repo: " + fullLocalPath);
-  let options = {};
 
-  displayModal("Cloning Repository...");
+  let progressDiv = document.getElementById("cloneProgressDiv");
+  progressDiv.style.visibility = "visible";
+
+  let options = {};
 
   options = {
     fetchOpts: {
@@ -43,6 +45,10 @@ function downloadFunc(cloneURL, fullLocalPath) {
         certificateCheck: function() { return 1; },
         credentials: function() {
           return cred;
+        },
+        transferProgress: function (data) {
+          let bytesRatio = data.receivedObjects()/data.totalObjects();
+          updateProgressBar(bytesRatio);
         }
       }
     }
@@ -51,6 +57,8 @@ function downloadFunc(cloneURL, fullLocalPath) {
   console.log("cloning into " + fullLocalPath);
   let repository = Git.Clone.clone(cloneURL, fullLocalPath, options)
   .then(function(repository) {
+    progressDiv.style.visibility = 'collapse';
+    updateProgressBar(0);
     console.log("Repo successfully cloned");
     refreshAll(repository);
     updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
@@ -63,6 +71,13 @@ function downloadFunc(cloneURL, fullLocalPath) {
     updateModalText("Clone Failed - " + err);
     console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
   });
+}
+
+function updateProgressBar(ratio) {
+  let progressBar = document.getElementById("cloneProgressBar");
+  let percentage = Math.floor(ratio*100) + "%";
+  progressBar.style.width = percentage;
+  progressBar.innerHTML = percentage;
 }
 
 function openRepository() {
