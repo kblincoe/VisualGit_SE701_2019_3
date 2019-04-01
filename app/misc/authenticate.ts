@@ -128,17 +128,12 @@ function getUserInfo(callback) {
             for(let i = 0; i < data.length; i++) {
               let rep2 = Object.values(data)[i];
                 if(rep2['name'] == rep['name']) {
-                  displayBranch(rep2['full_name'],rep['full_name'],"selectRepo(this)")
-                  repoList[rep2['full_name']] = rep2['html_url'];
+                  displayBranch("&nbsp; &nbsp;" +rep2['full_name'],rep['full_name'],"selectRepo(this)")
+                  repoList["&nbsp; &nbsp;"+rep2['full_name']] = rep2['html_url'];
                 }
             }
           }
         }
-
-        // if(rep['html_url']  == "https://github.com/kblincoe/VisualGit_SE701_2019_3") {
-        //   Number.parseFloat(rep['forks_count'])  
-        //   addCommand(rep['forks_count']);
-        // }
       }
     }
   });
