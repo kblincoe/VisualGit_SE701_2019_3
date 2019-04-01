@@ -20,7 +20,7 @@ import { GraphService } from "../services/graph.service";
           <ul class="nav navbar-nav col-md-5 hidden-xs">
             <li><img src="./assets/RightArrow.svg" class="right-arrow"></li>
             <li class="repo-name dropdown-toggle">
-                <a href="#" id="repo-name" data-toggle="modal" data-target="#repo-modal">repository</a>
+                <a href="#" id="repo-name" data-toggle="modal" data-target="#repo-modal" onclick="checkSignedIn()">repository</a>
             </li>
             <li><img src="./assets/RightArrow.svg" class="right-arrow"></li>
             <li class="branch-name dropdown">
