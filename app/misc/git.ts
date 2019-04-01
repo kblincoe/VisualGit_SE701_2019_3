@@ -324,7 +324,7 @@ function createBranch() {
     let branchName = document.getElementById("branchName").value;
     let repos;
 
-    console.log(branchName + "!!!!!!");
+    console.log(branchName + " is being created");
     Git.Repository.open(repoFullPath)
         .then(function (repo) {
           // Create a new branch on head
@@ -339,7 +339,7 @@ function createBranch() {
                     repo.defaultSignature(),
                     "Created new-branch on HEAD");
               }, function (err) {
-                console.log(err + "LLLLLL");
+                console.log("git.ts, line 337, error occurred while trying to create a new branch " + err);
               });
         }).done(function () {
       refreshAll(repos);
