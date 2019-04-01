@@ -60,11 +60,13 @@ function downloadFunc(cloneURL, fullLocalPath) {
     progressDiv.style.visibility = 'collapse';
     updateProgressBar(0);
     console.log("Repo successfully cloned");
+    displayModal("Drawing graph, please wait");
     refreshAll(repository);
     updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
     addCommand("git clone " + cloneURL + " " + fullLocalPath);
     repoFullPath = fullLocalPath;
     repoLocalPath = fullLocalPath;
+    displayModal("Drawing graph, please wait");
     refreshAll(repository);
   },
   function(err) {
@@ -107,6 +109,7 @@ function openRepository() {
       let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
       console.log("current HEAD commit: " + tid);
     }
+    displayModal("Drawing graph, please wait");
     refreshAll(repository);
     console.log("Repo successfully opened");
     updateModalText("Repository successfully opened");
@@ -135,6 +138,8 @@ function addBranchestoNode(thisB: string) {
 }
 
 function refreshAll(repository) {
+  displayModal("Drawing graph, please wait");
+
   let branch;
   bname = [];
   repository.getCurrentBranch()
@@ -293,6 +298,7 @@ function checkoutLocalBranch(element) {
   console.log("name of branch being checked out: " + bn);
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
+    displayModal("Drawing graph, please wait");
     addCommand("git checkout " + bn);
     repo.checkoutBranch("refs/heads/" + bn)
     .then(function() {
@@ -329,6 +335,7 @@ function checkoutRemoteBranch(element) {
     console.log("name of local branch " + bn);
     repos.mergeBranches(bn, "origin/" + bn)
     .then(function() {
+      displayModal("Drawing graph, please wait");
         refreshAll(repos);
         console.log("Pull successful");
     });

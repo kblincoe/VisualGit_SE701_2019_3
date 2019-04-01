@@ -5,8 +5,8 @@ let startP, secP = null, fromNode = null, toNode;
 
 
 function drawGraph() {
-
-
+  document.getElementById("modal-text-box").innerHTML = "Drawing graph, please wait";
+  $('#modal').modal('show');
   bsNodes = new vis.DataSet([]);
   bsEdges = new vis.DataSet([]);
 
