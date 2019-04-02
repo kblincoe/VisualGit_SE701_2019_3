@@ -422,3 +422,19 @@ body .footer .git-command {
 .file-deleted {
   background-color: #ff2448;
 }
+
+/*Toolbar Styles*/
+.toolbar-Container {
+ }
+
+.toolbar-Icons {
+  text-align: center;
+  cursor: pointer;
+  padding: 10px;
+  max-width: 75px;
+}
+
+.toolbar-Text {
+  font-size: 14px;
+  color: white;
+}

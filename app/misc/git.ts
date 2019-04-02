@@ -20,6 +20,7 @@ function cloneFromRemote(){
 }
 
 function addAndCommit() {
+    console.log("commit");
   let repository;
 
   Git.Repository.open(repoFullPath)
@@ -279,10 +280,6 @@ function pullFromRemote() {
 // });
 }
 
-
-
-
-
 function pushToRemote() {
   let branch = document.getElementById("branch-name").innerText;
   Git.Repository.open(repoFullPath)
@@ -314,6 +311,11 @@ function pushToRemote() {
       });
     });
   });
+}
+
+function openBranch() {
+  // TODO: implement branch functionality like sourcetree branching modal
+    console.log("Branch")
 }
 
 function createBranch() {
