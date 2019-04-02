@@ -233,6 +233,10 @@ function PullBuffer(){
 	}
 }
 
+function commitModal() {
+    displayModal("Commit modal yet to be implemented")
+}
+
 function pullFromRemote() {
   let repository;
   let branch = document.getElementById("branch-name").innerText;
@@ -333,6 +337,7 @@ function pushToRemote() {
 function openBranch() {
   // TODO: implement branch functionality like sourcetree branching modal
     console.log("Branch")
+  displayModal("Branch yet to be implemented");
 }
 
 function createBranch() {
@@ -643,6 +648,7 @@ function displayModifiedFiles() {
   clearModifiedFilesList();
 
   modifiedFiles = [];
+
   let selectedFile = "";
   Git.Repository.open(repoFullPath)
   .then(function(repo) {

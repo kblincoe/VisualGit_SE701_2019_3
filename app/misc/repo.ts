@@ -30,7 +30,6 @@ function downloadRepository() {
   } else {
     downloadFunc(cloneURL, fullLocalPath);
   }
-
 }
 
 function downloadFunc(cloneURL, fullLocalPath) {

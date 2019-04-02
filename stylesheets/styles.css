@@ -545,6 +545,7 @@ div.editor-area textarea.lines {
   width: 0vw;
   background-color: white;
 }
+
 /*Toolbar Styles*/
 .toolbar-Container {
  }
@@ -557,6 +558,6 @@ div.editor-area textarea.lines {
 }
 
 .toolbar-Text {
-  font-size: 14px;
-  color: white;
-}
+     font-size: 14px;
+     color: white;
+ }
