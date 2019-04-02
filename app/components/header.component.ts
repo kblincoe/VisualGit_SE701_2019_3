@@ -20,9 +20,9 @@ import { GraphService } from "../services/graph.service";
           <ul class="nav navbar-nav col-md-5 hidden-xs">
             <li><img src="./assets/RightArrow.svg" class="right-arrow"></li>
             <li class="repo-name dropdown-toggle">
-                <a href="#" id="repo-name" data-toggle="modal" data-target="#repo-modal" onclick="checkSignedIn()">repository</a>
+                <a id="repo-name" data-toggle="modal" data-target="#repo-modal" href="#" onclick="checkSignedIn()">repository</a>
             </li>
-            <li><img src="./assets/RightArrow.svg" class="right-arrow"></li>
+           <li><img src="./assets/RightArrow.svg" class="right-arrow"></li>
             <li class="branch-name dropdown">
               <a href="#" class="dropdown-toggle" id="branch-name" data-toggle="dropdown" onclick="switchToMainPanel()">
                 branch<span class="caret"></span>
@@ -245,6 +245,10 @@ import { GraphService } from "../services/graph.service";
     <div id="repo-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
+        <input type="text" id="searchRep" class="form-control" placeholder="Search Repository">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" onclick="searchName()">Search</button>
+        </span>
           <ul class="list-group"id="repo-dropdown" role="menu" aria-labelledby="repo-name">
           </ul>
           <div class="modal-footer">
@@ -277,7 +281,7 @@ import { GraphService } from "../services/graph.service";
   providers: [RepositoryService, GraphService]
 })
 
-export class HeaderComponent   {
+export class HeaderComponent {
   repoName: string = "Repo name";
   repoBranch: string = "Repo branch";
   repository: any;
