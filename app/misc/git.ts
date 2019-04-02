@@ -655,8 +655,8 @@ function displayModifiedFiles() {
         fileElement.onclick = function() {
           let doc = document.getElementById("diff-panel");
           console.log("width of document: " + doc.style.width);
-          if (doc.style.width === '0px' || doc.style.width === '') {
             // Get the filename being edited and displays on top of the window
+          if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();
 
             document.getElementById("diff-panel-body")!.innerHTML = "";
