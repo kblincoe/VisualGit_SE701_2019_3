@@ -22,40 +22,40 @@ var changes = 0;
 
 //Called then user pushes to sign out even if they have commited changes but not pushed; prompts a confirmation modal
 
-function CommitNoPush(){
-	if (CommitButNoPush == 1){
-		$("#modalW2").modal();
-	}
+function CommitNoPush() {
+  if (CommitButNoPush == 1) {
+    $("#modalW2").modal();
+  }
 }
 
 function signInHead(callback) {
-	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-	if (signed == 1){
-		if ((changes == 1) || (CommitButNoPush == 1)){
-			$("#modalW2").modal();
-		}
-		else {
-			getUserInfo(callback);
-		}
-	}
-	else{
-	  getUserInfo(callback);
-	}
+  encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+  if (signed == 1) {
+    if ((changes == 1) || (CommitButNoPush == 1)) {
+      $("#modalW2").modal();
+    }
+    else {
+      getUserInfo(callback);
+    }
+  }
+  else {
+    getUserInfo(callback);
+  }
 }
 
-function LogInAfterConfirm(callback){
-	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-	getUserInfo(callback);
+function LogInAfterConfirm(callback) {
+  encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+  getUserInfo(callback);
 }
 
-function ModalSignIn(callback){
-	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-	getUserInfo(callback);
+function ModalSignIn(callback) {
+  encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+  getUserInfo(callback);
 }
 
 function signInPage(callback) {
-    // assigning the check box to a variable to check the value
-    let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
+  // assigning the check box to a variable to check the value
+  let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
 
     // username and password values taken to be stored.
     let username: any = (<HTMLInputElement>document.getElementById("username")).value;
@@ -69,15 +69,48 @@ function signInPage(callback) {
 
 
 function loginWithSaved(callback) {
-  
-    document.getElementById("username").value = getUsername();
-    document.getElementById("password").value = getPassword(); //get decrypted username n password  
-  
-  }
-  
+
+  document.getElementById("username").value = getUsername();
+  document.getElementById("password").value = getPassword(); //get decrypted username n password  
+
+}
+
+function searchName() {
+  let ul = document.getElementById("repo-dropdown");
+
+  ul.innerHTML = '';
+
+  encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+
+  cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
+
+  client = github.client({
+    username: getUsernameTemp(),
+    password: getPasswordTemp()
+  });
+
+  var ghme = client.me();
+  ghme.repos(function (err, data, head) {
+    var ghme = client.me();
+
+    for (let i = 0; i < data.length; i++) {
+
+      let rep = Object.values(data)[i];
+      console.log("url of repo: " + rep['html_url']);
+
+      if (parseInt(rep['forks_count']) == 0) {
+        if (rep['full_name'].search(document.getElementById("searchRep").value) != -1) {
+          addSearchedName(rep['full_name'], "repo-dropdown", "selectRepo(this)");
+          repoList[rep['full_name']] = rep['html_url'];
+        }
+      }
+
+    }
+  });
+}
 
 function getUserInfo(callback) {
-  
+
   encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
 
   cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
@@ -87,7 +120,7 @@ function getUserInfo(callback) {
     password: getPasswordTemp()
   });
   var ghme = client.me();
-  ghme.info(function(err, data, head) {
+  ghme.info(function (err, data, head) {
     if (err) {
       displayModal(err);
     } else {
@@ -106,13 +139,13 @@ function getUserInfo(callback) {
 
       let doc = document.getElementById("avatar");
       //doc.innerHTML = 'Sign out'; //HAD TO REMOVE THIS LINE OR THE PROGRAM BROKE.
-	  signed = 1;
+      signed = 1;
 
       callback();
     }
   });
 
-  ghme.repos(function(err, data, head) {
+  ghme.repos(function (err, data, head) {
     if (err) {
       return;
     } else {
@@ -120,23 +153,23 @@ function getUserInfo(callback) {
       for (let i = 0; i < data.length; i++) {
         let rep = Object.values(data)[i];
         console.log("url of repo: " + rep['html_url']);
-      
-        if(rep['fork'] == false) {
-          if(parseInt(rep['forks_count']) == 0 ) {
+
+        if (rep['fork'] == false) {
+          if (parseInt(rep['forks_count']) == 0) {
             displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
             repoList[rep['full_name']] = rep['html_url'];
           }
           else {
             //Create a collapseable list for the forked repo
-            createDropDownFork(rep['full_name'],"repo-dropdown","showDropDown(this)");
+            createDropDownFork(rep['full_name'], "repo-dropdown", "showDropDown(this)");
             repoList[rep['full_name']] = rep['html_url'];
             //Reiterate through and get all the forks of the repo and add to list
-            for(let i = 0; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
               let rep2 = Object.values(data)[i];
-                if(rep2['name'] == rep['name']) {
-                  displayBranch("&nbsp; &nbsp;" +rep2['full_name'],rep['full_name'],"selectRepo(this)")
-                  repoList["&nbsp; &nbsp;"+rep2['full_name']] = rep2['html_url'];
-                }
+              if (rep2['name'] == rep['name']) {
+                displayBranch("&nbsp; &nbsp;" + rep2['full_name'], rep['full_name'], "selectRepo(this)")
+                repoList["&nbsp; &nbsp;" + rep2['full_name']] = rep2['html_url'];
+              }
             }
           }
         }
@@ -155,7 +188,7 @@ function make_base_auth(user, password) {
 function showDropDown(ele) {
   //If the forked Repo is clicked collapse or uncollapse the forked repo list
   let div = document.getElementById(ele.className)
-  if(div.style.display === 'none') {
+  if (div.style.display === 'none') {
     div.style.display = 'block';
   }
   else {
@@ -215,6 +248,6 @@ function redirectToHomePage() {
   window.location.href = "index.html";
   signed = 0;
   changes = 0;
-  CommitButNoPush = 0; 
+  CommitButNoPush = 0;
   //LogInAfterConfirm();
 }
