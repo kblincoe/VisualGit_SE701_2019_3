@@ -30,7 +30,7 @@ function downloadRepository() {
   } else {
     downloadFunc(cloneURL, fullLocalPath);
   }
-  
+
 }
 
 function downloadFunc(cloneURL, fullLocalPath) {
@@ -370,7 +370,6 @@ function clearBranchElement() {
   ul.innerHTML = '';
   ul.appendChild(li);
 }
-
 
 function displayBranch(name, id, onclick) {
   let ul = document.getElementById(id);

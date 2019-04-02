@@ -545,3 +545,18 @@ div.editor-area textarea.lines {
   width: 0vw;
   background-color: white;
 }
+/*Toolbar Styles*/
+.toolbar-Container {
+ }
+
+.toolbar-Icons {
+  text-align: center;
+  cursor: pointer;
+  padding: 10px;
+  max-width: 75px;
+}
+
+.toolbar-Text {
+  font-size: 14px;
+  color: white;
+}
