@@ -296,10 +296,6 @@ function pullFromRemote() {
 // });
 }
 
-
-
-
-
 function pushToRemote() {
   let branch = document.getElementById("branch-name").innerText;
   Git.Repository.open(repoFullPath)

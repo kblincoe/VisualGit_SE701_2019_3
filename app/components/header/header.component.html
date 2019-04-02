@@ -33,13 +33,37 @@
         </li>
       </ul>
 
-      <ul class="navbar-nav col-md-4 hidden-xs">
-        <li class="upload"><i aria-hidden="true" style="color:white" onclick="pushToRemote()" title="Push"><img src= "./assets/push.png"></i></li>
-        <li class="download"><i aria-hidden="true" style="color:white" onclick="pullFromRemote()" title="Pull"><img src= "./assets/pull.png"></i></li>
-        <li class="clone"><a href="#"><i class="fa fa-clone fa-2x col-md-2" aria-hidden="true" onclick="cloneFromRemote()" title="Clone"></i></a></li>
-        <a href="#"><img src="./assets/Clean-Dark.svg" height="48" width="48" onclick="cleanRepo()" class="add-repository-button" title="Clean"></a>
-        <a href=#><img src="./assets/refresh-button.png" height="48" width="48" onClick="requestLinkModal()" class="add-repository-button" title="sync"></a>
-       
+      <!--Toolbar-->
+      <ul class="navbar-nav col-md-4 hidden-xs toolbar-Container">
+        <!--Commit-->
+        <li class="toolbar-Icons" onclick="commitModal()">
+          <a href="#"><img src="./assets/Plus.svg" height="40" width="48" class="add-repository-button" title="Commit"></a>
+          <span class="toolbar-Text">Commit</span>
+        </li>
+
+        <!--Push-->
+        <li class="toolbar-Icons" onclick="pushToRemote()">
+          <a href="#"><img src="./assets/Push.svg" height="40" width="48"class="upload" title="Clean"></a>
+          <span class="toolbar-Text">Push</span>
+        </li>
+
+        <!--Pull-->
+        <li class="toolbar-Icons" onclick="pullFromRemote()">
+          <a href='#'><img src="./assets/Pull.svg" height="40" width="48" class="download" title="sync"></a>
+          <span class="toolbar-Text">Pull</span>
+        </li>
+
+        <!--Clean-->
+        <li class="toolbar-Icons" onclick="cleanRepo()">
+          <a href="#"><img src="./assets/Clean-Dark.svg" height="40" width="48"  class="add-repository-button" title="Clean"></a>
+          <span class="toolbar-Text">Clean</span>
+        </li>
+
+        <!--Branch-->
+        <li class="toolbar-Icons" onclick="openBranch()">
+          <a href="#"><img src="./assets/Branch.svg" height="40" width="48"  class="add-repository-button" title="Branch"></a>
+          <span class="toolbar-Text">Branch</span>
+        </li>
       </ul>
 
       <ul class="navbar-nav navbar-right hidden-xs">
