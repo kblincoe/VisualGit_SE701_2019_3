@@ -28,6 +28,9 @@ function downloadRepository() {
   } else {
       downloadFunc(cloneURL, fullLocalPath);
   }
+}
+
+function commit() {
 
 }
 

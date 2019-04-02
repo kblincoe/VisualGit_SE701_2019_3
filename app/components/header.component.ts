@@ -4,6 +4,9 @@ import { GraphService } from "../services/graph.service";
 
 @Component({
   selector: "app-header",
+  styleUrls: ['/app/components/header.component.css'],
+  // TODO: in-template HTML with separate HTML file
+  // templateUrl: '',
   template: `
     <nav class="navbar navbar-inverse" role="navigation">
       <div class="container-fluid row">
@@ -40,13 +43,31 @@ import { GraphService } from "../services/graph.service";
             </li>
           </ul>
 
-          <ul class="navbar-nav col-md-4 hidden-xs">
-            <li class="upload"><i aria-hidden="true" style="color:white" onclick="pushToRemote()" title="Push"><img src= "./assets/push.png"></i></li>
-            <li class="download"><i aria-hidden="true" style="color:white" onclick="pullFromRemote()" title="Pull"><img src= "./assets/pull.png"></i></li>
-            <li class="clone"><a href="#"><i class="fa fa-clone fa-2x col-md-2" aria-hidden="true" onclick="cloneFromRemote()" title="Clone"></i></a></li>
-            <a href="#"><img src="./assets/Clean-Dark.svg" height="48" width="48" onclick="cleanRepo()" class="add-repository-button" title="Clean"></a>
-            <a href=#><img src="./assets/refresh-button.png" height="48" width="48" onClick="requestLinkModal()" class="add-repository-button" title="sync"></a>
-           
+          <!--Toolbar-->
+          <ul class="navbar-nav col-md-4 hidden-xs toolbar-Container">
+            <!--Commit-->
+            <li class="toolbar-Icons" onclick="openCommitDialog()" style="cursor:pointer">
+              <a href="#"><img src="./assets/Plus.svg" height="40" width="48" class="add-repository-button" title="Commit"></a>
+              <span style="color: #9d9d9d;" >Commit</span>
+            </li>
+
+            <!--Push-->
+            <li class="toolbar-Icons" onclick="pushToRemote()" style="cursor:pointer">
+              <a href="#"><img src="./assets/Push.svg" height="40" width="48"class="upload" title="Clean"></a>
+              <span style="color: #9d9d9d;">Push</span>
+            </li>
+
+            <!--Pull-->
+            <li class="toolbar-Icons" onclick="pullFromRemote()" style="cursor:pointer">
+              <a href='#'><img src="./assets/Pull.svg" height="40" width="48" class="download" title="sync"></a>
+              <span style="color: #9d9d9d;">Pull</span>
+            </li>
+
+            <!--Clean-->
+            <li class="toolbar-Icons" onclick="cleanRepo()" style="cursor:pointer">
+              <a href="#"><img src="./assets/Clean-Dark.svg" height="40" width="48"  class="add-repository-button" title="Clean"></a>
+              <span style="color: #9d9d9d;">Clean</span>
+            </li>
           </ul>
 
           <ul class="navbar-nav navbar-right hidden-xs">
@@ -263,7 +284,7 @@ import { GraphService } from "../services/graph.service";
               <input type="text" id="origin-path" style=" width: 554px !important" placeholder="https://github.com/ORIGINAL_OWNER/ORIGINAL_OWNER_REPOSITORY.git">
             </div>
             <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fetchFromOrigin()">Confirm</button>  
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fetchFromOrigin()">Confirm</button>
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
           </div>
         </div>

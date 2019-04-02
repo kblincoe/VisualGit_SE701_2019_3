@@ -1,0 +1,8 @@
+/*Temporary CSS file until we decide how to do styling*/
+.toolbar-Container {
+   display: flex;
+ }
+
+.toolbar-Icons {
+  flex: 1;
+}
