@@ -287,7 +287,9 @@ export class HeaderComponent   {
   }
 
   switchToMainPanel(): void {
-    signInHead(collpaseSignPanel);
+    signInHead(collapseSignPanel);
+    document.getElementById("Email1").value = "";
+    document.getElementById("Password1").value = "";
   }
 
   WarningSignIn(): void {
