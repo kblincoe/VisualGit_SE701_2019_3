@@ -28,6 +28,7 @@ function processGraph(commits: nodegit.Commit[]) {
   sortCommits(commits);
   makeBranchColor();
   populateCommits();
+  document.getElementById("modal-text-box").innerHTML = "Graph finished";
 }
 
 function sortCommits(commits) {
@@ -239,7 +240,7 @@ function sortBasicGraph() {
 
 function makeBranchColor() {
   let bcList = [];
-  let count = 0;
+
   for (let i = 0; i < commitHistory.length; i++) {
     if (commitHistory[i].toString() in bname) {
       bcList.push({
@@ -248,7 +249,7 @@ function makeBranchColor() {
       });
     }
   }
-  count = 0;
+
   while (bcList.length > 0) {
     let commit = bcList.pop();
     let oid = commit.oid.toString();
@@ -258,6 +259,7 @@ function makeBranchColor() {
     } else {
       bDict[oid] = [cid];
     }
+
     let parents = commit.oid.parents();
 
     for (let i = 0; i < parents.length; i++) {
@@ -371,7 +373,7 @@ function makeAbsNode(c, column: number) {
         abstractList[i]['count'] += 1;
         count = abstractList[i]['count'];
         abstractList[i]['sha'].push(c.toString());
-        abNodes.update({id: i+1, title: "Author: " + getUsernameTemp() + "<br>" + "Number of Commits: " + count});
+        abNodes.update({id: i+1, title: "Author: " + name + "<br>" + "Number of Commits: " + count});
         break;
       }
     }
@@ -379,7 +381,7 @@ function makeAbsNode(c, column: number) {
 
   if (flag) {
     let id = absNodeId++;
-    let title = "Author: " + getUsernameTemp() + "<br>" + "Number of Commits: " + count;
+    let title = "Author: " + name + "<br>" + "Number of Commits: " + count;
 
     abNodes.add({
       id: id,
@@ -427,7 +429,7 @@ function makeAbsNode(c, column: number) {
       id: id,
       time: c.timeMs(),
       column: column,
-      email: getUsernameTemp(),
+      email: email,
       reference: reference,
       parents: c.parents(),
       count: 1,
@@ -441,7 +443,7 @@ function makeNode(c, column: number) {
   let name = getName(c.author().toString());
   let stringer = c.author().toString().replace(/</, "%").replace(/>/, "%");
   let email = stringer.split("%")[1];
-  let title = "Author: " + getUsernameTemp() + "<br>" + "Message: " + c.message();
+  let title = "Author: " + email + "<br>" + "Message: " + c.message();
   let flag = false;
   nodes.add({
     id: id,
@@ -487,7 +489,7 @@ function makeNode(c, column: number) {
     id: id,
     time: c.timeMs(),
     column: column,
-    email: getUsernameTemp(),
+    email: email,
     reference: reference,
     branch: flag,
   });

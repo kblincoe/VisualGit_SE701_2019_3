@@ -20,7 +20,7 @@ import { GraphService } from "../services/graph.service";
           <ul class="nav navbar-nav col-md-5 hidden-xs">
             <li><img src="./assets/RightArrow.svg" class="right-arrow"></li>
             <li class="repo-name dropdown-toggle">
-                <a href="#" id="repo-name" data-toggle="modal" data-target="#repo-modal">repository</a>
+                <a href="#" id="repo-name" data-toggle="modal" data-target="#repo-modal" onclick="checkSignedIn()">repository</a>
             </li>
             <li><img src="./assets/RightArrow.svg" class="right-arrow"></li>
             <li class="branch-name dropdown">
@@ -52,7 +52,7 @@ import { GraphService } from "../services/graph.service";
           <ul class="navbar-nav navbar-right hidden-xs">
             <li>
               <label id="githubname" style="color:white"></label>
-              <a class="btn btn-default btn-outline btn-circle"  id="avatar" data-toggle="collapse" href="#nav-collapse1" aria-expanded="false" aria-controls="nav-collapse1" onclick="signInOrOut()">Sign in</a>
+              <a class="btn btn-default btn-outline btn-circle"  id="avatar" data-toggle="collapse" href="#nav-collapse1" aria-expanded="false" aria-controls="nav-collapse1" onclick="signInOrOut()">Sign out</a>
             </li>
           </ul>
           <div class="collapse nav navbar-nav nav-collapse" id="nav-collapse1">
@@ -107,6 +107,11 @@ import { GraphService } from "../services/graph.service";
             <li class="clean" onclick="cleanRepo()"><a href="#">&nbsp;&nbsp;clean</a></li>
             <li class="sync" onclick="requestLinkModal()"><a href="#">&nbsp;&nbsp;sync</a></li>
           </ul>
+        </div>
+        <div id="cloneProgressDiv" class="progress" style="visibility: collapse">
+          <div id="cloneProgressBar" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
+               style="width: 0%">
+          </div>
         </div>
       </div>
     </nav>
@@ -282,7 +287,9 @@ export class HeaderComponent   {
   }
 
   switchToMainPanel(): void {
-    signInHead(collpaseSignPanel);
+    signInHead(collapseSignPanel);
+    document.getElementById("Email1").value = "";
+    document.getElementById("Password1").value = "";
   }
 
   WarningSignIn(): void {

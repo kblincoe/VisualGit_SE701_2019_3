@@ -205,4 +205,8 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+# User Settings
+data.json
+.settings/
+
 # End of https://www.gitignore.io/api/angular,webstorm,visualstudiocode,node

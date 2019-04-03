@@ -1,12 +1,13 @@
 let cred;
 let blue = "#39c0ba";
 let gray = "#5b6969";
+let continuedWithoutSignIn = false;
 
-function collpaseSignPanel() {
-  $('#nav-collapse1').collapse('hide');
+function collapseSignPanel() {
+  $("#nav-collapse1").collapse("hide");
 }
 
-function switchToClonePanel(){
+function switchToClonePanel() {
   console.log("switch to clone panel");
   hideAuthenticatePanel();
   hideFilePanel();
@@ -21,23 +22,48 @@ function switchToMainPanel() {
   displayGraphPanel();
 }
 
+function checkSignedIn() {
+  if (continuedWithoutSignIn) {
+    displayModal("You need to sign in");
+    // Don't open the repo modal
+    $('#repo-name').removeAttr("data-target");
+  } else {
+    // Ensure repo modal is connected
+    $('#repo-name').attr("data-target", "#repo-modal");
+  }
+}
+
+function switchToAddRepositoryPanelWhenNotSignedIn() {
+  continuedWithoutSignIn = true;
+  switchToAddRepositoryPanel();
+}
+
 function switchToAddRepositoryPanel() {
   console.log("Switching to add repo panel");
   hideAuthenticatePanel();
   hideFilePanel();
   hideGraphPanel();
   displayAddRepositoryPanel();
+  displayUsername();
+  document.getElementById("repoOpen").value = "";
 }
 
-function wait(ms){
-   var start = new Date().getTime();
-   var end = start;
-   while(end < start + ms) {
-     end = new Date().getTime();
+function wait(ms) {
+  var start = new Date().getTime();
+  var end = start;
+  while (end < start + ms) {
+    end = new Date().getTime();
   }
 }
 
-function displayClonePanel(){
+function displayUsername() {
+  console.log(getUsername());
+  if (getUsername() != null) {
+    document.getElementById("githubname").innerHTML = getUsername();
+  }
+}
+
+function displayClonePanel() {
   document.getElementById("add-repository-panel").style.zIndex = "10";
   $("#open-local-repository").hide();
 }
@@ -88,12 +114,12 @@ function displayAuthenticatePanel() {
   document.getElementById("authenticate").style.zIndex = "20";
 }
 
-function displayDiffPanelButtons(){
+function displayDiffPanelButtons() {
   document.getElementById("save-button").style.visibility = "visible";
   document.getElementById("cancel-button").style.visibility = "visible";
 }
 
-function hideDiffPanelButtons(){
+function hideDiffPanelButtons() {
   document.getElementById("save-button").style.visibility = "hidden";
   document.getElementById("cancel-button").style.visibility = "hidden";
   disableSaveCancelButton();
@@ -118,13 +144,23 @@ function enableSaveCancelButton() {
   cancelButton.style.backgroundColor = blue;
 }
 
-function disableDiffPanelEditOnHide(){
+function disableDiffPanelEditOnHide() {
   let doc = document.getElementById("diff-panel-body");
   doc.contentEditable = "false";
-} 
+}
 
 function useSaved() {
-  console.log('button has been pressed: logging in with saved credentials');
-  decrypt();
-  loginWithSaved(switchToMainPanel);
+
+  let file = 'data.json';
+  // check if the data.json file exists
+  fs.exists(file, (exist) => {
+    if (exist) {
+      console.log('button has been pressed: logging in with saved credentials');
+      decrypt();
+      loginWithSaved(switchToMainPanel);
+    } else {
+      // if data,json file doesn't exist show a pop up.
+      window.alert("No saved credentials exist");
+    }
+  });
 }

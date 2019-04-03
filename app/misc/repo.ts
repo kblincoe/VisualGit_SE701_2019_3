@@ -33,9 +33,11 @@ function downloadRepository() {
 
 function downloadFunc(cloneURL, fullLocalPath) {
   console.log("Path of cloning repo: " + fullLocalPath);
-  let options = {};
 
-  displayModal("Cloning Repository...");
+  let progressDiv = document.getElementById("cloneProgressDiv");
+  progressDiv.style.visibility = "visible";
+
+  let options = {};
 
   options = {
     fetchOpts: {
@@ -43,6 +45,10 @@ function downloadFunc(cloneURL, fullLocalPath) {
         certificateCheck: function() { return 1; },
         credentials: function() {
           return cred;
+        },
+        transferProgress: function (data) {
+          let bytesRatio = data.receivedObjects()/data.totalObjects();
+          updateProgressBar(bytesRatio);
         }
       }
     }
@@ -51,18 +57,29 @@ function downloadFunc(cloneURL, fullLocalPath) {
   console.log("cloning into " + fullLocalPath);
   let repository = Git.Clone.clone(cloneURL, fullLocalPath, options)
   .then(function(repository) {
+    progressDiv.style.visibility = 'collapse';
+    updateProgressBar(0);
     console.log("Repo successfully cloned");
+    displayModal("Drawing graph, please wait");
     refreshAll(repository);
     updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
     addCommand("git clone " + cloneURL + " " + fullLocalPath);
     repoFullPath = fullLocalPath;
     repoLocalPath = fullLocalPath;
+    displayModal("Drawing graph, please wait");
     refreshAll(repository);
   },
   function(err) {
     updateModalText("Clone Failed - " + err);
     console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
   });
+}
+
+function updateProgressBar(ratio) {
+  let progressBar = document.getElementById("cloneProgressBar");
+  let percentage = Math.floor(ratio*100) + "%";
+  progressBar.style.width = percentage;
+  progressBar.innerHTML = percentage;
 }
 
 function openRepository() {
@@ -92,6 +109,7 @@ function openRepository() {
       let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
       console.log("current HEAD commit: " + tid);
     }
+    displayModal("Drawing graph, please wait");
     refreshAll(repository);
     console.log("Repo successfully opened");
     updateModalText("Repository successfully opened");
@@ -120,6 +138,8 @@ function addBranchestoNode(thisB: string) {
 }
 
 function refreshAll(repository) {
+  displayModal("Drawing graph, please wait");
+
   let branch;
   bname = [];
   repository.getCurrentBranch()
@@ -245,11 +265,26 @@ function displayBranch(name, id, onclick) {
   let a = document.createElement("a");
   a.setAttribute("href", "#");
   a.setAttribute("class", "list-group-item");
-  a.setAttribute("onclick", onclick);
+  a.setAttribute("onclick", onclick + ";event.stopPropagation()");
   li.setAttribute("role", "presentation")
-  a.appendChild(document.createTextNode(name));
+  a.innerHTML = name;
   li.appendChild(a);
   ul.appendChild(li);
+}
+
+function createDropDownFork(name,id,onclick) {
+  let ul = document.getElementById(id);
+  let button = document.createElement("div");
+  let div = document.createElement("ul");
+  let innerText = document.createTextNode("↨" +name + " (Forked List)");
+  button.className = name; 
+  button.appendChild(innerText);
+  div.setAttribute("id",name);
+  div.setAttribute("role","menu");
+  div.setAttribute("class","list-group")
+  button.setAttribute("onclick",onclick)
+  button.appendChild(div);
+  ul.appendChild(button);
 }
 
 function checkoutLocalBranch(element) {
@@ -263,6 +298,7 @@ function checkoutLocalBranch(element) {
   console.log("name of branch being checked out: " + bn);
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
+    displayModal("Drawing graph, please wait");
     addCommand("git checkout " + bn);
     repo.checkoutBranch("refs/heads/" + bn)
     .then(function() {
@@ -299,6 +335,7 @@ function checkoutRemoteBranch(element) {
     console.log("name of local branch " + bn);
     repos.mergeBranches(bn, "origin/" + bn)
     .then(function() {
+      displayModal("Drawing graph, please wait");
         refreshAll(repos);
         console.log("Pull successful");
     });

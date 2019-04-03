@@ -23,7 +23,7 @@ function createMainWindow() {
 		icon: __dirname + '/assets/VisualGit_Logo.png'
 	});
 
-	
+
 	win.maximize();
 
 	win.setTitle(require('./package.json').name);
@@ -114,15 +114,15 @@ function setMyMenu() {
 			},
 			{
 				label: 'Github Homepage',
-				click () { require('electron').shell.openExternal('https://github.com/kblincoe/VisualGit_SE701'); }
+				click () { require('electron').shell.openExternal('https://github.com/kblincoe/VisualGit_SE701_2019_3'); }
 			},
 			{
 				label: 'Features',
-				click () { require('electron').shell.openExternal('https://github.com/kblincoe/VisualGit_SE701#features'); }
+				click () { require('electron').shell.openExternal('https://github.com/kblincoe/VisualGit_SE701_2019_3#features'); }
 			},
 			{
 				label: 'Report Bugs or Request new Features',
-				click () { require('electron').shell.openExternal('https://github.com/kblincoe/VisualGit_SE701/issues'); }
+				click () { require('electron').shell.openExternal('https://github.com/kblincoe/VisualGit_SE701_2019_3/issues'); }
 			},
 			{
 				label: 'Offline Support',
@@ -131,10 +131,30 @@ function setMyMenu() {
 			{type: 'separator'},
 			{
 				label: 'Learn More ... ',
-				click () { require('electron').shell.openExternal('https://github.com/kblincoe/VisualGit_SE701#help'); }
+				click () { require('electron').shell.openExternal('https://github.com/kblincoe/VisualGit_SE701_2019_3#help'); }
 			}
 		]
-	}];
+	}, {
+            submenu: [
+                {label: "About Application", selector: "orderFrontStandardAboutPanel:"},
+                {type: "separator"},
+                {
+                    label: "Quit", accelerator: "Command+Q", click: function () {
+                        app.quit();
+                    }
+                }
+            ]
+        }, {
+            submenu: [
+                {label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:"},
+                {label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:"},
+                {type: "separator"},
+                {label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:"},
+                {label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:"},
+                {label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:"},
+                {label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:"}
+            ]
+        }];
 
 	return myMenu;
 }
