@@ -45,6 +45,7 @@ function switchToAddRepositoryPanel() {
   hideGraphPanel();
   displayAddRepositoryPanel();
   displayUsername();
+  document.getElementById("repoOpen").value = "";
 }
 
 function wait(ms) {
