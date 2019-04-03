@@ -5,8 +5,6 @@ import { Component } from "@angular/core";
   selector: "user-auth",
   template: `
   <div class="authenticate" id="authenticate">
-  <nav class="navbar navbar-inverse" role="navigation">
-  </nav>
   <form role="form" style="text-align:center; margin-top:100px">
     <label>
       <h1>VisualGit</h1>
