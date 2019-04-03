@@ -130,12 +130,19 @@ function createLocalRepository(){
   } else {
     let localPath = document.getElementById("repoCreate").value;
     let fullLocalPath;
-    if (checkFile.existsSync(localPath)) {
-      fullLocalPath = localPath;
-    } else {
-      fullLocalPath = require("path").join(__dirname, localPath);
+    if(!require('path').isAbsolute(localPath)){
+      updateModalText('The filepath is not valid. For OSX and Ubuntu the filepath should start with /, for Windows C:\\\\')
+      return
+    }else{
+      if (checkFile.existsSync(localPath)) {
+        fullLocalPath = localPath;
+      } else {
+        checkFile.mkdirSync(localPath);
+        fullLocalPath = localPath;
+      }
     }
   }
+
 
   //console.log(require("path").join(fullLocalPath,".git"));
   if(checkFile.existsSync(require("path").join(fullLocalPath,".git"))){
@@ -148,6 +155,7 @@ function createLocalRepository(){
       refreshAll(repository);
       console.log("Repo successfully created");
       updateModalText("Repository successfully created");
+      document.getElementById("repoCreate").value = "";
       switchToMainPanel();
     },
     function(err) {
