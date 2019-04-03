@@ -254,7 +254,6 @@ function makeBranchColor() {
     let commit = bcList.pop();
     let oid = commit.oid.toString();
     let cid = commit.cid;
-    console.log(cid);
     if (oid in bDict) {
       bDict[oid].push(cid);
     } else {
