@@ -37,7 +37,6 @@ or... for macOS
 npm run macstart
 ````
 
-
 ### ssh-agent
 As VisualGit utilises SSH for user authentication, ensure you 
 [generate an SSH key for your GitHub account](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/). 
