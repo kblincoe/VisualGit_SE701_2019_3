@@ -655,8 +655,6 @@ function displayModifiedFiles() {
         fileElement.onclick = function() {
           let doc = document.getElementById("diff-panel");
           console.log("width of document: " + doc.style.width);
-          console.log("filePath" + file.filePath);
-          console.log("selectedFile" + selectedFile);
             // Get the filename being edited and displays on top of the window
           if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();
@@ -666,6 +664,7 @@ function displayModifiedFiles() {
             fileName.innerHTML = file.filePath
             document.getElementById("diff-panel-body").appendChild(fileName);
             if (fileElement.className === "file file-created") {
+              // set the selected file
               selectedFile = file.filePath;
               printNewFile(file.filePath);
             } else {
@@ -680,7 +679,7 @@ function displayModifiedFiles() {
           else if (doc.style.width === '40%') {
             document.getElementById("diff-panel-body").innerHTML = "";
             if (selectedFile === file.filePath) {
-              console.log("hide 40%");
+              // clear the selected file when diff panel is hidden
               selectedFile = "";
               hideDiffPanel()
             } else {
@@ -694,7 +693,8 @@ function displayModifiedFiles() {
             }
           }
           else {
-            console.log("final else");
+            // clear the selected file when diff panel is hidden
+            selectedFile = "";
             hideDiffPanel();
           }
         };
