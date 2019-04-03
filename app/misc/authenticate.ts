@@ -170,13 +170,12 @@ function cloneRepo() {
 
 function signInOrOut() {
   let doc = document.getElementById("avatar");
-  if (doc.innerHTML == 'Sign out'){
-    $('#avatar').removeAttr('data-toggle');
-    
-    if ((changes == 1) || (CommitButNoPush == 1)){
-			$("#modalW2").modal();
-    }
-    else {
+  if (doc.innerHTML == "Sign out") {
+    $("#avatar").removeAttr("data-toggle");
+
+    if (changes == 1 || CommitButNoPush == 1) {
+      $("#modalW2").modal();
+    } else {
       redirectToHomePage();
     }
   }
