@@ -248,7 +248,7 @@ body .body-panel .diff-panel .diff-panel-body {
   float: left;
   background-color: #282828;
   color: #fff;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 body .body-panel .diff-panel .diff-panel-body div {
