@@ -28,6 +28,7 @@ function processGraph(commits: nodegit.Commit[]) {
   sortCommits(commits);
   makeBranchColor();
   populateCommits();
+  document.getElementById("modal-text-box").innerHTML = "Graph finished";
 }
 
 function sortCommits(commits) {
@@ -239,7 +240,7 @@ function sortBasicGraph() {
 
 function makeBranchColor() {
   let bcList = [];
-  let count = 0;
+
   for (let i = 0; i < commitHistory.length; i++) {
     if (commitHistory[i].toString() in bname) {
       bcList.push({
@@ -248,7 +249,7 @@ function makeBranchColor() {
       });
     }
   }
-  count = 0;
+
   while (bcList.length > 0) {
     let commit = bcList.pop();
     let oid = commit.oid.toString();
@@ -258,6 +259,7 @@ function makeBranchColor() {
     } else {
       bDict[oid] = [cid];
     }
+
     let parents = commit.oid.parents();
 
     for (let i = 0; i < parents.length; i++) {
