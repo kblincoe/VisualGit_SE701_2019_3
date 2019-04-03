@@ -3,7 +3,7 @@ let blue = "#39c0ba";
 let gray = "#5b6969";
 let continuedWithoutSignIn = false;
 
-function collpaseSignPanel() {
+function collapseSignPanel() {
   $("#nav-collapse1").collapse("hide");
 }
 
