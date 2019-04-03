@@ -349,6 +349,178 @@ function createBranch() {
   }
 }
 
+function deleteLocalBranch() {
+  $('#delete-branch-modal').modal('toggle');
+  // move function to git.ts
+  let branchName = document.getElementById("branch-to-delete").value;
+  console.log("deleting branch: " + branchName)
+  console.log("remote is: " + remote)
+  let repos;
+  console.log(branchName + " is being deleted...");
+  Git.Repository.open(repoFullPath)
+  .then(function(repo) {
+    // Create a new branch on head
+    console.log("repo full path is: " + repoFullPath)
+    repos = repo;
+    console.log("repos: ")
+    console.log(repo.branchName)
+    console.log(repos.name)
+    console.log("i am deleting the branch")
+    addCommand("git push origin --delete " + branchName);
+
+    repo.getBranch(branchName).then(function(reference) {
+      Git.Branch.delete(reference)
+    })
+    }).then(function() {
+      console.log("ok i deleted the local branch") 
+      refreshAll(repos);
+   })
+}
+
+function deleteRemoteBranch() {
+  $('#delete-branch-modal').modal('toggle');
+  // move function to git.ts
+  let branchName = document.getElementById("branch-to-delete").value;
+  console.log("deleting branch: " + branchName)
+  console.log("remote is: " + remote)
+  let repos;
+  console.log(branchName + " is being deleted...");
+  Git.Repository.open(repoFullPath)
+  .then(function(repo) {
+    // Create a new branch on head
+    console.log("repo full path is: " + repoFullPath)
+    repos = repo;
+    console.log("repos: ")
+    console.log(repo.branchName)
+    console.log(repos.name)
+    console.log("i am deleting the branch")
+    addCommand("git push origin --delete " + branchName);
+/*
+    repo.getBranch(branchName).then(function(reference) {
+      // delete local branch if it exists
+      if (Git.Branch.isCheckedOut(reference)) {
+        console.log("hey this is checked out")
+        return;
+        console.log("check something else out")
+      }
+      console.log("deleting local branch")
+      repo.getBranch(branchName).then(function(reference) {
+        Git.Branch.delete(reference)
+      })
+    }).then(function() {
+      console.log("ok i deleted the local branch") 
+      refreshAll(repos);
+    })
+    console.log("check something else out")
+    */
+      console.log("attempting to do")
+      console.log(':refs/heads/' + branchName)
+      remote.push((':refs/heads/' + branchName),
+      {
+        callbacks: {
+          credentials: function() {
+            console.log("cred is:")
+            console.log(cred)
+            return cred;
+          }
+        }
+      }
+    )
+    /*
+    repo.getRemote('origin').then(function(remote) {
+      
+      console.log("attempting to do")
+      console.log(':refs/remotes/origin/' + branchName)
+      // removing remote branch
+
+      Git.Reference.list(repo).then(function(array) {
+        console.log("here is the reference list")
+        console.log(array)
+      });
+*/
+/*
+      repo.getBranch(branchName).then(function(reference) {
+        // delete local branch if it exists
+        console.log("deleting local branch")
+        repo.getBranch(branchName).then(function(reference) {
+          Git.Branch.delete(reference)
+        })
+      }).then(function() {
+        console.log("ok i deleted the local branch") 
+        
+      })
+    */
+      /*
+      .then(function(){
+          
+        })
+      */
+     /*
+      repo.getBranch(branchName).then(function(reference) {
+        // delete a remote branch
+        console.log("reference is: " + reference)
+      }).catch(function(error){
+        // Handle error
+        console.log("this is a remote branch!!!!!")
+        remote.push((':refs/heads/' + branchName),
+        {
+          callbacks: {
+            credentials: function() {
+              console.log("cred is:")
+              console.log(cred)
+              return cred;
+            }
+          }
+        }
+      )
+      });
+*/
+    
+      /*
+      remote.push((':refs/heads/' + branchName),
+      {
+        callbacks: {
+          credentials: function() {
+            return cred;
+          }
+        }
+      }
+    )
+    */
+    console.log("deleted remote brnch")
+
+}
+/*
+function displayBranch(name, id, onclick) {
+  let ul = document.getElementById(id);
+  let li = document.createElement("li");
+  let a = document.createElement("a");
+  a.setAttribute("href", "#");
+  a.setAttribute("class", "list-group-item");
+  a.setAttribute("onclick", onclick);
+  li.setAttribute("role", "presentation")
+  a.appendChild(document.createTextNode(name));
+  li.appendChild(a);
+
+  if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
+    // display a button beside branches that are not called master
+    let button = document.createElement("Button");
+    button.innerHTML = "Delete";
+    // button.setAttribute("onclick", "displayModal('Are you sure you want to delete the branch: "+name+"')")
+    
+    // opens modal when the delete button is clicked
+    $(button).click(function() {
+      $('#branch-to-delete').val(name);
+      $('#delete-branch-modal').modal();
+     });
+
+    li.appendChild(button);
+  }
+  ul.appendChild(li);
+  
+}
+*/
+
 function mergeLocalBranches(element) {
   let bn = element.innerHTML;
   let fromBranch;

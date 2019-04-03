@@ -259,6 +259,7 @@ function clearBranchElement() {
   ul.appendChild(li);
 }
 
+
 function displayBranch(name, id, onclick) {
   let ul = document.getElementById(id);
   let li = document.createElement("li");
@@ -267,11 +268,46 @@ function displayBranch(name, id, onclick) {
   a.setAttribute("class", "list-group-item");
   a.setAttribute("onclick", onclick + ";event.stopPropagation()");
   li.setAttribute("role", "presentation")
+  a.appendChild(document.createTextNode(name));
   a.innerHTML = name;
   li.appendChild(a);
+  if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
+    var button = document.createElement("Button");
+    button.innerHTML = "Delete";
+    $(button).click(function () {
+        $('#branch-to-delete').val(name);
+        $('#delete-branch-modal').modal();
+    });
+    li.appendChild(button);
+}
   ul.appendChild(li);
 }
 
+/*
+function displayBranch(name, id, onclick) {
+  var ul = document.getElementById(id);
+  var li = document.createElement("li");
+  var a = document.createElement("a");
+  a.setAttribute("href", "#");
+  a.setAttribute("class", "list-group-item");
+  a.setAttribute("onclick", onclick + ";event.stopPropagation()");
+
+  li.setAttribute("role", "presentation");
+  a.innerHTML = name;
+  a.appendChild(document.createTextNode(name));
+  li.appendChild(a);
+  if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
+      var button = document.createElement("Button");
+      button.innerHTML = "Delete";
+      $(button).click(function () {
+          $('#branch-to-delete').val(name);
+          $('#delete-branch-modal').modal();
+      });
+      li.appendChild(button);
+  }
+  ul.appendChild(li);
+}
+*/
 function createDropDownFork(name,id,onclick) {
   let ul = document.getElementById(id);
   let button = document.createElement("div");
