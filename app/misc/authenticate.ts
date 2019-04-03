@@ -1,5 +1,7 @@
 /// <reference path="git.ts" />
 
+import { Json } from "@angular/core/src/facade/lang";
+
 
 //import * as nodegit from "git";
 //import NodeGit, { Status } from "nodegit";
@@ -51,10 +53,16 @@ function ModalSignIn(callback){
 }
 
 function signInPage(callback) {
+    // assigning the check box to a variable to check the value
+    let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
 
-  if (rememberLogin.checked == true) {
-    encrypt(username, password);
-  }
+    // username and password values taken to be stored.
+    let username: any = (<HTMLInputElement>document.getElementById("username")).value;
+    let password: any = (<HTMLInputElement>document.getElementById("password")).value;
+
+    if (rememberLogin.checked == true) {
+        encrypt(username, password);
+    }
 
   getUserInfo(callback);
 }
@@ -112,8 +120,26 @@ function getUserInfo(callback) {
       for (let i = 0; i < data.length; i++) {
         let rep = Object.values(data)[i];
         console.log("url of repo: " + rep['html_url']);
-        displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
-        repoList[rep['full_name']] = rep['html_url'];
+      
+        if(rep['fork'] == false) {
+          if(parseInt(rep['forks_count']) == 0 ) {
+            displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
+            repoList[rep['full_name']] = rep['html_url'];
+          }
+          else {
+            //Create a collapseable list for the forked repo
+            createDropDownFork(rep['full_name'],"repo-dropdown","showDropDown(this)");
+            repoList[rep['full_name']] = rep['html_url'];
+            //Reiterate through and get all the forks of the repo and add to list
+            for(let i = 0; i < data.length; i++) {
+              let rep2 = Object.values(data)[i];
+                if(rep2['name'] == rep['name']) {
+                  displayBranch("&nbsp; &nbsp;" +rep2['full_name'],rep['full_name'],"selectRepo(this)")
+                  repoList["&nbsp; &nbsp;"+rep2['full_name']] = rep2['html_url'];
+                }
+            }
+          }
+        }
       }
     }
   });
@@ -136,6 +162,18 @@ function getUserInfo(callback) {
   // });
 }
 
+
+function showDropDown(ele) {
+  //If the forked Repo is clicked collapse or uncollapse the forked repo list
+  let div = document.getElementById(ele.className)
+  if(div.style.display === 'none') {
+    div.style.display = 'block';
+  }
+  else {
+    div.style.display = 'none';
+  }
+
+}
 function selectRepo(ele) {
   url = repoList[ele.innerHTML];
   let butt = document.getElementById("cloneButton");

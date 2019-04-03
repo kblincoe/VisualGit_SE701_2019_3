@@ -317,30 +317,36 @@ function pushToRemote() {
 }
 
 function createBranch() {
-  let branchName = document.getElementById("branchName").value;
-  let repos;
-  console.log(branchName + " is being created");
-  Git.Repository.open(repoFullPath)
-  .then(function(repo) {
-    // Create a new branch on head
-    repos = repo;
-    addCommand("git branch " + branchName);
-    return repo.getHeadCommit()
-    .then(function(commit) {
-      return repo.createBranch(
-        branchName,
-        commit,
-        0,
-        repo.defaultSignature(),
-        "Created new-branch on HEAD");
-    }, function(err) {
-      console.log("git.ts, line 337, error occurred while trying to create a new branch " + err);
+  if (typeof repoFullPath === "undefined") {
+    // repository not selected
+    displayModal("Please select the repository you want to create a branch of/ Disable the Branch Icon");
+  } else {
+    let branchName = document.getElementById("branchName").value;
+    let repos;
+
+    console.log(branchName + " is being created");
+    Git.Repository.open(repoFullPath)
+        .then(function (repo) {
+          // Create a new branch on head
+          repos = repo;
+          addCommand("git branch " + branchName);
+          return repo.getHeadCommit()
+              .then(function (commit) {
+                return repo.createBranch(
+                    branchName,
+                    commit,
+                    0,
+                    repo.defaultSignature(),
+                    "Created new-branch on HEAD");
+              }, function (err) {
+                console.log("git.ts, line 337, error occurred while trying to create a new branch " + err);
+              });
+        }).done(function () {
+      refreshAll(repos);
+      console.log("All done!");
     });
-  }).done(function() {
-    refreshAll(repos);
-    console.log("All repositories loaded");
-  });
-  document.getElementById("branchName").value = "";
+    document.getElementById("branchName").value = "";
+  }
 }
 
 function mergeLocalBranches(element) {
@@ -557,6 +563,7 @@ function Reload(){
 function displayModifiedFiles() {
   modifiedFiles = [];
 
+  let selectedFile = "";
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
     console.log("Is repo merging: " + repo.isMerging());
@@ -644,22 +651,50 @@ function displayModifiedFiles() {
 
         document.getElementById("files-changed").appendChild(fileElement);
 
+
         fileElement.onclick = function() {
           let doc = document.getElementById("diff-panel");
           console.log("width of document: " + doc.style.width);
-          if (doc.style.width === '0px' || doc.style.width === '') {
             // Get the filename being edited and displays on top of the window
+          if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();
-            document.getElementById("diff-panel-body").innerHTML = "";
+
+            document.getElementById("diff-panel-body")!.innerHTML = "";
             let fileName = document.createElement("p");
             fileName.innerHTML = file.filePath
             document.getElementById("diff-panel-body").appendChild(fileName);
             if (fileElement.className === "file file-created") {
+              // set the selected file
+              selectedFile = file.filePath;
               printNewFile(file.filePath);
             } else {
+
+              let diffCols = document.createElement("div");
+              diffCols.innerText = "Old" + "\t" + "New" + "\t" + "+/-" + "\t" + "Content";
+              document.getElementById("diff-panel-body")!.appendChild(diffCols);
+              selectedFile = file.filePath;
               printFileDiff(file.filePath);
             }
-          } else {
+          }
+          else if (doc.style.width === '40%') {
+            document.getElementById("diff-panel-body").innerHTML = "";
+            if (selectedFile === file.filePath) {
+              // clear the selected file when diff panel is hidden
+              selectedFile = "";
+              hideDiffPanel()
+            } else {
+              if (fileElement.className === "file file-created") {
+                selectedFile = file.filePath;
+                printNewFile(file.filePath);
+              } else {
+                selectedFile = file.filePath;
+                printFileDiff(file.filePath);
+              }
+            }
+          }
+          else {
+            // clear the selected file when diff panel is hidden
+            selectedFile = "";
             hideDiffPanel();
           }
         };
@@ -696,7 +731,17 @@ function displayModifiedFiles() {
                       let newFilePath = patch.newFile().path();
                       if (newFilePath === filePath) {
                         lines.forEach(function(line) {
-                          callback(String.fromCharCode(line.origin()) + line.content());
+
+                          // Catch the "no newline at end of file" lines created by git
+                          if (line.origin() != 62) {
+
+                            // include linenumbers and change type
+                            callback( String.fromCharCode(line.origin())
+                            + (line.oldLineno() != -1 ? line.oldLineno() : "") 
+                            + "\t" + (line.newLineno() != -1 ? line.newLineno() : "")
+                            + "\t" + String.fromCharCode(line.origin())
+                            + "\t" + line.content());
+                          }
                         });
                       }
                     });
@@ -714,12 +759,13 @@ function displayModifiedFiles() {
         if (line.charAt(0) === "+") {
           element.style.backgroundColor = "#84db00";
           element.style.display = "table-row";
-          line = line.slice(1, line.length);
         } else if (line.charAt(0) === "-") {
           element.style.backgroundColor = "#ff2448";
           element.style.display = "table-row";
-          line = line.slice(1, line.length);
         }
+
+        // If not a changed line, origin will be a space character, so still need to slice
+        line = line.slice(1, line.length);
 
         element.innerText = line;
         document.getElementById("diff-panel-body").appendChild(element);
