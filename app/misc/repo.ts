@@ -276,6 +276,7 @@ function displayBranch(name, id, onclick) {
     button.innerHTML = "Delete";
     $(button).click(function () {
         $('#branch-to-delete').val(name);
+        document.getElementById("displayedBranchName").innerHTML = name;
         $('#delete-branch-modal').modal();
     });
     li.appendChild(button);
