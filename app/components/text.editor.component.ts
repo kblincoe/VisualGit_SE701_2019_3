@@ -6,6 +6,7 @@ import { Component } from "@angular/core";
   <div class="editor-panel">
     <div>
       <button class="open-button" (click)="openFile()">Open File</button>
+      <input type="file" id="file-upload" (change)="newFileUpload()" style="display: none;"/>
       <button class="close-button" (click)="closeEditor()">Close</button>
     </div>
     <div class="file-tab" id="file-tab">
@@ -15,13 +16,8 @@ import { Component } from "@angular/core";
     <div id="0" class="tabcontent">
       <div class="editor-area">
         <textarea class="lines" readonly="true" id="line-text-area"></textarea>
-        <textarea class="file" id="file-text-area" (click)="populate()" (scroll)="scrollSync()" (keydown)="keyPressed($event)" (input)="valueChanged()" (cut)="cutPastePressed = true" (paste)="cutPastePressed = true"></textarea>
+        <textarea class="file" id="file-text-area" (click)="createLineNumbers()" (scroll)="scrollSync()" (keydown)="keyPressed($event)" (input)="valueChanged()" (cut)="cutPastePressed = true" (paste)="cutPastePressed = true"></textarea>
       </div>
-    </div>
-
-    <div id="1" class="tabcontent">
-      <h3>File B</h3>
-      <p>Content</p> 
     </div>
   </div>
   `
@@ -39,11 +35,45 @@ export class TextEditorComponent {
   cutPastePressed = false;
 
   // True when the line text area is being populated.
-  populating: boolean;
+  changingLines: boolean;
 
   // This function is used to open files.
   openFile(): void {
+    // Get the upload input element and then click it.
+    let fileOpenInput = document.getElementById("file-upload");
+    if (fileOpenInput != null) {
+      fileOpenInput.click();
+    }
+  }
 
+  /*
+    This function is called when a file is uploaded.
+    It's purpose is to create a tab for the new file
+    and fill the file text area with the file contents.
+  */
+  newFileUpload(): void {
+    let reader = new FileReader();
+
+    // The input where the opened file is located.
+    let fileOpenInput = document.getElementById("file-upload");
+
+    // This runs when the reader has finished reading the file.
+    reader.onload = (e) => {
+      let fileTextArea = document.getElementById("file-text-area");
+      if (fileTextArea != null && reader.result != null) {
+        // Add the file text to the editor and create lines.
+        (<HTMLInputElement>fileTextArea).value = (<string>reader.result);
+        this.createLineNumbers();
+      }
+    }
+
+    // Start reading the uploaded file.
+    if (fileOpenInput != null) {
+      let files = (<HTMLInputElement>fileOpenInput).files
+      if (files != null) {
+        reader.readAsText(files[0]);
+      }
+    }
   }
 
   /* 
@@ -107,16 +137,16 @@ export class TextEditorComponent {
     This function fills the line text area with the appropriate
     line numbers.
   */
-  populate(): void {
+  createLineNumbers(): void {
     // If this function is already running, return.
-    if (this.populating) {
+    if (this.changingLines) {
       return;
     }
 
 
     // The function has started running.
-    this.populating = true;
-    
+    this.changingLines = true;
+
     let i = 0;
     let lineNumberString = ''
     let lineTextArea = document.getElementById("line-text-area");
@@ -127,7 +157,7 @@ export class TextEditorComponent {
       corresponding to the number of lines in the editor.
     */
     if (lineTextArea != null && fileTextArea != null) {
-      let fileText = (<HTMLInputElement> fileTextArea).value
+      let fileText = (<HTMLInputElement>fileTextArea).value
       let numberOfLineBreaks = (fileText.match(/\n/g) || []).length;
       for (i = 0; i < numberOfLineBreaks + 1; i++) {
         lineNumberString = lineNumberString + (i + '\r\n');
@@ -136,7 +166,7 @@ export class TextEditorComponent {
     }
 
     // The function has finished running.
-    this.populating = false;
+    this.changingLines = false;
   }
 
   /*
@@ -144,7 +174,7 @@ export class TextEditorComponent {
     to repopulate the line numbers.
   */
   keyPressed(event: KeyboardEvent): void {
-    this.currentKey = (<string> event.key);
+    this.currentKey = (<string>event.key);
   }
 
   /*
@@ -153,8 +183,8 @@ export class TextEditorComponent {
     depending on what action the user takes.
   */
   valueChanged(): void {
-    if (this.currentKey == "Enter" || this.currentKey == "Backspace" || this.currentKey == "Delete" || this.cutPastePressed){
-      this.populate();
+    if (this.currentKey == "Enter" || this.currentKey == "Backspace" || this.currentKey == "Delete" || this.cutPastePressed) {
+      this.createLineNumbers();
       this.cutPastePressed = false;
     }
   }
