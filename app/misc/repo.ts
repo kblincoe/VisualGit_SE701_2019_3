@@ -109,6 +109,18 @@ function openRepository() {
       let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
       console.log("current HEAD commit: " + tid);
     }
+    if (readFile.exists(repoFullPath + "/.git/config")) {
+      let text = readFile.read(repoFullPath + "/.git/config", null);
+      console.log("This is text A",text)
+      var searchString = "[remote \"origin\"]"
+      text = text.substr(text.indexOf(searchString)+searchString.length, text.length);
+      console.log("This is text B",text)
+      text = text.substr(0, text.indexOf(".git"));
+      console.log("This is text C",text)
+      let array = text.split('/');
+      console.log("This is the last element ",array[array.length-1]);
+
+    }
     displayModal("Drawing graph, please wait");
     refreshAll(repository);
     console.log("Repo successfully opened");
