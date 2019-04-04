@@ -876,15 +876,16 @@ function displayModifiedFiles() {
 
         if (line.charAt(0) === "+") {
           element.style.backgroundColor = "#84db00";
-          element.style.display = "table-row";
+          //element.style.display = "table-row";
         } else if (line.charAt(0) === "-") {
           element.style.backgroundColor = "#ff2448";
-          element.style.display = "table-row";
+          //element.style.display = "table-row";
         }
 
         // If not a changed line, origin will be a space character, so still need to slice
         line = line.slice(1, line.length);
 
+        element.style.display = "table-row-group";
         element.innerText = line;
         document.getElementById("diff-panel-body").appendChild(element);
       }
@@ -892,6 +893,8 @@ function displayModifiedFiles() {
       function formatNewFileLine(text) {
         let element = document.createElement("div");
         element.style.backgroundColor = green;
+        //element.style.display = "table-row";
+        element.style.display = "table-row-group";
         element.innerHTML = text;
         document.getElementById("diff-panel-body").appendChild(element);
       }
