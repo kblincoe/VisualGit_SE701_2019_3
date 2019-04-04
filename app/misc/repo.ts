@@ -130,7 +130,6 @@ function createLocalRepository(){
   } else {
     let localPath = document.getElementById("repoCreate").value;
     let fullLocalPath;
-<<<<<<< HEAD
     if(!require('path').isAbsolute(localPath)){
       updateModalText('The filepath is not valid. For OSX and Ubuntu the filepath should start with /, for Windows C:\\\\')
       return
@@ -145,15 +144,6 @@ function createLocalRepository(){
   }
 
 
-=======
-    if (checkFile.existsSync(localPath)) {
-      fullLocalPath = localPath;
-    } else {
-      fullLocalPath = require("path").join(__dirname, localPath);
-    }
-  }
-
->>>>>>> implemented git init functionality. Testing still required.
   //console.log(require("path").join(fullLocalPath,".git"));
   if(checkFile.existsSync(require("path").join(fullLocalPath,".git"))){
     updateModalText("This folder is already a git repository. Please try to open it instead.");
@@ -165,10 +155,7 @@ function createLocalRepository(){
       refreshAll(repository);
       console.log("Repo successfully created");
       updateModalText("Repository successfully created");
-<<<<<<< HEAD
       document.getElementById("repoCreate").value = "";
-=======
->>>>>>> implemented git init functionality. Testing still required.
       switchToMainPanel();
     },
     function(err) {
