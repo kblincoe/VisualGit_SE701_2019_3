@@ -65,7 +65,7 @@ import { GraphService } from "../services/graph.service";
                 <label class="sr-only" for="Password">Password</label>
                 <input type="password" class="form-control" id="Password1" placeholder="Password" required />
               </div>
-              <button type="submit" class="btn btn-success" (click)="switchToMainPanel()">Sign in</button>
+              <button type="submit" class="btn btn-success" (click)="switchToMainPanel()">Sign In</button>
             </form>
           </div>
 

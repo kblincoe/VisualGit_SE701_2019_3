@@ -34,6 +34,7 @@ function checkSignedIn() {
 }
 
 function switchToAddRepositoryPanelWhenNotSignedIn() {
+  document.getElementById("avatar").innerHTML= "Sign In" ;
   continuedWithoutSignIn = true;
   switchToAddRepositoryPanel();
 }
