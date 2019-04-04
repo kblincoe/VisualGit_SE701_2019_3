@@ -463,8 +463,8 @@ body .footer .git-command {
   border-top: none;
 }
 
-div.editor-panel button.edit-button {
-  display: block;
+div.editor-header button.close-button, div.editor-header button.open-button {
+  display: inline;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
@@ -477,8 +477,17 @@ div.editor-panel button.edit-button {
   color: #fff;
 }
 
-div.editor-panel button.edit-button:hover {
+div.editor-header button.close-button:hover, div.editor-header button.open-button:hover {
   opacity: 0.8;
+}
+
+div.editor-header .indent-selector {
+  display: inline-block;
+}
+
+div.editor-header select, div.editor-header p {
+  display: inline;
+  vertical-align: top;
 }
 
 div.editor-area {

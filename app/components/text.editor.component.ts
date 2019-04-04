@@ -4,9 +4,22 @@ import { Component } from "@angular/core";
   selector: "editor-panel",
   template: `
   <div class="editor-panel">
-    <div>
+    <div class="editor-header">
       <button class="open-button" (click)="openFile()">Open File</button>
       <input type="file" id="file-upload" (change)="newFileUpload()" style="display: none;"/>
+      <div class="indent-selector">
+        <p> Spaces to indent: </p>
+        <select id="selected-indent" (change)="updateIndentAmount()">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected="selected">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+      </div>
       <button class="close-button" (click)="closeEditor()">Close</button>
     </div>
     <div class="file-tab" id="file-tab">
@@ -36,6 +49,9 @@ export class TextEditorComponent {
 
   // True when the line text area is being populated.
   changingLines: boolean;
+
+  // Amount of spaces to be added on 'Tab' press.
+  numberOfSpacesToIndent = 4;
 
   // This function is used to open files.
   openFile(): void {
@@ -143,7 +159,6 @@ export class TextEditorComponent {
       return;
     }
 
-
     // The function has started running.
     this.changingLines = true;
 
@@ -174,7 +189,29 @@ export class TextEditorComponent {
     to repopulate the line numbers.
   */
   keyPressed(event: KeyboardEvent): void {
-    this.currentKey = (<string>event.key);
+    this.currentKey = <string>event.key;
+
+    /*
+      When tab is pressed, override default behaviour and
+      insert specified number of spaces instead.
+    */
+    if (event.key == "Tab") {
+      event.preventDefault();
+      let fileTextArea = <HTMLInputElement>document.getElementById("file-text-area");
+
+      // Current cursor location.
+      let selectionStart = fileTextArea.selectionStart;
+
+      // Cursor location after current edit.
+      let selectionEnd = fileTextArea.selectionEnd;
+      if (selectionStart != null && selectionEnd != null) {
+        // Everything before the cursor + amount of spaces + everything after cursor end point.
+        fileTextArea.value = fileTextArea.value.substring(0, selectionStart) + " ".repeat(this.numberOfSpacesToIndent) + fileTextArea.value.substring(selectionEnd);
+        
+        // Move cursor forward by amount of spaces added.
+        fileTextArea.selectionStart = fileTextArea.selectionEnd = selectionStart + this.numberOfSpacesToIndent;
+      }
+    }
   }
 
   /*
@@ -187,5 +224,14 @@ export class TextEditorComponent {
       this.createLineNumbers();
       this.cutPastePressed = false;
     }
+  }
+
+  /*
+    Update the number of spaces to indent based 
+    on selection.
+  */
+  updateIndentAmount(): void {
+    let selector = <HTMLInputElement>document.getElementById("selected-indent");
+    this.numberOfSpacesToIndent = parseInt(selector.value);
   }
 }
