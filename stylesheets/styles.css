@@ -160,7 +160,7 @@ body .file-panel {
   overflow-y: auto;
 }
 
-body .file-panel .modified-files-header .select-all-message {
+body .file-panel .modified-files-header .staged-files-header .select-all-message {
   width: 77.5%;
   display: inline-block;
   margin-left: 10px;
@@ -179,7 +179,7 @@ body .file-panel .files-changed .file {
   border: 1px solid #fff;
 }
 
-body .file-panel .files-changed .file p {
+body .file-panel .files-changed .files-staged .file p {
   color: #fff;
   display: inline-block;
   vertical-align: middle;
@@ -190,11 +190,11 @@ body .file-panel .files-changed .file p {
   width: 80%;
 }
 
-body .file-panel .files-changed .file input {
+body .file-panel .files-changed .files-staged .file input {
   vertical-align: middle;
 }
 
-body .file-panel .files-changed .file:hover {
+body .file-panel .files-changed .files-staged .file:hover {
   opacity: 0.8;
 }
 
@@ -204,7 +204,7 @@ body .file-panel .commit-panel .commit-message-input {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 20px;
+  margin-top: 90%;
   margin-bottom: 5px;
   height: 50px;
   border-radius: 5px;
