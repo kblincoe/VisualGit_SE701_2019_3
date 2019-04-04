@@ -431,6 +431,7 @@ body .footer .git-command {
   overflow: hidden;
   border: 1px solid #ccc;
   background-color: #f1f1f1;
+  width: 100vw;
 }
 
 /* Style the buttons that are used to open the tab content */
@@ -478,4 +479,36 @@ div.editor-panel button.edit-button {
 
 div.editor-panel button.edit-button:hover {
   opacity: 0.8;
+}
+
+div.editor-area {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  height: 60vh;
+}
+
+div.editor-area textarea {
+  resize: none;
+}
+
+div.editor-area textarea.file {
+  float: left;
+  display: inline;
+  margin-right: 0;
+  width: 90%;
+  height: 100%;
+  overflow: auto;
+  white-space: nowrap;
+}
+div.editor-area textarea.lines {
+  float: left;
+  display: inline;
+  margin-left: 0;
+  width: 10%;
+  max-width: 40px;
+  height: 100%;
+  overflow: hidden;
+  text-align:right;
 }
