@@ -271,16 +271,18 @@ function displayBranch(name, id, onclick) {
   a.appendChild(document.createTextNode(name));
   a.innerHTML = name;
   li.appendChild(a);
+  
   if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
     var button = document.createElement("Button");
     button.innerHTML = "Delete";
+    button.classList.add('btn-danger');
     $(button).click(function () {
         $('#branch-to-delete').val(name);
         document.getElementById("displayedBranchName").innerHTML = name;
         $('#delete-branch-modal').modal();
     });
     li.appendChild(button);
-}
+  }
   ul.appendChild(li);
 }
 
