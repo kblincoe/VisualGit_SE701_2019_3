@@ -678,6 +678,9 @@ function displayModifiedFiles() {
           }
           else if (doc.style.width === '40%') {
             document.getElementById("diff-panel-body").innerHTML = "";
+            let fileName = document.createElement("p");
+            fileName.innerHTML = file.filePath
+            document.getElementById("diff-panel-body").appendChild(fileName);
             if (selectedFile === file.filePath) {
               // clear the selected file when diff panel is hidden
               selectedFile = "";
