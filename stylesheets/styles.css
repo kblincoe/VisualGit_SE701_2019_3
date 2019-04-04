@@ -407,7 +407,38 @@ body .footer p {
   margin: 0;
 }
 
-body .footer .git-command {
+body .footer .commit-panel .commit-message-input {
+  resize: none;
+  width: 275px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 50px;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+body .footer .commit-panel .commit-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 15px;
+  background-color: #39c0ba;
+  color: #fff;
+}
+
+body .footer .commit-panel .commit-button:hover {
+  opacity: 0.8;
+}
+
+body .footer .terminal .git-command {
   margin: 10px;
 }
 

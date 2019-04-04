@@ -70,6 +70,7 @@ function displayClonePanel() {
 
 function displayFilePanel() {
   document.getElementById("file-panel").style.zIndex = "10";
+  document.getElementById("commit-button").style="visiblity: visible";
 }
 
 function displayGraphPanel() {
@@ -83,6 +84,7 @@ function displayAddRepositoryPanel() {
 
 function hideFilePanel() {
   document.getElementById("file-panel").style.zIndex = "-10";
+  document.getElementById("commit-button").style="visibility: hidden";
 }
 
 function hideGraphPanel() {
