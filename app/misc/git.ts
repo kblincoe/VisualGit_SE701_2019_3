@@ -386,7 +386,35 @@ function deleteRemoteBranch() {
   console.log(branchName + " is being deleted...");
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
+    Git.Reference.list(repo).then(function(array) {
+      if (array.includes("refs/remotes/origin/" + branchName)) {
+        console.log("this is a remote branch")
+        repo.getRemote('origin').then(function(remote) {
+          remote.push((':refs/heads/' + branchName),
+        {
+          callbacks: {
+            credentials: function() {
+              return cred;
+            }
+          }
+        }
+      )
+      .then(function() {
+        console.log("ok i deleted the remote branch") 
+        updateModalText("The remote branch: " + branchName + " has been deleted")
+      });
+      })
+      }
+      else{
+        console.log("this is a local branch")
+        updateModalText("A remote branch called: " + branchName + " does not exist.")
+        return;
+        console.log("you are not supposed to be reading this")
+      }
+    })
     // Create a new branch on head
+
+    /*
     console.log("repo full path is: " + repoFullPath)
     repos = repo;
     console.log("repos: ")
@@ -413,9 +441,10 @@ function deleteRemoteBranch() {
    })
   
   })
+  */
   })
-    console.log("deleted remote brnch")
-
+   // console.log("deleted remote brnch")
+  
 }
 /*
 function displayBranch(name, id, onclick) {
