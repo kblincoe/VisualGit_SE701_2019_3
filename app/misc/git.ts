@@ -663,10 +663,12 @@ function displayModifiedFiles() {
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
-        checkbox.onclick = function(){
+        checkbox.onclick = function(event){
           if(!checkbox.checked){
             document.getElementById('select-all-checkbox').checked = false;
           }
+          // Stops a click from propagating to the other layers
+          event.stopPropagation();
         }
         fileElement.appendChild(checkbox);
 
