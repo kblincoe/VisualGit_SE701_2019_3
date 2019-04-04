@@ -71,7 +71,8 @@ function downloadFunc(cloneURL, fullLocalPath) {
     repoLocalPath = fullLocalPath;
     displayModal("Drawing graph, please wait");
     refreshAll(repository);
-    },
+    switchToMainPanel();
+  },
   function(err) {
     updateModalText("Clone Failed - " + err);
     console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
