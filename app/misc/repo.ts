@@ -11,6 +11,7 @@ let checkFile = require("fs");
 let repoCurrentBranch = "master";
 let modal;
 let span;
+let contributors: [any] = [0];
 
 function downloadRepository() {
   let fullLocalPath;
@@ -109,14 +110,12 @@ function openRepository() {
       let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
       console.log("current HEAD commit: " + tid);
     }
-    //TODO: Store in global variable for repo name
-    //Use with API
-    //Pull username from url as well
+    //Reads the git config file and extracts info about the remote on GitHub
     if (readFile.exists(repoFullPath + "/.git/config")) {
       let text = readFile.read(repoFullPath + "/.git/config", null);
       let searchString = "[remote \"origin\"]";
+
       text = text.substr(text.indexOf(searchString)+searchString.length, text.length);
-      
       text = text.substr(0, text.indexOf(".git"));
       
       let array = text.split('/');
@@ -136,8 +135,14 @@ function openRepository() {
         success: function(response){
           
           for(var i=0;i<response.length;i++){
-            console.log("This is login: ",response[i].login);
+            //Store list of logins here.
+            contributors[i] = {
+              "username" : response[i].login,
+              "name" : "",
+              "email" : ""
+            }
           }
+          console.log("The contributors for this project are ",contributors)
         }
       })
 
