@@ -7,6 +7,7 @@ import { Component } from "@angular/core";
     <div class="editor-header">
       <button class="open-button" (click)="openFile()">Open File</button>
       <input type="file" id="file-upload" (change)="newFileUpload()" style="display: none;"/>
+      <button class="open-button" (click)="saveFile()" id="save-button">Save</button>
       <div class="indent-selector">
         <p> Spaces to indent: </p>
         <select id="selected-indent" (change)="updateIndentAmount()">
@@ -53,6 +54,9 @@ export class TextEditorComponent {
   // Amount of spaces to be added on 'Tab' press.
   numberOfSpacesToIndent = 4;
 
+  // Path of opened file
+  filePath: string;
+
   // This function is used to open files.
   openFile(): void {
     // Get the upload input element and then click it.
@@ -73,20 +77,23 @@ export class TextEditorComponent {
     // The input where the opened file is located.
     let fileOpenInput = document.getElementById("file-upload");
 
-    // This runs when the reader has finished reading the file.
-    reader.onload = (e) => {
-      let fileTextArea = document.getElementById("file-text-area");
-      if (fileTextArea != null && reader.result != null) {
-        // Add the file text to the editor and create lines.
-        (<HTMLInputElement>fileTextArea).value = (<string>reader.result);
-        this.createLineNumbers();
-      }
-    }
-
-    // Start reading the uploaded file.
     if (fileOpenInput != null) {
       let files = (<HTMLInputElement>fileOpenInput).files
+
       if (files != null) {
+        // This runs when the reader has finished reading the file.
+        reader.onload = (e) => {
+          let fileTextArea = document.getElementById("file-text-area");
+          if (fileTextArea != null && reader.result != null) {
+            // Add the file text to the editor and create lines.
+            (<HTMLInputElement>fileTextArea).value = (<string>reader.result);
+            this.createLineNumbers();
+            let file = files[0];
+            this.filePath = file.path
+          }
+        }
+
+        // Start reading the uploaded file.
         reader.readAsText(files[0]);
       }
     }
@@ -207,9 +214,15 @@ export class TextEditorComponent {
       if (selectionStart != null && selectionEnd != null) {
         // Everything before the cursor + amount of spaces + everything after cursor end point.
         fileTextArea.value = fileTextArea.value.substring(0, selectionStart) + " ".repeat(this.numberOfSpacesToIndent) + fileTextArea.value.substring(selectionEnd);
-        
+
         // Move cursor forward by amount of spaces added.
         fileTextArea.selectionStart = fileTextArea.selectionEnd = selectionStart + this.numberOfSpacesToIndent;
+      }
+    } else if (event.ctrlKey || event.metaKey) {
+      // When Ctrl+S is pressed, save file.
+      if (event.key == "s") {
+        event.preventDefault();
+        this.saveFile();
       }
     }
   }
@@ -224,6 +237,11 @@ export class TextEditorComponent {
       this.createLineNumbers();
       this.cutPastePressed = false;
     }
+    // Change save button back to 'Save' on value change.
+    let saveButton = document.getElementById("save-button");
+    if (saveButton != null) {
+      saveButton.innerHTML = "Save";
+    }
   }
 
   /*
@@ -233,5 +251,42 @@ export class TextEditorComponent {
   updateIndentAmount(): void {
     let selector = <HTMLInputElement>document.getElementById("selected-indent");
     this.numberOfSpacesToIndent = parseInt(selector.value);
+  }
+
+  /*
+    Get content of text area and file name and 
+    save the contents.
+  */
+  saveFile(): void {
+    let saveButton = document.getElementById("save-button");
+
+    // Give user feedback that save is occuring.
+    if (saveButton != null) {
+      saveButton.innerHTML = "Saving...";
+    }
+
+    // Get current content.
+    let fileTextArea = <HTMLInputElement>document.getElementById("file-text-area")
+
+    // Save file.
+    saveEditedFile(this.filePath, fileTextArea.value, this.saveSuccess)
+  }
+
+  /*
+    This function gives user feedback after attempting to
+    save the file.
+  */
+  saveSuccess(err: any): void {
+    if (err) {
+      // Inform user of error.
+      displayModal("An error occured when saving, please try again.");
+      console.log(err);
+    } else {
+      // Change save button to saved, remove star next to filename
+      let saveButton = document.getElementById("save-button");
+      if (saveButton != null) {
+        saveButton.innerHTML = "Saved";
+      }
+    }
   }
 }
