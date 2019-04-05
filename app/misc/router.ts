@@ -2,6 +2,7 @@ let cred;
 let blue = "#39c0ba";
 let gray = "#5b6969";
 let continuedWithoutSignIn = false;
+let showUsername = true;
 
 function collapseSignPanel() {
   $("#nav-collapse1").collapse("hide");
@@ -20,6 +21,7 @@ function switchToMainPanel() {
   hideAddRepositoryPanel();
   displayFilePanel();
   displayGraphPanel();
+  
 }
 
 function checkSignedIn() {
@@ -36,7 +38,9 @@ function checkSignedIn() {
 function switchToAddRepositoryPanelWhenNotSignedIn() {
   document.getElementById("avatar").innerHTML= "Sign In" ;
   continuedWithoutSignIn = true;
+  showUsername = false;
   switchToAddRepositoryPanel();
+  
 }
 
 function switchToAddRepositoryPanel() {
@@ -45,7 +49,15 @@ function switchToAddRepositoryPanel() {
   hideFilePanel();
   hideGraphPanel();
   displayAddRepositoryPanel();
-  displayUsername();
+  
+  if(showUsername){
+    document.getElementById("Button_Sign_out").style.display = "block";
+    document.getElementById("Button_Sign_in").style.display = "none";
+    displayUsername();
+  }else{
+    document.getElementById("Button_Sign_out").style.display = "none";
+    document.getElementById("Button_Sign_in").style.display = "block";
+  }
   document.getElementById("repoOpen").value = "";
 }
 
