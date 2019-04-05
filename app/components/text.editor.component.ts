@@ -24,8 +24,6 @@ import { Component } from "@angular/core";
       <button class="close-button" (click)="closeEditor()">Close</button>
     </div>
     <div class="file-tab" id="file-tab">
-      <button class="tablinks" (click)="switchTab($event, '0')">Some File</button>
-      <button class="tablinks" (click)="switchTab($event, '1')">Some Other File</button>
     </div>
     <div id="0" class="tabcontent">
       <div class="editor-area">
@@ -57,6 +55,9 @@ export class TextEditorComponent {
   // Path of opened file
   filePath: string;
 
+  // Stores the id of the currently open file tab.
+  currentFileId = 0;
+
   // This function is used to open files.
   openFile(): void {
     // Get the upload input element and then click it.
@@ -78,7 +79,7 @@ export class TextEditorComponent {
     let fileOpenInput = document.getElementById("file-upload");
 
     if (fileOpenInput != null) {
-      let files = (<HTMLInputElement>fileOpenInput).files
+      let files = (<HTMLInputElement>fileOpenInput).files!
 
       if (files != null) {
         // This runs when the reader has finished reading the file.
@@ -90,6 +91,7 @@ export class TextEditorComponent {
             this.createLineNumbers();
             let file = files[0];
             this.filePath = file.path
+            this.createFileTab(file.name);
           }
         }
 
@@ -110,7 +112,7 @@ export class TextEditorComponent {
   /*
     This function is used to switch between different file tabs
   */
-  switchTab(event: Event, fileId: string): void {
+  switchTab(fileTabId: string, fileId: string): void {
     // Declare all variables
     let i = 0;
     let tabcontent: HTMLCollectionOf<Element>;
@@ -138,9 +140,8 @@ export class TextEditorComponent {
     let fileIdElement = document.getElementById(fileId);
     if (fileIdElement != null) {
       fileIdElement.style.display = "block";
-      if (event.currentTarget != null) {
-        (<HTMLElement>event.currentTarget).className += " active";
-      }
+      let selectedTab = document.getElementById(fileTabId)!;
+      selectedTab.className += " active";
     }
   }
 
@@ -288,5 +289,31 @@ export class TextEditorComponent {
         saveButton.innerHTML = "Saved";
       }
     }
+  }
+
+  /*
+    Creates a tab for the newly opened file and focuses
+    the editor on this tab.
+  */
+  createFileTab(fileName: string): void {
+    // Get div where tags are stored.
+    let tabs = document.getElementById("file-tab")!;
+
+    // Create new tab.
+    let newTab = document.createElement("button");
+    newTab.className = "tablinks";
+    newTab.id = "tab-link-" + this.currentFileId;
+    newTab.innerHTML = fileName;
+
+    // Store function to be called when the tab is clicked.
+    newTab.onclick = (e) => {
+      this.switchTab("tab-link-" + this.currentFileId, "" + this.currentFileId);
+    };
+
+    // Add tab to the tab div.
+    tabs.appendChild(newTab);
+
+    // Focus on the new tab.
+    this.switchTab("tab-link-" + this.currentFileId, "" + this.currentFileId);
   }
 }
