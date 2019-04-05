@@ -60,7 +60,6 @@ function signInPage(callback) {
     // username and password values taken to be stored.
     let username: any = (<HTMLInputElement>document.getElementById("username")).value;
     let password: any = (<HTMLInputElement>document.getElementById("password")).value;
-    //testFunction()
     if (rememberLogin.checked == true) {
         encrypt(username, password);
     }
