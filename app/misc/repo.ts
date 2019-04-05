@@ -119,6 +119,9 @@ function openRepository() {
       text = text.substr(0, text.indexOf(".git"));
       
       let array = text.split('/');
+      if(array[0].indexOf("@") !=-1){
+        array[0] = array[0].substring(array[0].indexOf(":") + 1);
+      }
       let repoOwner = array[array.length-2]
       let repoName = array[array.length-1]
 
