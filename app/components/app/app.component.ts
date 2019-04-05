@@ -1,21 +1,14 @@
 import { Component } from "@angular/core";
-import { HeaderComponent } from "./header.component";
-import { FilePanelComponent } from "./file.panel.component";
-import { BodyPanelComponent } from "./body.panel.component";
-import { FooterComponent } from "./footer.component";
-import { AddRepositoryComponent } from "./add.repository.component";
-import { AuthenticateComponent } from "./authenticate.component"
+import { HeaderComponent } from "../header/header.component";
+import { FilePanelComponent } from "../filePanel/file.panel.component";
+import { BodyPanelComponent } from "../bodyPanel/body.panel.component";
+import { FooterComponent } from "../footer/footer.component";
+import { AddRepositoryComponent } from "../addRepository/add.repository.component";
+import { AuthenticateComponent } from "../authenticate/authenticate.component"
 
 @Component({
   selector: "my-app",
-  template: `
-    <user-auth></user-auth>
-    <app-header></app-header>
-    <file-panel></file-panel>
-    <body-panel></body-panel>
-    <add-repository-panel></add-repository-panel>
-    <app-footer></app-footer>
-  `,
+  templateUrl: 'app/components/app/app.component.html',
   directives: [HeaderComponent, FilePanelComponent, BodyPanelComponent, FooterComponent, AddRepositoryComponent, AuthenticateComponent]
 })
 

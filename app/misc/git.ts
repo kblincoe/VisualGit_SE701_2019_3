@@ -576,24 +576,43 @@ function displayModifiedFiles() {
           filePanelMessage.parentNode.removeChild(filePanelMessage);
         }
       }
+      
       modifiedFiles.forEach(displayModifiedFile);
 
       // Add modified file to array of modified files 'modifiedFiles'
       function addModifiedFile(file) {
-        // Check if modified file is already being displayed
+
+        // Check if modified file  is already being displayed
         let filePaths = document.getElementsByClassName('file-path');
-        for (let i = 0; i < filePaths.length; i++) {
+        for (let i = 0; i < filePaths.length; i++) {         
           if (filePaths[i].innerHTML === file.path()) {
             return;
           }
+          // If previously displayed file is not the new modified file
+          // then check if it exists, else remove 
+          let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
+          if (fs.existsSync(filePath)) {
+            // exists
+            console.log("exists");
+          } else {
+            // doesn't exist
+            console.log("doesn't exists");
+            filePaths[i].parentElement.remove();
+          }
         }
+
+        
 
         let path = file.path();
         let modification = calculateModification(file);
+        
+      
+      
+        
         modifiedFiles.push({
             filePath: path,
             fileModification: modification
-          });
+          })
       }
 
 
@@ -633,7 +652,9 @@ function displayModifiedFiles() {
           fileElement.className = "file file-modified";
         } else if (file.fileModification === "DELETED") {
           fileElement.className = "file file-deleted";
-        } else {
+        }  else if (file.fileModification === "RENAMED") {
+          fileElement.className = "file file-renamed";
+        }else {
           fileElement.className = "file";
         }
 
@@ -642,10 +663,12 @@ function displayModifiedFiles() {
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
-        checkbox.onclick = function(){
+        checkbox.onclick = function(event){
           if(!checkbox.checked){
             document.getElementById('select-all-checkbox').checked = false;
           }
+          // Stops a click from propagating to the other layers
+          event.stopPropagation();
         }
         fileElement.appendChild(checkbox);
 
@@ -655,13 +678,13 @@ function displayModifiedFiles() {
         fileElement.onclick = function() {
           let doc = document.getElementById("diff-panel");
           console.log("width of document: " + doc.style.width);
+          let fileName = document.createElement("p");
+          fileName.innerHTML = file.filePath
             // Get the filename being edited and displays on top of the window
           if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();
 
             document.getElementById("diff-panel-body")!.innerHTML = "";
-            let fileName = document.createElement("p");
-            fileName.innerHTML = file.filePath
             document.getElementById("diff-panel-body").appendChild(fileName);
             if (fileElement.className === "file file-created") {
               // set the selected file
@@ -678,6 +701,7 @@ function displayModifiedFiles() {
           }
           else if (doc.style.width === '40%') {
             document.getElementById("diff-panel-body").innerHTML = "";
+            document.getElementById("diff-panel-body").appendChild(fileName);
             if (selectedFile === file.filePath) {
               // clear the selected file when diff panel is hidden
               selectedFile = "";
