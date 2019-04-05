@@ -39,6 +39,10 @@ export class AddRepositoryComponent {
     switchToMainPanel();
   }
 
+  createLocalRepository(): void {
+    createLocalRepository();
+  }
+
   returnToMainPanel(): void {
     switchToMainPanel();
   }
