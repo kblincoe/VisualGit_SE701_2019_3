@@ -145,20 +145,6 @@ function getUserInfo(callback) {
     }
   });
 
-  $.ajax({
-    url: "https://api.github.com/user",
-    type: "GET",
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
-    },
-    headers: {
-      'Accept': 'application/vnd.github.v3+json'
-    },
-    success: function(response){
-      console.log(response)
-    }
-  })
-
 }
 
 function make_base_auth(user, password) {

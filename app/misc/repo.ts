@@ -109,16 +109,37 @@ function openRepository() {
       let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
       console.log("current HEAD commit: " + tid);
     }
+    //TODO: Store in global variable for repo name
+    //Use with API
+    //Pull username from url as well
     if (readFile.exists(repoFullPath + "/.git/config")) {
       let text = readFile.read(repoFullPath + "/.git/config", null);
-      console.log("This is text A",text)
-      var searchString = "[remote \"origin\"]"
+      let searchString = "[remote \"origin\"]";
       text = text.substr(text.indexOf(searchString)+searchString.length, text.length);
-      console.log("This is text B",text)
+      
       text = text.substr(0, text.indexOf(".git"));
-      console.log("This is text C",text)
+      
       let array = text.split('/');
-      console.log("This is the last element ",array[array.length-1]);
+      let repoOwner = array[array.length-2]
+      let repoName = array[array.length-1]
+
+      //Call to get all usernames
+      $.ajax({
+        url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
+        type: "GET",
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
+        },
+        headers: {
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        success: function(response){
+          
+          for(var i=0;i<response.length;i++){
+            console.log("This is login: ",response[i].login);
+          }
+        }
+      })
 
     }
     displayModal("Drawing graph, please wait");
