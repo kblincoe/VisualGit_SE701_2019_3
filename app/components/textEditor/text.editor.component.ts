@@ -22,11 +22,14 @@ export class TextEditorComponent {
   // Amount of spaces to be added on 'Tab' press.
   numberOfSpacesToIndent = 4;
 
-  // Path of opened file
-  filePath: string;
+  // Stores number of files that have been opened in this session. 
+  latestFileId = 0;
 
   // Stores the id of the currently open file tab.
   currentFileId = 0;
+
+  // Stores a list of file paths.
+  filePaths: [string] = [""];
 
   // This function is used to open files.
   openFile(): void {
@@ -49,18 +52,20 @@ export class TextEditorComponent {
     let fileOpenInput = document.getElementById("file-upload");
 
     if (fileOpenInput != null) {
-      let files = (<HTMLInputElement>fileOpenInput).files!
+      let files = (<HTMLInputElement>fileOpenInput).files!;
 
       if (files != null) {
         // This runs when the reader has finished reading the file.
         reader.onload = (e) => {
-          let fileTextArea = document.getElementById("file-text-area");
+          this.latestFileId++;
+          this.createFileEditor();
+          let fileTextArea = document.getElementById("file-text-area-" + this.latestFileId);
           if (fileTextArea != null && reader.result != null) {
             // Add the file text to the editor and create lines.
             (<HTMLInputElement>fileTextArea).value = (<string>reader.result);
             this.createLineNumbers();
             let file = files[0];
-            this.filePath = file.path
+            this.filePaths[this.latestFileId] = file.path;
             this.createFileTab(file.name);
           }
         }
@@ -83,6 +88,9 @@ export class TextEditorComponent {
     This function is used to switch between different file tabs
   */
   switchTab(fileTabId: string, fileId: string): void {
+    // Update currently open file.
+    this.currentFileId = parseInt(fileId);
+    
     // Declare all variables
     let i = 0;
     let tabcontent: HTMLCollectionOf<Element>;
@@ -113,6 +121,9 @@ export class TextEditorComponent {
       let selectedTab = document.getElementById(fileTabId)!;
       selectedTab.className += " active";
     }
+
+    // Fill line numbers for this tab.
+    this.createLineNumbers();
   }
 
   /*
@@ -120,8 +131,8 @@ export class TextEditorComponent {
     the editor text area and the line counter text area.
   */
   scrollSync(): void {
-    let lineTextArea = document.getElementById("line-text-area");
-    let fileTextArea = document.getElementById("file-text-area");
+    let lineTextArea = document.getElementById("line-text-area-" + this.currentFileId);
+    let fileTextArea = document.getElementById("file-text-area-" + this.currentFileId);
     if (lineTextArea != null && fileTextArea != null) {
       lineTextArea.scrollTop = fileTextArea.scrollTop;
     }
@@ -142,8 +153,8 @@ export class TextEditorComponent {
 
     let i = 0;
     let lineNumberString = ''
-    let lineTextArea = document.getElementById("line-text-area");
-    let fileTextArea = document.getElementById("file-text-area");
+    let lineTextArea = document.getElementById("line-text-area-" + this.currentFileId);
+    let fileTextArea = document.getElementById("file-text-area-" + this.currentFileId);
 
     /*
       If the elements were found, create a string of numbers
@@ -175,7 +186,7 @@ export class TextEditorComponent {
     */
     if (event.key == "Tab") {
       event.preventDefault();
-      let fileTextArea = <HTMLInputElement>document.getElementById("file-text-area");
+      let fileTextArea = <HTMLInputElement>document.getElementById("file-text-area-" + this.currentFileId);
 
       // Current cursor location.
       let selectionStart = fileTextArea.selectionStart;
@@ -237,10 +248,10 @@ export class TextEditorComponent {
     }
 
     // Get current content.
-    let fileTextArea = <HTMLInputElement>document.getElementById("file-text-area")
+    let fileTextArea = <HTMLInputElement>document.getElementById("file-text-area-" + this.currentFileId)
 
     // Save file.
-    saveEditedFile(this.filePath, fileTextArea.value, this.saveSuccess)
+    saveEditedFile(this.filePaths[this.currentFileId], fileTextArea.value, this.saveSuccess)
   }
 
   /*
@@ -266,24 +277,78 @@ export class TextEditorComponent {
     the editor on this tab.
   */
   createFileTab(fileName: string): void {
-    // Get div where tags are stored.
+    // Get div where tabs are stored.
     let tabs = document.getElementById("file-tab")!;
 
     // Create new tab.
     let newTab = document.createElement("button");
     newTab.className = "tablinks";
-    newTab.id = "tab-link-" + this.currentFileId;
+    newTab.id = "tab-link-" + this.latestFileId;
     newTab.innerHTML = fileName;
 
     // Store function to be called when the tab is clicked.
+    let fileTabId = "tab-link-"+this.latestFileId;
+    let fileId = "" + this.latestFileId;
     newTab.onclick = (e) => {
-      this.switchTab("tab-link-" + this.currentFileId, "" + this.currentFileId);
+      this.switchTab(fileTabId, fileId);
     };
 
     // Add tab to the tab div.
     tabs.appendChild(newTab);
 
     // Focus on the new tab.
-    this.switchTab("tab-link-" + this.currentFileId, "" + this.currentFileId);
+    this.switchTab("tab-link-" + this.latestFileId, "" + this.latestFileId);
+  }
+
+  /*
+    Creates an text area for the newly opened file.
+  */
+  createFileEditor(): void {
+    // Get div where editors are stored.
+    let editors = document.getElementById("file-editors")!;
+
+    // Create div for new editor
+    let newEditorDiv = document.createElement("div");
+    newEditorDiv.id = "" + this.latestFileId;
+    newEditorDiv.className = "tabcontent";
+
+    // Create a div for the file and line text areas.
+    let newEditorArea = document.createElement("div");
+    newEditorArea.className = "editor-area";
+
+    // Create the line text area for this file.
+    let lineTextArea = document.createElement("textarea");
+    lineTextArea.className = "lines";
+    lineTextArea.readOnly = true;
+    lineTextArea.id = "line-text-area-" + this.latestFileId;
+
+    // Create the file editor area for this file.
+    let fileTextArea = document.createElement("textarea");
+    fileTextArea.className = "file";
+    fileTextArea.id = "file-text-area-" + this.latestFileId;
+    fileTextArea.onclick = (e) => {
+      this.createLineNumbers();
+    }
+    fileTextArea.onscroll = (e) => {
+      this.scrollSync();
+    }
+    fileTextArea.onkeydown = (e) => {
+      this.keyPressed(e);
+    }
+    fileTextArea.oninput = (e) => {
+      this.valueChanged();
+    }
+    fileTextArea.oncut = (e) => {
+      this.cutPastePressed = true;
+    }
+    fileTextArea.oncut = (e) => {
+      this.cutPastePressed = true;
+    }
+
+    // Putting elements together.
+    newEditorArea.appendChild(lineTextArea);
+    newEditorArea.appendChild(fileTextArea);
+    newEditorDiv.appendChild(newEditorArea);
+    editors.appendChild(newEditorDiv);
   }
 }

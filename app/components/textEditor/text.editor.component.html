@@ -20,11 +20,7 @@
     </div>
     <div class="file-tab" id="file-tab">
     </div>
-    <div id="0" class="tabcontent">
-        <div class="editor-area">
-            <textarea class="lines" readonly="true" id="line-text-area"></textarea>
-            <textarea class="file" id="file-text-area" (click)="createLineNumbers()" (scroll)="scrollSync()" (keydown)="keyPressed($event)"
-                (input)="valueChanged()" (cut)="cutPastePressed = true" (paste)="cutPastePressed = true"></textarea>
-        </div>
+    <div id="file-editors">
+        
     </div>
 </div>
