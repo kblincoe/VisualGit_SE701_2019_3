@@ -125,7 +125,6 @@ function addAndCommit() {
     console.log("Commit successful: " + oid.tostrS());
     stagedFiles = null;
     hideDiffPanel();
-    clearModifiedFilesList();
     clearStagedFilesList();
     clearCommitMessage();
     clearSelectAllCheckbox();
