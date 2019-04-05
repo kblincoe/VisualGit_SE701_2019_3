@@ -204,6 +204,8 @@ function cloneRepo() {
   downloadFunc(url, local);
   url = null;
   $('#repo-modal').modal('hide');
+
+  switchToMainPanel()
 }
 
 function signInOrOut() {
