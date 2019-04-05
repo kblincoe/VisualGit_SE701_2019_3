@@ -171,6 +171,10 @@ body .file-panel .files-changed .modified-files-message {
   padding: 20px;
 }
 
+body .file-panel .files-staged .modified-files-message {
+    padding: 20px;
+}
+
 body .file-panel .files-changed .file {
   width: 99%;
   height: 10%;
