@@ -121,7 +121,7 @@ function openRepository() {
 }
 
 function createLocalRepository(){
-  console.log("createLocalRepo")
+  //console.log("createLocalRepo")
   if (document.getElementById("repoCreate").value == null || document.getElementById("repoCreate").value == ""){
     document.getElementById("dirPickerCreateLocal").click();
     let localPath = document.getElementById("dirPickerCreateLocal").files[0].webkitRelativePath;
@@ -144,11 +144,11 @@ function createLocalRepository(){
     }
   }
 
-  console.log("pre-git check")
-  console.log("fullLocalPath is " + fullLocalPath)
+  //console.log("pre-git check")
+  //console.log("fullLocalPath is " + fullLocalPath)
   //console.log(require("path").join(fullLocalPath,".git"));
   if(checkFile.existsSync(require("path").join(fullLocalPath,".git"))){
-    console.log("Is git repository already")
+    //console.log("Is git repository already")
     updateModalText("This folder is already a git repository. Please try to open it instead.");
   }else{
     displayModal("creating repository at " + require("path").join(fullLocalPath,".git"));
@@ -156,7 +156,7 @@ function createLocalRepository(){
       repoFullPath = fullLocalPath;
       repoLocalPath = localPath;
       refreshAll(repository);
-      console.log("Repo successfully created");
+      //console.log("Repo successfully created");
       updateModalText("Repository successfully created");
       document.getElementById("repoCreate").value = "";
       document.getElementById("dirPickerCreateLocal").value = null;
@@ -164,7 +164,7 @@ function createLocalRepository(){
     },
     function(err) {
       updateModalText("Creating Failed - " + err);
-      console.log("repo.ts, line 131, cannot open repository: "+err); // TODO show error on screen
+      //console.log("repo.ts, line 131, cannot open repository: "+err); // TODO show error on screen
     });
   }
 }
