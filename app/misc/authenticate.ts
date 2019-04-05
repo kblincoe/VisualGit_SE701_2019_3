@@ -205,7 +205,7 @@ function cloneRepo() {
   url = null;
   $('#repo-modal').modal('hide');
 
-  switchToMainPanel()
+  switchToMainPanel();
 }
 
 function signInOrOut() {
