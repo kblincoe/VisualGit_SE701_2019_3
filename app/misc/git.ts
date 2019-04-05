@@ -61,6 +61,12 @@ function stage() {
 }
 
 function addAndCommit() {
+
+  if (stagedFiles == null) {
+    displayModal("You haven't staged anything");
+    return;
+  }
+
   let repository;
 
   Git.Repository.open(repoFullPath)
@@ -117,7 +123,7 @@ function addAndCommit() {
 	changes = 0;
 	CommitButNoPush = 1;
     console.log("Commit successful: " + oid.tostrS());
-
+    stagedFiles = null;
     hideDiffPanel();
     clearModifiedFilesList();
     clearStagedFilesList();
@@ -675,8 +681,10 @@ function displayModifiedFiles() {
     document.getElementById(fileId).remove();
     document.getElementById("modified-files-message").remove();
     // Check if there's no staged files, in case we need to print the "Your staged..."
+    stagedFiles = index.remove(file);
     if (document.getElementById("files-staged").children.length == 0) {
       clearStagedFilesList();
+      stagedFiles = null;
     }
 
     displayModifiedFile(file);
