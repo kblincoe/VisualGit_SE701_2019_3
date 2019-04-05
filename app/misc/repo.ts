@@ -259,7 +259,6 @@ function clearBranchElement() {
   ul.appendChild(li);
 }
 
-
 function displayBranch(name, id, onclick) {
   let ul = document.getElementById(id);
   let li = document.createElement("li");
@@ -268,25 +267,8 @@ function displayBranch(name, id, onclick) {
   a.setAttribute("class", "list-group-item");
   a.setAttribute("onclick", onclick + ";event.stopPropagation()");
   li.setAttribute("role", "presentation")
-  a.appendChild(document.createTextNode(name));
   a.innerHTML = name;
   li.appendChild(a);
-  
-  // Adding a delete button beside the branch
-  if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
-    var button = document.createElement("Button");
-    button.innerHTML = "Delete";
-    button.classList.add('btn-danger');
-
-    // Function to execute when button is clicked
-    $(button).click(function () {
-        // Display delete branch warning modal
-        $('#branch-to-delete').val(name);
-        document.getElementById("displayedBranchName").innerHTML = name;
-        $('#delete-branch-modal').modal();
-    });
-    li.appendChild(button); // Add delete button to the branch dropdown list
-  }
   ul.appendChild(li);
 }
 
