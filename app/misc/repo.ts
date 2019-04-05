@@ -272,45 +272,24 @@ function displayBranch(name, id, onclick) {
   a.innerHTML = name;
   li.appendChild(a);
   
+  // Adding a delete button beside the branch
   if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
     var button = document.createElement("Button");
     button.innerHTML = "Delete";
     button.classList.add('btn-danger');
+
+    // Function to execute when button is clicked
     $(button).click(function () {
+        // Display delete branch warning modal
         $('#branch-to-delete').val(name);
         document.getElementById("displayedBranchName").innerHTML = name;
         $('#delete-branch-modal').modal();
     });
-    li.appendChild(button);
+    li.appendChild(button); // Add delete button to the branch dropdown list
   }
   ul.appendChild(li);
 }
 
-/*
-function displayBranch(name, id, onclick) {
-  var ul = document.getElementById(id);
-  var li = document.createElement("li");
-  var a = document.createElement("a");
-  a.setAttribute("href", "#");
-  a.setAttribute("class", "list-group-item");
-  a.setAttribute("onclick", onclick + ";event.stopPropagation()");
-
-  li.setAttribute("role", "presentation");
-  a.innerHTML = name;
-  a.appendChild(document.createTextNode(name));
-  li.appendChild(a);
-  if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
-      var button = document.createElement("Button");
-      button.innerHTML = "Delete";
-      $(button).click(function () {
-          $('#branch-to-delete').val(name);
-          $('#delete-branch-modal').modal();
-      });
-      li.appendChild(button);
-  }
-  ul.appendChild(li);
-}
-*/
 function createDropDownFork(name,id,onclick) {
   let ul = document.getElementById(id);
   let button = document.createElement("div");
