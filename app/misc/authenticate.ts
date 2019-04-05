@@ -32,9 +32,6 @@ function signInHead(callback) {
   encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
   continuedWithoutSignIn = false;
   signedAfter = true;
-  if(document.getElementById("avatar").innerHTML == ""){
-    document.getElementById("avatar").innerHTML = "Sign out";
-  }
 	if (signed == 1){
 		if ((changes == 1) || (CommitButNoPush == 1)){
 			$("#modalW2").modal();
@@ -83,7 +80,7 @@ function loginWithSaved(callback) {
   
 
 function getUserInfo(callback) {
-  if(signedAfter == true){
+  if(signedAfter == true){  // if the trys to login after clicking "continues without sign in" 
     encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
   }
   else{
@@ -126,6 +123,8 @@ function getUserInfo(callback) {
     if (err) {
       return;
     } else {
+      displayUsername();
+      document.getElementById("avatar").innerHTML = "Sign out"; 
       console.log("number of repos: " + data.length);
       for (let i = 0; i < data.length; i++) {
         let rep = Object.values(data)[i];
@@ -218,10 +217,6 @@ function cloneRepo() {
 
 function signInOrOut() {
   let doc = document.getElementById("avatar");
-  console.log(doc.innerHTML);
-  if(signedAfter == true){
-    doc.innerHTML = "Sign out";
-  }
   if(doc.innerHTML == "Sign In"){
     doc.innerHTML = "";
   }
