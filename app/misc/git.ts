@@ -668,7 +668,19 @@ function displayModifiedFiles() {
 	  function Confirmation(){
 		$("#modalW").modal();
 		return 'Hi';
-	}
+  }
+  
+  function unstage(file, fileId) {
+    // Get the fileId element and remove it
+    document.getElementById(fileId).remove();
+    document.getElementById("modified-files-message").remove();
+    // Check if there's no staged files, in case we need to print the "Your staged..."
+    if (document.getElementById("files-staged").children.length == 0) {
+      clearStagedFilesList();
+    }
+
+    displayModifiedFile(file);
+  }
 
       function displayModifiedFile(file) {
         let filePath = document.createElement("p");
@@ -782,6 +794,7 @@ function displayModifiedFiles() {
           fileElement.className = "file";
         }
 
+        fileElement.id = fileId;
         fileElement.appendChild(filePath);
 
         let checkbox = document.createElement("input");
@@ -791,7 +804,7 @@ function displayModifiedFiles() {
         checkbox.onclick = function(event){
           if(!checkbox.checked){
             document.getElementById('select-all-checkbox').checked = false;
-            // TODO:  call unstage()
+            unstage(file, fileId);
           }
           // Stops a click from propagating to the other layers
           event.stopPropagation();
