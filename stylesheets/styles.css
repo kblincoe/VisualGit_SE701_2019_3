@@ -812,3 +812,14 @@ div.selected-commit-diff-panel button.close-button {
   width: 0vw;
   background-color: white;
 }
+div.wiki-header button.close-button, div.wiki-header button.open-button {
+  display: inline;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 15px;
+  background-color: #39c0ba;
+  color: #fff;
+}
