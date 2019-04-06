@@ -28,6 +28,9 @@ export class TextEditorComponent {
   // Stores the id of the currently open file tab.
   currentFileId = 0;
 
+  // Stores the id of the last open file tab.
+  previousFileId = 0;
+
   // Stores a list of file paths.
   filePaths: [string] = [""];
 
@@ -89,6 +92,9 @@ export class TextEditorComponent {
     This function is used to switch between different file tabs
   */
   switchTab(fileTabId: string, fileId: string): void {
+    // Update previous open file.
+    this.previousFileId = this.currentFileId;
+
     // Update currently open file.
     this.currentFileId = parseInt(fileId);
 
@@ -294,13 +300,30 @@ export class TextEditorComponent {
     let newTab = document.createElement("button");
     newTab.className = "tablinks";
     newTab.id = "tab-link-" + this.latestFileId;
+
+    let closingTab = false;
+
+    let id = "" + this.latestFileId;
+    let closeIcon = document.createElement("i");
+    closeIcon.className = "fa fa-times"
+    closeIcon.onclick = (e) => {
+      closingTab = true;
+      let fileEditor = document.getElementById(id)!;
+      fileEditor.remove();
+      newTab.remove();
+    }
+    closeIcon.style.marginLeft = "5px";
+
     newTab.innerHTML = fileName;
+    newTab.appendChild(closeIcon);
 
     // Store function to be called when the tab is clicked.
     let fileTabId = "tab-link-" + this.latestFileId;
     let fileId = "" + this.latestFileId;
     newTab.onclick = (e) => {
-      this.switchTab(fileTabId, fileId);
+      if (!closingTab) {
+        this.switchTab(fileTabId, fileId);
+      }
     };
 
     // Add tab to the tab div.
