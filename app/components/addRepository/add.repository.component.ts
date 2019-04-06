@@ -33,9 +33,21 @@ export class AddRepositoryComponent {
     }
   }
 
+  selectLocalRepoDirectory(): void{
+    if (document.getElementById("repoCreate").value == null || document.getElementById("repoCreate").value == ""){
+      document.getElementById("dirPickerCreateLocal").click();
+    }else {
+      this.createLocalRepository();
+    }
+  }
+
   openRepository(): void {
     openRepository();
     switchToMainPanel();
+  }
+
+  createLocalRepository(): void {
+    createLocalRepository();
   }
 
   returnToMainPanel(): void {
