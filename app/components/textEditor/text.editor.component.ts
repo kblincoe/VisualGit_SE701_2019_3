@@ -67,6 +67,7 @@ export class TextEditorComponent {
             let file = files[0];
             this.filePaths[this.latestFileId] = file.path;
             this.createFileTab(file.name);
+            this.currentFileId = this.latestFileId;
           }
         }
 
@@ -90,7 +91,7 @@ export class TextEditorComponent {
   switchTab(fileTabId: string, fileId: string): void {
     // Update currently open file.
     this.currentFileId = parseInt(fileId);
-    
+
     // Declare all variables
     let i = 0;
     let tabcontent: HTMLCollectionOf<Element>;
@@ -224,6 +225,11 @@ export class TextEditorComponent {
     if (saveButton != null) {
       saveButton.innerHTML = "Save";
     }
+
+    let fileTab = document.getElementById("tab-link-" + this.currentFileId)!;
+    if (fileTab.innerHTML.slice(-1) != "*") {
+      fileTab.innerHTML += " *";
+    }
   }
 
   /*
@@ -252,6 +258,10 @@ export class TextEditorComponent {
 
     // Save file.
     saveEditedFile(this.filePaths[this.currentFileId], fileTextArea.value, this.saveSuccess)
+    let fileTab = document.getElementById("tab-link-" + this.currentFileId)!;
+    if (fileTab.innerHTML.slice(-1) == "*") {
+      fileTab.innerHTML = fileTab.innerHTML.substr(0, fileTab.innerHTML.indexOf(" *"));
+    }
   }
 
   /*
@@ -287,7 +297,7 @@ export class TextEditorComponent {
     newTab.innerHTML = fileName;
 
     // Store function to be called when the tab is clicked.
-    let fileTabId = "tab-link-"+this.latestFileId;
+    let fileTabId = "tab-link-" + this.latestFileId;
     let fileId = "" + this.latestFileId;
     newTab.onclick = (e) => {
       this.switchTab(fileTabId, fileId);
