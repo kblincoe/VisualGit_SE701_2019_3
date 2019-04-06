@@ -23,7 +23,7 @@ function createMainWindow() {
 		icon: __dirname + "/assets/icons/Icon.png"
 	});
 
-	win.setMinimumSize(900, 720);
+	win.setMinimumSize(900, 830);
 
 	win.maximize();
 	win.setTitle(require('./package.json').name);
