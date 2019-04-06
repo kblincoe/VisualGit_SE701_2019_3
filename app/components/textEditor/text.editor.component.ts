@@ -110,6 +110,18 @@ export class TextEditorComponent {
     this.filePaths = [""];
   }
 
+  /* 
+  This function is used to hide the editor and return
+  to the main screen.
+*/
+  hideEditor(): void {
+    // Hide editor panel.
+    let editor = document.getElementById("editor-panel")!;
+    editor.style.height = "0vh";
+    editor.style.width = "0vw";
+    editor.style.zIndex = "-10";
+  }
+
   /*
     This function is used to switch between different file tabs
   */
