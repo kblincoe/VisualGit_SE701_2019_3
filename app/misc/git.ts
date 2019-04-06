@@ -297,6 +297,10 @@ function pullFromRemote() {
 // });
 }
 
+
+
+
+
 function pushToRemote() {
   let branch = document.getElementById("branch-name").innerText;
   Git.Repository.open(repoFullPath)
@@ -391,7 +395,7 @@ function deleteLocalBranch() {
     })
     }).then(function() {
       // refresh graph
-      console.log("deleted the local branch") 
+      console.log("deleted the local branch")
       refreshAll(repos);
    })
 }
@@ -419,7 +423,7 @@ function deleteRemoteBranch() {
               }
             }
           }).then(function() {
-              console.log("deleted the remote branch") 
+              console.log("deleted the remote branch")
               updateModalText("The remote branch: " + branchName + " has been deleted")
           });
         })
