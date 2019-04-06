@@ -108,15 +108,11 @@ function hideDiffPanel() {
 
 function hideDiffPanelIfNoChange() {
   let filename = document.getElementById("diff-panel-file-name") == null ? null : document.getElementById("diff-panel-file-name").innerHTML;
-  console.log("filename :" + filename);
   let filePaths = document.getElementsByClassName('file-path');
-  console.log(filePaths);
-  console.log("ELGNTH :" + filePaths.length);
   let nochange = true;
   for (let i = 0; i < filePaths.length; i++) {
-    console.log("filepathsname :" + filePaths[i].innerHTML);
     if (filePaths[i].innerHTML === filename) {
-      console.log("not hiding");
+
       nochange = false;
     }
   }
