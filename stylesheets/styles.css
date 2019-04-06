@@ -126,7 +126,7 @@ body .navbar .dropdown-menu a {
   color: #000;
 }
 
-.modal-content{
+#repo-list-modal{
   max-height: 90vh;
   overflow: scroll;
 }
