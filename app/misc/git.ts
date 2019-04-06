@@ -886,7 +886,7 @@ function displayModifiedFiles() {
 
         //element.style.minWidth = document.getElementById("diff-panel").offsetWidth;
         //element.style.display = "table-row-group";
-        element.style.minWidth = "max-content";
+        // element.style.minWidth = "max-content";
         
         element.innerText = line;
 
@@ -895,6 +895,11 @@ function displayModifiedFiles() {
         // let textWidth = document.getElementById("diff-panel-body").scrollWidth;
         // console.log("text width:"+textWidth);
         // element.style.minWidth = textWidth+"px";
+
+        let spacer = document.createElement("spacer");
+        // spacer.innerText = "----";
+        spacer.style.width = document.getElementById("diff-panel-body").scrollWidth+"px";
+        element!.appendChild(spacer);
 
         document.getElementById("diff-panel-body").appendChild(element);
       }
@@ -905,7 +910,7 @@ function displayModifiedFiles() {
         
         //element.style.minWidth = document.getElementById("diff-panel").offsetWidth;
         //element.style.display = "table-row-group";
-        element.style.minWidth = "max-content";
+        // element.style.minWidth = "max-content";
         
         element.innerHTML = text;
 
@@ -914,6 +919,11 @@ function displayModifiedFiles() {
         // let textWidth = document.getElementById("diff-panel-body").scrollWidth;
         // console.log("text width:"+textWidth);
         // element.style.minWidth = textWidth+"px";
+
+        let spacer = document.createElement("spacer");
+        // spacer.innerText = "----";
+        spacer.style.width = document.getElementById("diff-panel-body").scrollWidth+"px";
+        element!.appendChild(spacer);
         
         document.getElementById("diff-panel-body").appendChild(element);
       }
