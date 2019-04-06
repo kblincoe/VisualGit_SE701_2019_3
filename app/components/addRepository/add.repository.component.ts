@@ -9,7 +9,6 @@ export class AddRepositoryComponent {
 
   addRepository(): void {
     downloadRepository();
-    switchToMainPanel();
   }
 
   //Add function that determines if directory written or not
