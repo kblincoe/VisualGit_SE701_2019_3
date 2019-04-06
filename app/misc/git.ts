@@ -655,6 +655,7 @@ function displayModifiedFiles() {
   modifiedFiles = [];
 
   let selectedFile = "";
+  let diffPanelWidth = 0;
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
     console.log("Is repo merging: " + repo.isMerging());
@@ -876,26 +877,44 @@ function displayModifiedFiles() {
 
         if (line.charAt(0) === "+") {
           element.style.backgroundColor = "#84db00";
-          //element.style.display = "table-row";
         } else if (line.charAt(0) === "-") {
           element.style.backgroundColor = "#ff2448";
-          //element.style.display = "table-row";
         }
 
         // If not a changed line, origin will be a space character, so still need to slice
         line = line.slice(1, line.length);
 
-        element.style.display = "table-row-group";
+        //element.style.minWidth = document.getElementById("diff-panel").offsetWidth;
+        //element.style.display = "table-row-group";
+        element.style.minWidth = "max-content";
+        
         element.innerText = line;
+
+        // let windowWidth = document.getElementById("diff-panel").offsetWidth;
+        // console.log("window width:"+windowWidth);
+        // let textWidth = document.getElementById("diff-panel-body").scrollWidth;
+        // console.log("text width:"+textWidth);
+        // element.style.minWidth = textWidth+"px";
+
         document.getElementById("diff-panel-body").appendChild(element);
       }
 
       function formatNewFileLine(text) {
         let element = document.createElement("div");
         element.style.backgroundColor = green;
-        //element.style.display = "table-row";
-        element.style.display = "table-row-group";
+        
+        //element.style.minWidth = document.getElementById("diff-panel").offsetWidth;
+        //element.style.display = "table-row-group";
+        element.style.minWidth = "max-content";
+        
         element.innerHTML = text;
+
+        // let windowWidth = document.getElementById("diff-panel").offsetWidth;
+        // console.log("window width:"+windowWidth);
+        // let textWidth = document.getElementById("diff-panel-body").scrollWidth;
+        // console.log("text width:"+textWidth);
+        // element.style.minWidth = textWidth+"px";
+        
         document.getElementById("diff-panel-body").appendChild(element);
       }
     });
