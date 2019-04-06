@@ -126,6 +126,10 @@ body .navbar .dropdown-menu a {
   color: #000;
 }
 
+.modal-content{
+  max-height: 90vh;
+  overflow: scroll;
+}
 /*body .navbar .repo-name {
   margin-left: 30px;
 }*/
