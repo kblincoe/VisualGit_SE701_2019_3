@@ -349,6 +349,66 @@ function createBranch() {
   }
 }
 
+// Deletes a local branch
+function deleteLocalBranch() {
+  $('#delete-branch-modal').modal('toggle') // open warning modal
+  let branchName = document.getElementById("branch-to-delete").value; // selected branch name
+  console.log("deleting branch: " + branchName)
+  let repos;
+  console.log(branchName + " is being deleted...")
+  Git.Repository.open(repoFullPath)
+  .then(function(repo) {
+    repos = repo;
+    addCommand("git branch --delete " + branchName);
+
+    //check if the selected branch is a local branch
+    repo.getBranch(branchName).then(function(reference) {
+      Git.Branch.delete(reference) // delete local branch
+    })
+    }).then(function() {
+      // refresh graph
+      console.log("deleted the local branch") 
+      refreshAll(repos);
+   })
+}
+
+// Deletes a remote branch
+function deleteRemoteBranch() {
+  $('#delete-branch-modal').modal('toggle') // open warning modal
+  let branchName = document.getElementById("branch-to-delete").value; // selected branch name
+  let repos;
+  console.log(branchName + " is being deleted...");
+
+  Git.Repository.open(repoFullPath)
+  .then(function(repo) {
+    Git.Reference.list(repo).then(function(array) {
+      if (array.includes("refs/remotes/origin/" + branchName)) {  // check if the branch is remote
+        console.log("this is a remote branch")
+
+         // delete the remote branch
+        repo.getRemote('origin').then(function(remote) {
+          remote.push((':refs/heads/' + branchName),
+          {
+            callbacks: { // pass in user credentials as a parameter
+              credentials: function() {
+                return cred;
+              }
+            }
+          }).then(function() {
+              console.log("deleted the remote branch") 
+              updateModalText("The remote branch: " + branchName + " has been deleted")
+          });
+        })
+      }
+      else{
+        console.log("this is a local branch")
+        updateModalText("A remote branch called: " + branchName + " does not exist.")
+        return;
+      }
+    })
+  })
+}
+
 function mergeLocalBranches(element) {
   let bn = element.innerHTML;
   let fromBranch;
@@ -563,6 +623,7 @@ function Reload(){
 function displayModifiedFiles() {
   modifiedFiles = [];
 
+  let selectedFile = "";
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
     console.log("Is repo merging: " + repo.isMerging());
@@ -575,24 +636,43 @@ function displayModifiedFiles() {
           filePanelMessage.parentNode.removeChild(filePanelMessage);
         }
       }
+      
       modifiedFiles.forEach(displayModifiedFile);
 
       // Add modified file to array of modified files 'modifiedFiles'
       function addModifiedFile(file) {
-        // Check if modified file is already being displayed
+
+        // Check if modified file  is already being displayed
         let filePaths = document.getElementsByClassName('file-path');
-        for (let i = 0; i < filePaths.length; i++) {
+        for (let i = 0; i < filePaths.length; i++) {         
           if (filePaths[i].innerHTML === file.path()) {
             return;
           }
+          // If previously displayed file is not the new modified file
+          // then check if it exists, else remove 
+          let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
+          if (fs.existsSync(filePath)) {
+            // exists
+            console.log("exists");
+          } else {
+            // doesn't exist
+            console.log("doesn't exists");
+            filePaths[i].parentElement.remove();
+          }
         }
+
+        
 
         let path = file.path();
         let modification = calculateModification(file);
+        
+      
+      
+        
         modifiedFiles.push({
             filePath: path,
             fileModification: modification
-          });
+          })
       }
 
 
@@ -632,7 +712,9 @@ function displayModifiedFiles() {
           fileElement.className = "file file-modified";
         } else if (file.fileModification === "DELETED") {
           fileElement.className = "file file-deleted";
-        } else {
+        }  else if (file.fileModification === "RENAMED") {
+          fileElement.className = "file file-renamed";
+        }else {
           fileElement.className = "file";
         }
 
@@ -641,36 +723,62 @@ function displayModifiedFiles() {
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
-        checkbox.onclick = function(){
+        checkbox.onclick = function(event){
           if(!checkbox.checked){
             document.getElementById('select-all-checkbox').checked = false;
           }
+          // Stops a click from propagating to the other layers
+          event.stopPropagation();
         }
         fileElement.appendChild(checkbox);
 
         document.getElementById("files-changed").appendChild(fileElement);
 
+
         fileElement.onclick = function() {
           let doc = document.getElementById("diff-panel");
           console.log("width of document: " + doc.style.width);
-          if (doc.style.width === '0px' || doc.style.width === '') {
+          let fileName = document.createElement("p");
+          fileName.innerHTML = file.filePath
             // Get the filename being edited and displays on top of the window
+          if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();
 
             document.getElementById("diff-panel-body")!.innerHTML = "";
-            let fileName = document.createElement("p");
-            fileName.innerHTML = file.filePath
             document.getElementById("diff-panel-body").appendChild(fileName);
             if (fileElement.className === "file file-created") {
+              // set the selected file
+              selectedFile = file.filePath;
               printNewFile(file.filePath);
             } else {
 
               let diffCols = document.createElement("div");
               diffCols.innerText = "Old" + "\t" + "New" + "\t" + "+/-" + "\t" + "Content";
               document.getElementById("diff-panel-body")!.appendChild(diffCols);
+              selectedFile = file.filePath;
               printFileDiff(file.filePath);
             }
-          } else {
+          }
+          else if (doc.style.width === '40%') {
+            document.getElementById("diff-panel-body").innerHTML = "";
+            document.getElementById("diff-panel-body").appendChild(fileName);
+            if (selectedFile === file.filePath) {
+              // clear the selected file when diff panel is hidden
+              selectedFile = "";
+              hideDiffPanel()
+            } else {
+              if (fileElement.className === "file file-created") {
+                selectedFile = file.filePath;
+                printNewFile(file.filePath);
+              } else {
+                selectedFile = file.filePath;
+                printFileDiff(file.filePath);
+              }
+            }
+          }
+          else {
+            // clear the selected file when diff panel is hidden
+            selectedFile = "";
             hideDiffPanel();
           }
         };

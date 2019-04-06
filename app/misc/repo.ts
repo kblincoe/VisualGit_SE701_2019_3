@@ -11,6 +11,7 @@ let checkFile = require("fs");
 let repoCurrentBranch = "master";
 let modal;
 let span;
+let contributors: [any] = [0];
 
 function downloadRepository() {
   let fullLocalPath;
@@ -25,6 +26,7 @@ function downloadRepository() {
 
   if (!cloneURL || cloneURL.length === 0) {
       updateModalText("Clone Failed - Empty URL Given");
+      switchToAddRepositoryPanel();
   } else {
       downloadFunc(cloneURL, fullLocalPath);
   }
@@ -60,16 +62,20 @@ function downloadFunc(cloneURL, fullLocalPath) {
     progressDiv.style.visibility = 'collapse';
     updateProgressBar(0);
     console.log("Repo successfully cloned");
+    displayModal("Drawing graph, please wait");
     refreshAll(repository);
     updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
     addCommand("git clone " + cloneURL + " " + fullLocalPath);
     repoFullPath = fullLocalPath;
     repoLocalPath = fullLocalPath;
+    displayModal("Drawing graph, please wait");
     refreshAll(repository);
+    switchToMainPanel();
   },
   function(err) {
     updateModalText("Clone Failed - " + err);
     console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
+      switchToAddRepositoryPanel();
   });
 }
 
@@ -107,6 +113,47 @@ function openRepository() {
       let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
       console.log("current HEAD commit: " + tid);
     }
+    //Reads the git config file and extracts info about the remote on GitHub
+    if (readFile.exists(repoFullPath + "/.git/config")) {
+      let text = readFile.read(repoFullPath + "/.git/config", null);
+      let searchString = "[remote \"origin\"]";
+
+      text = text.substr(text.indexOf(searchString)+searchString.length, text.length);
+      text = text.substr(0, text.indexOf(".git"));
+      
+      let array = text.split('/');
+      if(array[0].indexOf("@") !=-1){
+        array[0] = array[0].substring(array[0].indexOf(":") + 1);
+      }
+      let repoOwner = array[array.length-2]
+      let repoName = array[array.length-1]
+
+      //Call to get all usernames
+      $.ajax({
+        url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
+        type: "GET",
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
+        },
+        headers: {
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        success: function(response){
+          
+          for(var i=0;i<response.length;i++){
+            //Store list of logins here.
+            contributors[i] = {
+              "username" : response[i].login,
+              "name" : "",
+              "email" : ""
+            }
+          }
+          console.log("The contributors for this project are ",contributors)
+        }
+      })
+
+    }
+    displayModal("Drawing graph, please wait");
     refreshAll(repository);
     console.log("Repo successfully opened");
     updateModalText("Repository successfully opened");
@@ -135,6 +182,8 @@ function addBranchestoNode(thisB: string) {
 }
 
 function refreshAll(repository) {
+  displayModal("Drawing graph, please wait");
+
   let branch;
   bname = [];
   repository.getCurrentBranch()
@@ -254,6 +303,7 @@ function clearBranchElement() {
   ul.appendChild(li);
 }
 
+
 function displayBranch(name, id, onclick) {
   let ul = document.getElementById(id);
   let li = document.createElement("li");
@@ -262,8 +312,25 @@ function displayBranch(name, id, onclick) {
   a.setAttribute("class", "list-group-item");
   a.setAttribute("onclick", onclick + ";event.stopPropagation()");
   li.setAttribute("role", "presentation")
+  a.appendChild(document.createTextNode(name));
   a.innerHTML = name;
   li.appendChild(a);
+  
+  // Adding a delete button beside the branch
+  if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
+    var button = document.createElement("Button");
+    button.innerHTML = "Delete";
+    button.classList.add('btn-danger');
+
+    // Function to execute when button is clicked
+    $(button).click(function () {
+        // Display delete branch warning modal
+        $('#branch-to-delete').val(name);
+        document.getElementById("displayedBranchName").innerHTML = name;
+        $('#delete-branch-modal').modal();
+    });
+    li.appendChild(button); // Add delete button to the branch dropdown list
+  }
   ul.appendChild(li);
 }
 
@@ -293,6 +360,7 @@ function checkoutLocalBranch(element) {
   console.log("name of branch being checked out: " + bn);
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
+    displayModal("Drawing graph, please wait");
     addCommand("git checkout " + bn);
     repo.checkoutBranch("refs/heads/" + bn)
     .then(function() {
@@ -329,6 +397,7 @@ function checkoutRemoteBranch(element) {
     console.log("name of local branch " + bn);
     repos.mergeBranches(bn, "origin/" + bn)
     .then(function() {
+      displayModal("Drawing graph, please wait");
         refreshAll(repos);
         console.log("Pull successful");
     });

@@ -3,7 +3,7 @@ let blue = "#39c0ba";
 let gray = "#5b6969";
 let continuedWithoutSignIn = false;
 
-function collpaseSignPanel() {
+function collapseSignPanel() {
   $("#nav-collapse1").collapse("hide");
 }
 
@@ -45,6 +45,7 @@ function switchToAddRepositoryPanel() {
   hideGraphPanel();
   displayAddRepositoryPanel();
   displayUsername();
+  document.getElementById("repoOpen").value = "";
 }
 
 function wait(ms) {
@@ -149,7 +150,17 @@ function disableDiffPanelEditOnHide() {
 }
 
 function useSaved() {
-  console.log('button has been pressed: logging in with saved credentials');
-  decrypt();
-  loginWithSaved(switchToMainPanel);
+
+  let file = 'data.json';
+  // check if the data.json file exists
+  fs.exists(file, (exist) => {
+    if (exist) {
+      console.log('button has been pressed: logging in with saved credentials');
+      decrypt();
+      loginWithSaved(switchToMainPanel);
+    } else {
+      // if data,json file doesn't exist show a pop up.
+      window.alert("No saved credentials exist");
+    }
+  });
 }
