@@ -260,13 +260,17 @@ export class TextEditorComponent {
     }
 
     // Get current content.
-    let fileTextArea = <HTMLInputElement>document.getElementById("file-text-area-" + this.currentFileId)
+    let fileTextArea = <HTMLInputElement>document.getElementById("file-text-area-" + this.currentFileId);
 
-    // Save file.
-    saveEditedFile(this.filePaths[this.currentFileId], fileTextArea.value, this.saveSuccess)
-    let fileTab = document.getElementById("tab-link-" + this.currentFileId)!;
-    if (fileTab.innerHTML.slice(-1) == "*") {
-      fileTab.innerHTML = fileTab.innerHTML.substr(0, fileTab.innerHTML.indexOf(" *"));
+    if (fileTextArea != null) {
+      // Save file.
+      saveEditedFile(this.filePaths[this.currentFileId], fileTextArea.value, this.saveSuccess);
+      let fileTab = document.getElementById("tab-link-" + this.currentFileId)!;
+      if (fileTab.innerHTML.slice(-1) == "*") {
+        fileTab.innerHTML = fileTab.innerHTML.substr(0, fileTab.innerHTML.indexOf(" *"));
+      }
+    } else if (saveButton != null) {
+      saveButton.innerHTML = "Save";
     }
   }
 
