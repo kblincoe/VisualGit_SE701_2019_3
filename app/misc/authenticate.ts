@@ -177,6 +177,7 @@ function getUserInfo(callback) {
 
 }
 
+//Converts string to base 64 to be used for Basic Authorization in external API calls
 function make_base_auth(user, password) {
   var tok = user + ':' + password;
   var hash = btoa(tok);
