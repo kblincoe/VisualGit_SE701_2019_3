@@ -27,6 +27,8 @@ function changeColor(color) {
   let footer = document.getElementById('footer');
   let arp = document.getElementById('add-repository-panel');
   let auth = document.getElementById('authenticate');
+  let rememberLogin = document.getElementById('checkboxText');
+
   if (color === 'white') {
     for (let i = 0; i < head.length; i++) {
       console.log(head[i]);
@@ -57,6 +59,8 @@ function changeColor(color) {
     footer.style.backgroundColor = '#E3E3E3';
     arp.style.backgroundColor = '#D1D1D1';
     auth.style.backgroundColor = '#D6D6D6';
+    rememberLogin.style.color = '#5E5E5E';
+    
     before = 'white';
   }
   else if (color === 'pink') {
@@ -87,6 +91,8 @@ function changeColor(color) {
         footer.style.border = '#FFD7D7';
         arp.style.backgroundColor = '#FFD7D7';
         auth.style.backgroundColor = '#FFE5E5';
+        rememberLogin.style.color = '#FFA3A3';
+
         before = 'pink';
     }
     else if (color === 'blue') {
@@ -116,7 +122,9 @@ function changeColor(color) {
           footer.style.backgroundColor = '#B6DEFF'; 
           footer.style.border = '#B6DEFF'; 
           arp.style.backgroundColor = '#DAEEFF'; 
-          auth.style.backgroundColor = '#DAEEFF'; 
+          auth.style.backgroundColor = '#DAEEFF';
+          rememberLogin.style.color = '#4EAFFE';
+          
           before = 'blue';
     }
     else if (color === 'navy') {
@@ -147,7 +155,9 @@ function changeColor(color) {
           footer.style.backgroundColor = '#4D94FF'; 
           footer.style.border = '#4D94FF'; 
           arp.style.backgroundColor = '#4D94FF'; 
-          auth.style.backgroundColor = '#4D94FF'; 
+          auth.style.backgroundColor = '#4D94FF';
+          rememberLogin.style.color = '#001C83';
+          
           before = 'navy';
     }
     else if (color === 'green') {
@@ -178,6 +188,8 @@ function changeColor(color) {
           footer.style.border = '#ADEBAD'; 
           arp.style.backgroundColor = '#ADEBAD'; 
           auth.style.backgroundColor = '#ADEBAD'; 
+          rememberLogin.style.color = '#00990d';
+
           before = 'green';
   } 
   else if (color === 'default') {
@@ -210,6 +222,8 @@ function changeColor(color) {
     footer.style.backgroundColor = '#282828';
     arp.style.backgroundColor = '#282828';
     auth.style.backgroundColor = '#282828';
+    rememberLogin.style.color = '#ccc';
+
     before = 'default';
   }
 }
