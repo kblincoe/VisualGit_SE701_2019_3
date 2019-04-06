@@ -129,30 +129,31 @@ function openRepository() {
         }
         let repoOwner = array[array.length - 2]
         let repoName = array[array.length - 1]
+        if(!continuedWithoutSignIn){
+          //Call to get all usernames
+          $.ajax({
+            url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
+            type: "GET",
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
+            },
+            headers: {
+              'Accept': 'application/vnd.github.v3+json'
+            },
+            success: function (response) {
 
-        //Call to get all usernames
-        $.ajax({
-          url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
-          type: "GET",
-          beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
-          },
-          headers: {
-            'Accept': 'application/vnd.github.v3+json'
-          },
-          success: function (response) {
-
-            for (var i = 0; i < response.length; i++) {
-              //Store list of logins here.
-              contributors[i] = {
-                "username": response[i].login,
-                "name": "",
-                "email": ""
+              for (var i = 0; i < response.length; i++) {
+                //Store list of logins here.
+                contributors[i] = {
+                  "username": response[i].login,
+                  "name": "",
+                  "email": ""
+                }
               }
+              console.log("The contributors for this project are ", contributors)
             }
-            console.log("The contributors for this project are ", contributors)
-          }
-        })
+          })
+        }
 
       }
       displayModal("Drawing graph, please wait");
