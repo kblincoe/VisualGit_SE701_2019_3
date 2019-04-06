@@ -28,9 +28,6 @@ export class TextEditorComponent {
   // Stores the id of the currently open file tab.
   currentFileId = 0;
 
-  // Stores the id of the last open file tab.
-  previousFileId = 0;
-
   // Stores a list of file paths.
   filePaths: [string] = [""];
 
@@ -85,16 +82,32 @@ export class TextEditorComponent {
     to the main screen.
   */
   closeEditor(): void {
+    // Hide editor panel.
+    let editor = document.getElementById("editor-panel")!;
+    editor.style.height = "0vh";
+    editor.style.width = "0vw";
+    editor.style.zIndex = "-10";
 
+    // Reset editor.
+    let fileTabs = document.getElementById("file-tab")!;
+    fileTabs.innerHTML = "";
+
+    let fileEditors = document.getElementById("file-editors")!;
+    fileEditors.innerHTML = "";
+
+    // Reset variables.
+    this.currentKey = "";
+    this.cutPastePressed = false;
+    this.changingLines = false;
+    this.latestFileId = 0;
+    this.currentFileId = 0;
+    this.filePaths = [""];
   }
 
   /*
     This function is used to switch between different file tabs
   */
   switchTab(fileTabId: string, fileId: string): void {
-    // Update previous open file.
-    this.previousFileId = this.currentFileId;
-
     // Update currently open file.
     this.currentFileId = parseInt(fileId);
 

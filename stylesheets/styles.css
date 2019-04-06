@@ -465,8 +465,6 @@ body .footer .git-command {
 
 div.editor-header button.close-button, div.editor-header button.open-button {
   display: inline;
-  margin-left: auto;
-  margin-right: auto;
   margin-top: 10px;
   margin-bottom: 10px;
   height: 30px;
@@ -520,4 +518,30 @@ div.editor-area textarea.lines {
   height: 100%;
   overflow: hidden;
   text-align:right;
+}
+
+.close-button {
+  float: right;
+  margin-right: 50px;
+}
+
+.open-button {
+  float: left;
+  margin-left: 50px;
+}
+
+.indent-selector {
+  display: inline;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  height: 30px;
+  padding: 0 15px;
+}
+
+.editor-panel {
+  position: absolute;
+  z-index: -10;
+  height: 0vh;
+  width: 0vw;
+  background-color: white;
 }
