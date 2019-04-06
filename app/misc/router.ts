@@ -112,6 +112,7 @@ function hideDiffPanelIfNoChange() {
   let nochange = true;
   for (let i = 0; i < filePaths.length; i++) {
     if (filePaths[i].innerHTML === filename) {
+
       nochange = false;
     }
   }

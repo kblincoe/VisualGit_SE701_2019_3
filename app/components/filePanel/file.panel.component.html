@@ -2,7 +2,7 @@
 
   <div class="modified-files-header" id="modified-files-header">
     <p class="select-all-message" id="select-all-message">Select all</p>
-    <input onClick="setAllCheckboxes(this);" type="checkbox" class="select-all-checkbox" id="select-all-checkbox"/>
+    <input onClick="setAllCheckboxes(this);" type="checkbox" class="select-all-checkbox" id="select-all-checkbox" />
   </div>
 
   <div class="files-changed" id="files-changed">
@@ -15,6 +15,7 @@
   <div class="commit-panel" id="commit-panel">
     <textarea placeholder="Describe your changes here..." class="commit-message-input" id="commit-message-input"></textarea>
     <button class="commit-button" id="commit-button">Commit</button>
+    <button class="commit-button" id="fileEdit-button" (click)="displayFileEditor()">File Editor</button>
   </div>
 
 </div>
