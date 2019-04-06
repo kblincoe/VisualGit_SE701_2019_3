@@ -75,6 +75,41 @@ function loginWithSaved(callback) {
   
   }
   
+function searchRepoName() {
+  let ul = document.getElementById("repo-dropdown");
+
+  ul.innerHTML = ''; // clears the dropdown menu which shows all the repos
+
+  // Gets users name and password
+  encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+
+  cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
+
+  client = github.client({
+    username: getUsernameTemp(),
+    password: getPasswordTemp()
+  });
+
+  var ghme = client.me();
+  ghme.repos(function (err, data, head) {
+    var ghme = client.me();
+
+    for (let i = 0; i < data.length; i++) {
+
+      let rep = Object.values(data)[i];
+      console.log("url of repo: " + rep['html_url']);
+      
+      // Searches from the text input and adds to the list if repo name is found
+      if (parseInt(rep['forks_count']) == 0) {
+        if (rep['full_name'].search(document.getElementById("searchRep").value) != -1) {
+          displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
+          repoList[rep['full_name']] = rep['html_url'];
+        }
+      }
+
+    }
+  });
+}
 
 function getUserInfo(callback) {
   
