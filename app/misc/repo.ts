@@ -44,14 +44,12 @@ function downloadFunc(cloneURL, fullLocalPath) {
     options = {
         fetchOpts: {
             callbacks: {
-                certificateCheck: function () {
-                    return 1;
-                },
-                credentials: function () {
+                certificateCheck: function() { return 1; },
+                credentials: function() {
                     return cred;
                 },
                 transferProgress: function (data) {
-                    let bytesRatio = data.receivedObjects() / data.totalObjects();
+                    let bytesRatio = data.receivedObjects()/data.totalObjects();
                     updateProgressBar(bytesRatio);
                 }
             }
@@ -60,7 +58,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
 
     console.log("cloning into " + fullLocalPath);
     let repository = Git.Clone.clone(cloneURL, fullLocalPath, options)
-        .then(function (repository) {
+        .then(function(repository) {
                 progressDiv.style.visibility = 'collapse';
                 updateProgressBar(0);
                 console.log("Repo successfully cloned");
@@ -74,7 +72,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
                 refreshAll(repository);
                 switchToMainPanel();
             },
-            function (err) {
+            function(err) {
                 updateModalText("Clone Failed - " + err);
                 console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
                 switchToAddRepositoryPanel();
@@ -83,7 +81,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
 
 function updateProgressBar(ratio) {
     let progressBar = document.getElementById("cloneProgressBar");
-    let percentage = Math.floor(ratio * 100) + "%";
+    let percentage = Math.floor(ratio*100) + "%";
     progressBar.style.width = percentage;
     progressBar.innerHTML = percentage;
 }
@@ -108,7 +106,7 @@ function openRepository() {
     console.log("Trying to open repository at " + fullLocalPath);
     displayModal("Opening Local Repository...");
 
-    Git.Repository.open(fullLocalPath).then(function (repository) {
+    Git.Repository.open(fullLocalPath).then(function(repository) {
             repoFullPath = fullLocalPath;
             repoLocalPath = localPath;
             if (readFile.exists(repoFullPath + "/.git/MERGE_HEAD")) {
@@ -120,15 +118,15 @@ function openRepository() {
                 let text = readFile.read(repoFullPath + "/.git/config", null);
                 let searchString = "[remote \"origin\"]";
 
-                text = text.substr(text.indexOf(searchString) + searchString.length, text.length);
+                text = text.substr(text.indexOf(searchString)+searchString.length, text.length);
                 text = text.substr(0, text.indexOf(".git"));
 
                 let array = text.split('/');
-                if (array[0].indexOf("@") != -1) {
+                if(array[0].indexOf("@") !=-1){
                     array[0] = array[0].substring(array[0].indexOf(":") + 1);
                 }
-                let repoOwner = array[array.length - 2]
-                let repoName = array[array.length - 1]
+                let repoOwner = array[array.length-2]
+                let repoName = array[array.length-1]
 
                 //Call to get all usernames
                 $.ajax({
@@ -140,17 +138,17 @@ function openRepository() {
                     headers: {
                         'Accept': 'application/vnd.github.v3+json'
                     },
-                    success: function (response) {
+                    success: function(response){
 
-                        for (var i = 0; i < response.length; i++) {
+                        for(var i=0;i<response.length;i++){
                             //Store list of logins here.
                             contributors[i] = {
-                                "username": response[i].login,
-                                "name": "",
-                                "email": ""
+                                "username" : response[i].login,
+                                "name" : "",
+                                "email" : ""
                             }
                         }
-                        console.log("The contributors for this project are ", contributors)
+                        console.log("The contributors for this project are ",contributors)
                     }
                 })
 
@@ -160,15 +158,15 @@ function openRepository() {
             console.log("Repo successfully opened");
             updateModalText("Repository successfully opened");
         },
-        function (err) {
+        function(err) {
             updateModalText("Opening Failed - " + err);
-            console.log("repo.ts, line 101, cannot open repository: " + err); // TODO show error on screen
+            console.log("repo.ts, line 101, cannot open repository: "+err); // TODO show error on screen
         });
 }
 
-function createLocalRepository() {
+function createLocalRepository(){
     //console.log("createLocalRepo")
-    if (document.getElementById("repoCreate").value == null || document.getElementById("repoCreate").value == "") {
+    if (document.getElementById("repoCreate").value == null || document.getElementById("repoCreate").value == ""){
         document.getElementById("dirPickerCreateLocal").click();
         let localPath = document.getElementById("dirPickerCreateLocal").files[0].webkitRelativePath;
         let fullLocalPath = document.getElementById("dirPickerCreateLocal").files[0].path;
@@ -177,10 +175,10 @@ function createLocalRepository() {
     } else {
         let localPath = document.getElementById("repoCreate").value;
         let fullLocalPath;
-        if (!require('path').isAbsolute(localPath)) {
+        if(!require('path').isAbsolute(localPath)){
             updateModalText('The filepath is not valid. For OSX and Ubuntu the filepath should start with /, for Windows C:\\\\')
             return
-        } else {
+        }else{
             if (checkFile.existsSync(localPath)) {
                 fullLocalPath = localPath;
             } else {
@@ -193,12 +191,12 @@ function createLocalRepository() {
     //console.log("pre-git check")
     //console.log("fullLocalPath is " + fullLocalPath)
     //console.log(require("path").join(fullLocalPath,".git"));
-    if (checkFile.existsSync(require("path").join(fullLocalPath, ".git"))) {
+    if(checkFile.existsSync(require("path").join(fullLocalPath,".git"))){
         //console.log("Is git repository already")
         updateModalText("This folder is already a git repository. Please try to open it instead.");
-    } else {
-        displayModal("creating repository at " + require("path").join(fullLocalPath, ".git"));
-        Git.Repository.init(fullLocalPath, 0).then(function (repository) {
+    }else{
+        displayModal("creating repository at " + require("path").join(fullLocalPath,".git"));
+        Git.Repository.init(fullLocalPath, 0).then(function(repository) {
                 repoFullPath = fullLocalPath;
                 repoLocalPath = localPath;
                 refreshAll(repository);
@@ -208,7 +206,7 @@ function createLocalRepository() {
                 document.getElementById("dirPickerCreateLocal").value = null;
                 switchToMainPanel();
             },
-            function (err) {
+            function(err) {
                 updateModalText("Creating Failed - " + err);
                 //console.log("repo.ts, line 131, cannot open repository: "+err); // TODO show error on screen
             });
@@ -293,27 +291,28 @@ function refreshAll(repository) {
             document.getElementById("repo-name").innerHTML = repoLocalPath;
             document.getElementById("branch-name").innerHTML = branch + '<span class="caret"></span>';
         }, function (err) {
-        //If the repository has no commits, getCurrentBranch will throw an error.
-        //Default values will be set for the branch labels
-        window.alert("Warning:\n" +
-            "No branches have been found in this repository.\n" +
-            "This is likely because there have been no commits made.");
-        console.log("No branches found. Setting default label values to master");
-        console.log("Updating the labels - no graph update as project has no commits");
-        document.getElementById("repo-name").innerHTML = repoLocalPath;
-        //default label set to master
-        document.getElementById("branch-name").innerHTML = "master" + '<span class="caret"></span>';
-    });
+            //If the repository has no commits, getCurrentBranch will throw an error.
+            //Default values will be set for the branch labels
+            window.alert("Warning:\n" +
+                "No branches have been found in this repository.\n" +
+                "This is likely because there have been no commits made.");
+            console.log("No branches found. Setting default label values to master");
+            console.log("Updating the labels and graph");
+            drawGraph();
+            document.getElementById("repo-name").innerHTML = repoLocalPath;
+            //default label set to master
+            document.getElementById("branch-name").innerHTML = "master" + '<span class="caret"></span>';
+        });
 }
 
 function getAllBranches() {
     let repos;
     Git.Repository.open(repoFullPath)
-        .then(function (repo) {
+        .then(function(repo) {
             repos = repo;
             return repo.getReferenceNames(Git.Reference.TYPE.LISTALL);
         })
-        .then(function (branchList) {
+        .then(function(branchList) {
             clearBranchElement();
             for (let i = 0; i < branchList.length; i++) {
                 console.log("branch discovered: " + branchList[i]);
@@ -321,7 +320,7 @@ function getAllBranches() {
                 if (bp[1] !== "remotes") {
                     displayBranch(bp[bp.length - 1], "branch-dropdown", "checkoutLocalBranch(this)");
                 }
-                Git.Reference.nameToId(repos, branchList[i]).then(function (oid) {
+                Git.Reference.nameToId(repos, branchList[i]).then(function(oid) {
                     // Use oid
                     console.log("old id " + oid);
                 });
@@ -333,18 +332,18 @@ function getOtherBranches() {
     let list;
     let repos;
     Git.Repository.open(repoFullPath)
-        .then(function (repo) {
+        .then(function(repo) {
             repos = repo;
             return repo.getReferenceNames(Git.Reference.TYPE.LISTALL);
         })
-        .then(function (branchList) {
+        .then(function(branchList) {
             clearMergeElement();
             list = branchList;
         })
-        .then(function () {
+        .then(function() {
             return repos.getCurrentBranch()
         })
-        .then(function (ref) {
+        .then(function(ref) {
             let name = ref.name().split("/");
             console.log("merging remote branch with tracked local branch");
             clearBranchElement();
@@ -401,17 +400,17 @@ function displayBranch(name, id, onclick) {
     ul.appendChild(li);
 }
 
-function createDropDownFork(name, id, onclick) {
+function createDropDownFork(name,id,onclick) {
     let ul = document.getElementById(id);
     let button = document.createElement("div");
     let div = document.createElement("ul");
-    let innerText = document.createTextNode("↨" + name + " (Forked List)");
+    let innerText = document.createTextNode("↨" +name + " (Forked List)");
     button.className = name;
     button.appendChild(innerText);
-    div.setAttribute("id", name);
-    div.setAttribute("role", "menu");
-    div.setAttribute("class", "list-group")
-    button.setAttribute("onclick", onclick)
+    div.setAttribute("id",name);
+    div.setAttribute("role","menu");
+    div.setAttribute("class","list-group")
+    button.setAttribute("onclick",onclick)
     button.appendChild(div);
     ul.appendChild(button);
 }
@@ -426,13 +425,13 @@ function checkoutLocalBranch(element) {
     }
     console.log("name of branch being checked out: " + bn);
     Git.Repository.open(repoFullPath)
-        .then(function (repo) {
+        .then(function(repo) {
             displayModal("Drawing graph, please wait");
             addCommand("git checkout " + bn);
             repo.checkoutBranch("refs/heads/" + bn)
-                .then(function () {
+                .then(function() {
                     refreshAll(repo);
-                }, function (err) {
+                }, function(err) {
                     console.log("repo.tx, line 271, cannot checkout local branch: " + err);
                 });
         })
@@ -448,7 +447,7 @@ function checkoutRemoteBranch(element) {
     console.log("current branch name: " + bn);
     let repos;
     Git.Repository.open(repoFullPath)
-        .then(function (repo) {
+        .then(function(repo) {
             repos = repo;
             addCommand("git fetch");
             addCommand("git checkout -b " + bn);
@@ -456,19 +455,19 @@ function checkoutRemoteBranch(element) {
             console.log("name of remote branch:  " + cid);
             return Git.Commit.lookup(repo, cid);
         })
-        .then(function (commit) {
+        .then(function(commit) {
             console.log("commiting");
             return Git.Branch.create(repos, bn, commit, 0);
         })
-        .then(function (code) {
+        .then(function(code) {
             console.log("name of local branch " + bn);
             repos.mergeBranches(bn, "origin/" + bn)
-                .then(function () {
+                .then(function() {
                     displayModal("Drawing graph, please wait");
                     refreshAll(repos);
                     console.log("Pull successful");
                 });
-        }, function (err) {
+        }, function(err) {
             console.log("repo.ts, line 306, could not pull from repository" + err);
         })
 }
