@@ -115,7 +115,7 @@ function openRepository() {
     updateModalText("Repository successfully opened");
   },
   function(err) {
-    updateModalText("Opening Failed - " + err);
+    updateModalText("No repository found. Select a folder with a repository.");
     console.log("repo.ts, line 101, cannot open repository: "+err); // TODO show error on screen
     switchToAddRepositoryPanel();
   });
