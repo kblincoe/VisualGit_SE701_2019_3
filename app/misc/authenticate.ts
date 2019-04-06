@@ -102,7 +102,7 @@ function searchRepoName() {
       // Searches from the text input and adds to the list if repo name is found
       if (parseInt(rep['forks_count']) == 0) {
         if (rep['full_name'].search(document.getElementById("searchRep").value) != -1) {
-          addSearchedName(rep['full_name'], "repo-dropdown", "selectRepo(this)");
+          displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
           repoList[rep['full_name']] = rep['html_url'];
         }
       }
