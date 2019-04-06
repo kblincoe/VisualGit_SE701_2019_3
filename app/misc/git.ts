@@ -638,8 +638,9 @@ function Reload(){
 }
 
 function displayModifiedFiles() {
-  modifiedFiles = [];
+  clearModifiedFilesList();
 
+  modifiedFiles = [];
   let selectedFile = "";
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
@@ -655,6 +656,8 @@ function displayModifiedFiles() {
       }
       
       modifiedFiles.forEach(displayModifiedFile);
+
+      hideDiffPanelIfNoChange();
 
       // Add modified file to array of modified files 'modifiedFiles'
       function addModifiedFile(file) {
@@ -757,6 +760,7 @@ function displayModifiedFiles() {
           console.log("width of document: " + doc.style.width);
           let fileName = document.createElement("p");
           fileName.innerHTML = file.filePath
+          fileName.id = "diff-panel-file-name";
             // Get the filename being edited and displays on top of the window
           if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();
