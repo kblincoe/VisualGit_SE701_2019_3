@@ -134,7 +134,9 @@ function setMyMenu() {
 				click () { require('electron').shell.openExternal('https://github.com/kblincoe/VisualGit_SE701_2019_3#help'); }
 			}
 		]
-	}, {
+	}, 
+	{
+		label: 'Application',
             submenu: [
                 {label: "About Application", selector: "orderFrontStandardAboutPanel:"},
                 {type: "separator"},
@@ -144,7 +146,9 @@ function setMyMenu() {
                     }
                 }
             ]
-        }, {
+	}, 
+	{
+		label: 'Edit',
             submenu: [
                 {label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:"},
                 {label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:"},

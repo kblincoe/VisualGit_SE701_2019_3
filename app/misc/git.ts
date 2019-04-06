@@ -64,12 +64,23 @@ function addAndCommit() {
   .then(function(oidResult) {
     console.log("changing " + oid + " to " + oidResult);
     oid = oidResult;
-    return Git.Reference.nameToId(repository, "HEAD");
+    return Git.Reference.nameToId(repository, "HEAD").then((head)=>{
+        console.log("the current head is: " + head);
+        return head;
+    }).catch(() => {
+      console.log("there is no head commit, passing null as head");
+      return null;
+    });
   })
 
   .then(function(head) {
-    console.log("founf the current commit");
-    return repository.getCommit(head);
+    if (head==null){
+      console.log("there is no head commit, passing null as parent");
+      return null;
+    }else {
+      console.log("found the current head commit");
+      return repository.getCommit(head);
+    }
   })
 
   .then(function(parent) {
@@ -88,8 +99,14 @@ function addAndCommit() {
       console.log("head commit on local repository: " + parent.id.toString());
       return repository.createCommit("HEAD", sign, sign, commitMessage, oid, [parent.id().toString(), tid.trim()]);
     } else {
-      console.log('no other commits');
-      return repository.createCommit("HEAD", sign, sign, commitMessage, oid, [parent]);
+      console.log('This is not a merging commit');
+      let array;
+      if (parent==null){
+        array = []; //parent is null hence this is the first commit
+      }else{
+        array = [parent];
+      }
+      return repository.createCommit("HEAD", sign, sign, commitMessage, oid, array);
     }
   })
   .then(function(oid) {
@@ -347,6 +364,66 @@ function createBranch() {
     });
     document.getElementById("branchName").value = "";
   }
+}
+
+// Deletes a local branch
+function deleteLocalBranch() {
+  $('#delete-branch-modal').modal('toggle') // open warning modal
+  let branchName = document.getElementById("branch-to-delete").value; // selected branch name
+  console.log("deleting branch: " + branchName)
+  let repos;
+  console.log(branchName + " is being deleted...")
+  Git.Repository.open(repoFullPath)
+  .then(function(repo) {
+    repos = repo;
+    addCommand("git branch --delete " + branchName);
+
+    //check if the selected branch is a local branch
+    repo.getBranch(branchName).then(function(reference) {
+      Git.Branch.delete(reference) // delete local branch
+    })
+    }).then(function() {
+      // refresh graph
+      console.log("deleted the local branch") 
+      refreshAll(repos);
+   })
+}
+
+// Deletes a remote branch
+function deleteRemoteBranch() {
+  $('#delete-branch-modal').modal('toggle') // open warning modal
+  let branchName = document.getElementById("branch-to-delete").value; // selected branch name
+  let repos;
+  console.log(branchName + " is being deleted...");
+
+  Git.Repository.open(repoFullPath)
+  .then(function(repo) {
+    Git.Reference.list(repo).then(function(array) {
+      if (array.includes("refs/remotes/origin/" + branchName)) {  // check if the branch is remote
+        console.log("this is a remote branch")
+
+         // delete the remote branch
+        repo.getRemote('origin').then(function(remote) {
+          remote.push((':refs/heads/' + branchName),
+          {
+            callbacks: { // pass in user credentials as a parameter
+              credentials: function() {
+                return cred;
+              }
+            }
+          }).then(function() {
+              console.log("deleted the remote branch") 
+              updateModalText("The remote branch: " + branchName + " has been deleted")
+          });
+        })
+      }
+      else{
+        console.log("this is a local branch")
+        updateModalText("A remote branch called: " + branchName + " does not exist.")
+        return;
+      }
+    })
+  })
 }
 
 function mergeLocalBranches(element) {
