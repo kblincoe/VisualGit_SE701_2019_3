@@ -334,9 +334,13 @@ function pushToRemote() {
   });
 }
 
+function commitModal() {
+  // TODO: implement commit modal
+  displayModal("Commit inside a modal yet to be implemented");
+}
+
 function openBranch() {
   // TODO: implement branch functionality like sourcetree branching modal
-    console.log("Branch")
   displayModal("Branch yet to be implemented");
 }
 
