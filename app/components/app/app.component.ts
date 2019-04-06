@@ -5,11 +5,12 @@ import { BodyPanelComponent } from "../bodyPanel/body.panel.component";
 import { FooterComponent } from "../footer/footer.component";
 import { AddRepositoryComponent } from "../addRepository/add.repository.component";
 import { AuthenticateComponent } from "../authenticate/authenticate.component"
+import { TextEditorComponent } from "../textEditor/text.editor.component";
 
 @Component({
   selector: "my-app",
   templateUrl: 'app/components/app/app.component.html',
-  directives: [HeaderComponent, FilePanelComponent, BodyPanelComponent, FooterComponent, AddRepositoryComponent, AuthenticateComponent]
+  directives: [HeaderComponent, FilePanelComponent, BodyPanelComponent, FooterComponent, AddRepositoryComponent, AuthenticateComponent, TextEditorComponent]
 })
 
 export class AppComponent {
