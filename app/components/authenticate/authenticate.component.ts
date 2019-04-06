@@ -8,7 +8,7 @@ import { Component } from "@angular/core";
 
 export class AuthenticateComponent {
   switchToMainPanel(): void {
-    signInPage(switchToAddRepositoryPanel);
+    getUserInfo(switchToAddRepositoryPanel);
   }
 
   createNewAccount(): void {

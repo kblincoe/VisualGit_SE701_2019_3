@@ -46,3 +46,7 @@ function cancelEdit(){
     hideDiffPanel();
 }
 
+function saveEditedFile(filePath: string, content: string, callback: any): void {
+    fs.writeFile(filePath, content, callback);
+}
+

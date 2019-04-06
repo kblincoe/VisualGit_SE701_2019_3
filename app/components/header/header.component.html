@@ -235,17 +235,21 @@
   </div>
 </div>
 
-<div id="repo-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" id="repo-list-modal">
-      <ul class="list-group"id="repo-dropdown" role="menu" aria-labelledby="repo-name">
-      </ul>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary disabled" id="cloneButton" onclick="cloneRepo()">Clone</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div>
+    <div id="repo-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <input type="text" id="searchRep" class="form-control" placeholder="Search Repository">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" onclick="searchRepoName()">Search</button>
+          </span>
+          <ul class="list-group"id="repo-dropdown" role="menu" aria-labelledby="repo-name">
+          </ul>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary disabled" id="cloneButton" onclick="cloneRepo()">Clone</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
 
 <div id="fetch-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
