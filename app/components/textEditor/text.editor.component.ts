@@ -88,6 +88,12 @@ export class TextEditorComponent {
     editor.style.width = "0vw";
     editor.style.zIndex = "-10";
 
+    // Reset inputted file
+    let inputFile = <HTMLInputElement>document.getElementById("file-upload");
+    if (inputFile != null) {
+      inputFile.value = "";
+    }
+
     // Reset editor.
     let fileTabs = document.getElementById("file-tab")!;
     fileTabs.innerHTML = "";
