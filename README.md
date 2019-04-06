@@ -6,10 +6,15 @@ VisualGit is a visually-oriented desktop client for Git aimed at helping student
 
 ### Prerequisites
 
-`npm` (Node Package Manager) is used to manage VisualGit's dependencies. To run this project,`npm` version `6.11` is 
-required. To setup `npm` to have the correct version, see the [Project Setup](https://github.com/kblincoe/VisualGit_SE701_2019_3/wiki/Project-Setup).
+`Node.js` and its package manager - `npm` (Node Package Manager) are used to manage VisualGit's dependencies. To run 
+this project,`node v6.11` and `npm v3.10` is required. Downgrading your `node` version can be done through `nvm` (Node 
+Version Manager). To setup `node` to have the correct version, see the 
+[Project Setup](https://github.com/kblincoe/VisualGit_SE701_2019_3/wiki/Project-Setup).
 
-### Setup
+**_Note:_** _If you used `Homebrew` to install `node` on macOS, you may need to reinstall `node` by uninstalling the `brew` 
+version first. See the [Project Setup](https://github.com/kblincoe/VisualGit_SE701_2019_3/wiki/Project-Setup) to do so._
+
+### Repository Setup
 The repository can be cloned using either HTTPS or SSH, but SSH will be needed for making pull requests.
 
 #### SSH
