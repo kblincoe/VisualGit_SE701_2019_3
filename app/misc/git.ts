@@ -64,12 +64,23 @@ function addAndCommit() {
   .then(function(oidResult) {
     console.log("changing " + oid + " to " + oidResult);
     oid = oidResult;
-    return Git.Reference.nameToId(repository, "HEAD");
+    return Git.Reference.nameToId(repository, "HEAD").then((head)=>{
+        console.log("the current head is: " + head);
+        return head;
+    }).catch(() => {
+      console.log("there is no head commit, passing null as head");
+      return null;
+    });
   })
 
   .then(function(head) {
-    console.log("founf the current commit");
-    return repository.getCommit(head);
+    if (head==null){
+      console.log("there is no head commit, passing null as parent");
+      return null;
+    }else {
+      console.log("found the current head commit");
+      return repository.getCommit(head);
+    }
   })
 
   .then(function(parent) {
@@ -88,8 +99,14 @@ function addAndCommit() {
       console.log("head commit on local repository: " + parent.id.toString());
       return repository.createCommit("HEAD", sign, sign, commitMessage, oid, [parent.id().toString(), tid.trim()]);
     } else {
-      console.log('no other commits');
-      return repository.createCommit("HEAD", sign, sign, commitMessage, oid, [parent]);
+      console.log('This is not a merging commit');
+      let array;
+      if (parent==null){
+        array = []; //parent is null hence this is the first commit
+      }else{
+        array = [parent];
+      }
+      return repository.createCommit("HEAD", sign, sign, commitMessage, oid, array);
     }
   })
   .then(function(oid) {
@@ -621,8 +638,9 @@ function Reload(){
 }
 
 function displayModifiedFiles() {
-  modifiedFiles = [];
+  clearModifiedFilesList();
 
+  modifiedFiles = [];
   let selectedFile = "";
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
@@ -638,6 +656,8 @@ function displayModifiedFiles() {
       }
       
       modifiedFiles.forEach(displayModifiedFile);
+
+      hideDiffPanelIfNoChange();
 
       // Add modified file to array of modified files 'modifiedFiles'
       function addModifiedFile(file) {
@@ -740,6 +760,7 @@ function displayModifiedFiles() {
           console.log("width of document: " + doc.style.width);
           let fileName = document.createElement("p");
           fileName.innerHTML = file.filePath
+          fileName.id = "diff-panel-file-name";
             // Get the filename being edited and displays on top of the window
           if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();

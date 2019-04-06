@@ -53,19 +53,6 @@ function ModalSignIn(callback) {
         getUserInfo(callback);
 }
 
-function signInPage(callback) {
-    // assigning the check box to a variable to check the value
-    let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
-
-    // username and password values taken to be stored.
-    let username: any = (<HTMLInputElement>document.getElementById("username")).value;
-    let password: any = (<HTMLInputElement>document.getElementById("password")).value;
-    if (rememberLogin.checked == true) {
-        encrypt(username, password);
-    }
-
-  getUserInfo(callback);
-}
 
 
 function loginWithSaved(callback) {
@@ -126,6 +113,15 @@ function getUserInfo(callback) {
     if (err) {
       displayModal(err);
     } else {
+     // assigning the check box to a variable to check the value
+    let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
+
+    // username and password values taken to be stored.
+    let username: any = (<HTMLInputElement>document.getElementById("username")).value;
+    let password: any = (<HTMLInputElement>document.getElementById("password")).value;
+    if (rememberLogin.checked == true) {
+        encrypt(username, password);
+    }
       avaterImg = Object.values(data)[2]
       // let doc = document.getElementById("avater");
       // doc.innerHTML = "";
