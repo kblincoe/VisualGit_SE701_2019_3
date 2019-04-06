@@ -11,6 +11,7 @@ let checkFile = require("fs");
 let repoCurrentBranch = "master";
 let modal;
 let span;
+let contributors: [any] = [0];
 
 function downloadRepository() {
   let fullLocalPath;
@@ -25,6 +26,7 @@ function downloadRepository() {
 
   if (!cloneURL || cloneURL.length === 0) {
       updateModalText("Clone Failed - Empty URL Given");
+      switchToAddRepositoryPanel();
   } else {
       downloadFunc(cloneURL, fullLocalPath);
   }
@@ -68,10 +70,12 @@ function downloadFunc(cloneURL, fullLocalPath) {
     repoLocalPath = fullLocalPath;
     displayModal("Drawing graph, please wait");
     refreshAll(repository);
+    switchToMainPanel();
   },
   function(err) {
     updateModalText("Clone Failed - " + err);
     console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
+      switchToAddRepositoryPanel();
   });
 }
 
@@ -109,6 +113,46 @@ function openRepository() {
       let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
       console.log("current HEAD commit: " + tid);
     }
+    //Reads the git config file and extracts info about the remote on GitHub
+    if (readFile.exists(repoFullPath + "/.git/config")) {
+      let text = readFile.read(repoFullPath + "/.git/config", null);
+      let searchString = "[remote \"origin\"]";
+
+      text = text.substr(text.indexOf(searchString)+searchString.length, text.length);
+      text = text.substr(0, text.indexOf(".git"));
+      
+      let array = text.split('/');
+      if(array[0].indexOf("@") !=-1){
+        array[0] = array[0].substring(array[0].indexOf(":") + 1);
+      }
+      let repoOwner = array[array.length-2]
+      let repoName = array[array.length-1]
+
+      //Call to get all usernames
+      $.ajax({
+        url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
+        type: "GET",
+        beforeSend: function (xhr) {
+          xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
+        },
+        headers: {
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        success: function(response){
+          
+          for(var i=0;i<response.length;i++){
+            //Store list of logins here.
+            contributors[i] = {
+              "username" : response[i].login,
+              "name" : "",
+              "email" : ""
+            }
+          }
+          console.log("The contributors for this project are ",contributors)
+        }
+      })
+
+    }
     displayModal("Drawing graph, please wait");
     refreshAll(repository);
     console.log("Repo successfully opened");
@@ -118,6 +162,55 @@ function openRepository() {
     updateModalText("Opening Failed - " + err);
     console.log("repo.ts, line 101, cannot open repository: "+err); // TODO show error on screen
   });
+}
+
+function createLocalRepository(){
+  //console.log("createLocalRepo")
+  if (document.getElementById("repoCreate").value == null || document.getElementById("repoCreate").value == ""){
+    document.getElementById("dirPickerCreateLocal").click();
+    let localPath = document.getElementById("dirPickerCreateLocal").files[0].webkitRelativePath;
+    let fullLocalPath = document.getElementById("dirPickerCreateLocal").files[0].path;
+    document.getElementById("repoCreate").value = fullLocalPath;
+    document.getElementById("repoCreate").text = fullLocalPath;
+  } else {
+    let localPath = document.getElementById("repoCreate").value;
+    let fullLocalPath;
+    if(!require('path').isAbsolute(localPath)){
+      updateModalText('The filepath is not valid. For OSX and Ubuntu the filepath should start with /, for Windows C:\\\\')
+      return
+    }else{
+      if (checkFile.existsSync(localPath)) {
+        fullLocalPath = localPath;
+      } else {
+        checkFile.mkdirSync(localPath);
+        fullLocalPath = localPath;
+      }
+    }
+  }
+
+  //console.log("pre-git check")
+  //console.log("fullLocalPath is " + fullLocalPath)
+  //console.log(require("path").join(fullLocalPath,".git"));
+  if(checkFile.existsSync(require("path").join(fullLocalPath,".git"))){
+    //console.log("Is git repository already")
+    updateModalText("This folder is already a git repository. Please try to open it instead.");
+  }else{
+    displayModal("creating repository at " + require("path").join(fullLocalPath,".git"));
+    Git.Repository.init(fullLocalPath, 0).then(function(repository) {
+      repoFullPath = fullLocalPath;
+      repoLocalPath = localPath;
+      refreshAll(repository);
+      //console.log("Repo successfully created");
+      updateModalText("Repository successfully created");
+      document.getElementById("repoCreate").value = "";
+      document.getElementById("dirPickerCreateLocal").value = null;
+      switchToMainPanel();
+    },
+    function(err) {
+      updateModalText("Creating Failed - " + err);
+      //console.log("repo.ts, line 131, cannot open repository: "+err); // TODO show error on screen
+    });
+  }
 }
 
 function addBranchestoNode(thisB: string) {
@@ -259,6 +352,7 @@ function clearBranchElement() {
   ul.appendChild(li);
 }
 
+
 function displayBranch(name, id, onclick) {
   let ul = document.getElementById(id);
   let li = document.createElement("li");
@@ -267,8 +361,25 @@ function displayBranch(name, id, onclick) {
   a.setAttribute("class", "list-group-item");
   a.setAttribute("onclick", onclick + ";event.stopPropagation()");
   li.setAttribute("role", "presentation")
+  a.appendChild(document.createTextNode(name));
   a.innerHTML = name;
   li.appendChild(a);
+  
+  // Adding a delete button beside the branch
+  if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
+    var button = document.createElement("Button");
+    button.innerHTML = "Delete";
+    button.classList.add('btn-danger');
+
+    // Function to execute when button is clicked
+    $(button).click(function () {
+        // Display delete branch warning modal
+        $('#branch-to-delete').val(name);
+        document.getElementById("displayedBranchName").innerHTML = name;
+        $('#delete-branch-modal').modal();
+    });
+    li.appendChild(button); // Add delete button to the branch dropdown list
+  }
   ul.appendChild(li);
 }
 
