@@ -316,6 +316,7 @@ function pushToRemote() {
 function openBranch() {
   // TODO: implement branch functionality like sourcetree branching modal
     console.log("Branch")
+  displayModal("Branching yet to be implemented");
 }
 
 function createBranch() {
