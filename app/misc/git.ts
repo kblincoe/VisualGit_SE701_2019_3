@@ -233,10 +233,6 @@ function PullBuffer(){
 	}
 }
 
-function commitModal() {
-    displayModal("Commit modal yet to be implemented")
-}
-
 function pullFromRemote() {
   let repository;
   let branch = document.getElementById("branch-name").innerText;
