@@ -517,7 +517,7 @@ body .footer .terminal .git-command {
   border-top: none;
 }
 
-div.editor-header button.close-button, div.editor-header button.open-button {
+div.editor-header button.close-button, div.editor-header button.open-button, button.open-editor-button{
   display: inline;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -529,7 +529,7 @@ div.editor-header button.close-button, div.editor-header button.open-button {
   color: #fff;
 }
 
-div.editor-header button.close-button:hover, div.editor-header button.open-button:hover {
+div.editor-header button.close-button:hover, div.editor-header button.open-button:hover, button.open-editor-button:hover{
   opacity: 0.8;
 }
 
