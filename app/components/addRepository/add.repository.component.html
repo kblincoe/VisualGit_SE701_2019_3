@@ -39,5 +39,23 @@
         </div>
       </div>
     </div>
+    
+    <div id="create-local-repository">
+	      <div class="title">
+	        <h1>Create a local repository</h1>
+	      </div>
+	
+	      <div class="block">
+	        <div class="left">
+	          <p>Location of folder</p>
+	        </div>
+	
+	        <div class="right">
+	          <input type="text" name="folderLocal" size="50" id="repoCreate"/>
+	          <button class="button-open" (click)="selectLocalRepoDirectory()">Create</button>
+	          <input type="file" id="dirPickerCreateLocal" name="localDir" (change)="createLocalRepository()" style="display: none;" webkitdirectory />
+	        </div>
+	
+	    </div>
   </div>
 </div>
