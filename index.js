@@ -10,6 +10,8 @@ require('electron-debug')();
 
 // prevent window being garbage collected
 let mainWindow;
+let popupWindow;
+
 
 function onClosed() {
 	// dereference the window
@@ -138,7 +140,13 @@ function setMyMenu() {
 	{
 		label: 'Application',
             submenu: [
-                {label: "About Application", selector: "orderFrontStandardAboutPanel:"},
+				{	
+					label: "About Application", selector: "orderFrontStandardAboutPanel:",
+					click: function(){
+							popupWindow = new BrowserWindow({width:300, height:200})
+            				popupWindow.loadURL(`file://${__dirname}/popupWindow.html`)
+							} ,
+				},
                 {type: "separator"},
                 {
                     label: "Quit", accelerator: "Command+Q", click: function () {
