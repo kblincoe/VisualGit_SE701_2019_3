@@ -1,6 +1,5 @@
 /// <reference path="git.ts" />
 
-//import { Json } from "@angular/core/src/facade/lang";
 let $ = require("jquery");
 
 //import * as nodegit from "git";
