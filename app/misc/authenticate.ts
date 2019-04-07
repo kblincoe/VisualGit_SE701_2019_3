@@ -207,14 +207,14 @@ function cloneRepo() {
 
 function signInOrOut() {
   let doc = document.getElementById("avatar");
-  if(doc.innerHTML == "Sign In"){
+  if(doc.innerHTML === "Sign In"){
     doc.innerHTML = "";
   }
-  else if(doc.innerHTML == ""){
+  else if(doc.innerHTML === ""){
       doc.innerHTML = "Sign In";
   }
     
-  if (doc.innerHTML == "Sign out") {
+  if (doc.innerHTML === "Sign out") {
     $("#avatar").removeAttr("data-toggle");
 
     if (changes == 1 || CommitButNoPush == 1) {
