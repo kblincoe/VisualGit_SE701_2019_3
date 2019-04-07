@@ -14,6 +14,13 @@ export class DiffPanelComponent {
   openFromDiff(): void {
     let doc = document.getElementById("diff-panel");
     this.footerInstance.displayFileEditor();
-    console.log(doc.getElementsByTagName("P")[0].innerHTML);
+    let fileName = doc.getElementsByTagName("P")[0].innerHTML;
+    let fileLocation = repoFullPath + '/' + fileName;
+
+    if (readFile.exists(fileLocation)) {
+      let readme = fs.readFileSync(fileLocation, 'utf8');
+      console.log(readme);
+      this.textEditorInstance.openDiffFile(fileName, fileLocation, readme);
+    }
   }
 }
