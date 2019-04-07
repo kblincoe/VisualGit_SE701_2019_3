@@ -689,7 +689,6 @@ function displayModifiedFiles() {
     displayModifiedFile(file);
   }
 
-  // TODO
       document.getElementById("stage-all").onclick = function() {
         let unstagedFileElements = document.getElementById('files-changed').children;
         while (unstagedFileElements.length > 0) {
@@ -698,7 +697,10 @@ function displayModifiedFiles() {
       };
 
       document.getElementById("unstage-all").onclick = function () {
-        console.log("bye");
+        let stagedFileElements = document.getElementById('files-staged').children;
+        while (stagedFileElements.length > 0){
+          stagedFileElements[0].getElementsByTagName("input")[0].click();
+        }
       };
 
       function displayModifiedFile(file) {
