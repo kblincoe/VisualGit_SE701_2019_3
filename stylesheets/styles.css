@@ -164,7 +164,7 @@ body .file-panel {
   overflow-y: auto;
 }
 
-body .file-panel .modified-files-header .select-all-message {
+body .file-panel .modified-files-header .staged-files-header .select-all-message {
   width: 77.5%;
   display: inline-block;
   margin-left: 10px;
@@ -175,6 +175,10 @@ body .file-panel .files-changed .modified-files-message {
   padding: 20px;
 }
 
+body .file-panel .files-staged .modified-files-message {
+    padding: 20px;
+}
+
 body .file-panel .files-changed .file {
   width: 99%;
   height: 10%;
@@ -183,7 +187,7 @@ body .file-panel .files-changed .file {
   border: 1px solid #fff;
 }
 
-body .file-panel .files-changed .file p {
+body .file-panel .files-changed .files-staged .file p {
   color: #fff;
   display: inline-block;
   vertical-align: middle;
@@ -194,11 +198,11 @@ body .file-panel .files-changed .file p {
   width: 80%;
 }
 
-body .file-panel .files-changed .file input {
+body .file-panel .files-changed .files-staged .file input {
   vertical-align: middle;
 }
 
-body .file-panel .files-changed .file:hover {
+body .file-panel .files-changed .files-staged .file:hover {
   opacity: 0.8;
 }
 
@@ -208,7 +212,7 @@ body .file-panel .commit-panel .commit-message-input {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 20px;
+  margin-top: 90%;
   margin-bottom: 5px;
   height: 50px;
   border-radius: 5px;
@@ -227,6 +231,24 @@ body .file-panel .commit-panel .commit-button {
   padding: 0 15px;
   background-color: #39c0ba;
   color: #fff;
+}
+
+body .file-panel .staging-buttons {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 15px;
+  background-color: #39c0ba;
+  color: #fff;
+}
+
+body .file-panel .staging-buttons:hover {
+  opacity: 0.8;
 }
 
 body .file-panel .commit-panel .commit-button:hover {
@@ -256,9 +278,14 @@ body .body-panel .diff-panel .diff-panel-body {
 }
 
 body .body-panel .diff-panel .diff-panel-body div {
+  display: table-row-group;
   padding: 1px 5px 1px 5px;
   white-space: pre;
   font-family: monospace;
+}
+
+body .body-panel .diff-panel .diff-panel-body spacer {
+  display: block;
 }
 
 body .body-panel .diff-panel .diff-panel-minimise:hover {
@@ -411,7 +438,39 @@ body .footer p {
   margin: 0;
 }
 
-body .footer .git-command {
+body .footer .commit-panel .commit-message-input {
+  resize: none;
+  width: 275px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 50px;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+body .footer .commit-panel .commit-button {
+  display: block;
+  margin-left: 35px;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float: left;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 15px;
+  background-color: #39c0ba;
+  color: #fff;
+}
+
+body .footer .commit-panel .commit-button:hover {
+  opacity: 0.8;
+}
+
+body .footer .terminal .git-command {
   margin: 10px;
 }
 
@@ -426,3 +485,138 @@ body .footer .git-command {
 .file-deleted {
   background-color: #ff2448;
 }
+
+.file-tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  width: 100vw;
+}
+
+/* Style the buttons that are used to open the tab content */
+.file-tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.file-tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.file-tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+div.editor-header button.close-button, div.editor-header button.open-button {
+  display: inline;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 15px;
+  background-color: #39c0ba;
+  color: #fff;
+}
+
+div.editor-header button.close-button:hover, div.editor-header button.open-button:hover {
+  opacity: 0.8;
+}
+
+div.editor-header .indent-selector {
+  display: inline-block;
+}
+
+div.editor-header select, div.editor-header p {
+  display: inline;
+  vertical-align: top;
+}
+
+div.editor-area {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  height: 60vh;
+}
+
+div.editor-area textarea {
+  resize: none;
+}
+
+div.editor-area textarea.file {
+  float: left;
+  display: inline;
+  margin-right: 0;
+  width: 90%;
+  height: 100%;
+  overflow: auto;
+  white-space: nowrap;
+}
+div.editor-area textarea.lines {
+  float: left;
+  display: inline;
+  margin-left: 0;
+  width: 10%;
+  max-width: 40px;
+  height: 100%;
+  overflow: hidden;
+  text-align:right;
+}
+
+.close-button {
+  float: right;
+  margin-right: 50px;
+}
+
+.open-button {
+  float: left;
+  margin-left: 50px;
+}
+
+.indent-selector {
+  display: inline;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  height: 30px;
+  padding: 0 15px;
+}
+
+.editor-panel {
+  position: absolute;
+  z-index: -10;
+  height: 0vh;
+  width: 0vw;
+  background-color: white;
+}
+
+/*Toolbar Styles*/
+.toolbar-Container {
+ }
+
+.toolbar-Icons {
+  text-align: center;
+  cursor: pointer;
+  padding: 10px;
+  max-width: 75px;
+}
+
+.toolbar-Text {
+     font-size: 14px;
+     color: white;
+ }

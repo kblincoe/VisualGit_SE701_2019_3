@@ -1,8 +1,8 @@
 <div class="file-panel" id="file-panel">
 
   <div class="modified-files-header" id="modified-files-header">
-    <p class="select-all-message" id="select-all-message">Select all</p>
-    <input onClick="setAllCheckboxes(this);" type="checkbox" class="select-all-checkbox" id="select-all-checkbox"/>
+    <h4 style="color: white">Unstaged Files</h4>
+    <button class="staging-buttons" id="stage-all">Stage All</button>
   </div>
 
   <div class="files-changed" id="files-changed">
@@ -11,10 +11,17 @@
       <p>{{file}}</p>
     </div>
   </div>
+  <hr>
+  <div class="staged-files-header" id="staged-files-header">
+    <h4 style="color: white">Staged Files</h4>
+    <button class="staging-buttons" id="unstage-all">Unstage All</button>
+  </div>
 
-  <div class="commit-panel" id="commit-panel">
-    <textarea placeholder="Describe your changes here..." class="commit-message-input" id="commit-message-input"></textarea>
-    <button class="commit-button" id="commit-button">Commit</button>
+  <div class="files-staged" id="files-staged">
+    <p class="modified-files-message" id="staged-files-message">Your staged files will appear here</p>
+    <div class="file" *ngFor="let file of files">
+      <p>{{file}}</p>
+    </div>
   </div>
 
 </div>
