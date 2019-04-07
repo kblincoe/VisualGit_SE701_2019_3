@@ -53,11 +53,11 @@ function switchToAddRepositoryPanel() {
   
   if(showUsername){
     document.getElementById("Button_Sign_out").style.display = "block";
-    document.getElementById("Button_Sign_in").style.display = "none";
+    //document.getElementById("Button_Sign_in").style.display = "none";
     displayUsername();
   }else{
     document.getElementById("Button_Sign_out").style.display = "none";
-    document.getElementById("Button_Sign_in").style.display = "block";
+    //document.getElementById("Button_Sign_in").style.display = "block";
   }
   document.getElementById("repoOpen").value = "";
 }
