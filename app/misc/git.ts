@@ -20,121 +20,126 @@ function cloneFromRemote(){
 }
 
 function addAndCommit() {
-    console.log("commit");
-  let repository;
+  commitMessage = document.getElementById('commit-message-input').value;
+  // make sure there is a commit message before committing
+  if (commitMessage != null && commitMessage != ""){
+    let repository;
 
-  Git.Repository.open(repoFullPath)
-  .then(function(repoResult) {
-    repository = repoResult;
-    console.log("found a repository");
-    return repository.refreshIndex();
-  })
+    Git.Repository.open(repoFullPath)
+        .then(function(repoResult) {
+          repository = repoResult;
+          console.log("found a repository");
+          return repository.refreshIndex();
+        })
 
-  .then(function(indexResult) {
-    console.log("found a file to stage");
-    index = indexResult;
-    let filesToStage = [];
-    filesToAdd = [];
-    let fileElements = document.getElementsByClassName('file');
-    for (let i = 0; i < fileElements.length; i++) {
-      let fileElementChildren = fileElements[i].childNodes;
-      if (fileElementChildren[1].checked === true) {
-        filesToStage.push(fileElementChildren[0].innerHTML);
-        filesToAdd.push(fileElementChildren[0].innerHTML);
-      }
-    }
-    if (filesToStage.length > 0) {
-      console.log("staging files");
-      return index.addAll(filesToStage);
-    } else {
-      //If no files checked, then throw error to stop empty commits
-      throw new Error("No files selected to commit.");
-    }
-  })
+        .then(function(indexResult) {
+          console.log("found a file to stage");
+          index = indexResult;
+          let filesToStage = [];
+          filesToAdd = [];
+          let fileElements = document.getElementsByClassName('file');
+          for (let i = 0; i < fileElements.length; i++) {
+            let fileElementChildren = fileElements[i].childNodes;
+            if (fileElementChildren[1].checked === true) {
+              filesToStage.push(fileElementChildren[0].innerHTML);
+              filesToAdd.push(fileElementChildren[0].innerHTML);
+            }
+          }
+          if (filesToStage.length > 0) {
+            console.log("staging files");
+            return index.addAll(filesToStage);
+          } else {
+            //If no files checked, then throw error to stop empty commits
+            throw new Error("No files selected to commit.");
+          }
+        })
 
-  .then(function() {
-    console.log("found an index to write result to");
-    return index.write();
-  })
+        .then(function() {
+          console.log("found an index to write result to");
+          return index.write();
+        })
 
-  .then(function() {
-    console.log("creating a tree object using current index");
-    return index.writeTree();
-  })
+        .then(function() {
+          console.log("creating a tree object using current index");
+          return index.writeTree();
+        })
 
-  .then(function(oidResult) {
-    console.log("changing " + oid + " to " + oidResult);
-    oid = oidResult;
-    return Git.Reference.nameToId(repository, "HEAD").then((head)=>{
-        console.log("the current head is: " + head);
-        return head;
-    }).catch(() => {
-      console.log("there is no head commit, passing null as head");
-      return null;
-    });
-  })
+        .then(function(oidResult) {
+          console.log("changing " + oid + " to " + oidResult);
+          oid = oidResult;
+          return Git.Reference.nameToId(repository, "HEAD").then((head)=>{
+            console.log("the current head is: " + head);
+            return head;
+          }).catch(() => {
+            console.log("there is no head commit, passing null as head");
+            return null;
+          });
+        })
 
-  .then(function(head) {
-    if (head==null){
-      console.log("there is no head commit, passing null as parent");
-      return null;
-    }else {
-      console.log("found the current head commit");
-      return repository.getCommit(head);
-    }
-  })
+        .then(function(head) {
+          if (head==null){
+            console.log("there is no head commit, passing null as parent");
+            return null;
+          }else {
+            console.log("found the current head commit");
+            return repository.getCommit(head);
+          }
+        })
 
-  .then(function(parent) {
-    console.log("Verifying account");
-    let sign;
-    if (getUsernameTemp() !== null && getPasswordTemp !== null) {
-      sign = Git.Signature.now(getUsernameTemp(), getPasswordTemp());
-    } else {
-      sign = Git.Signature.default(repository);
-    }
-    commitMessage = document.getElementById('commit-message-input').value;
-    console.log("Signature to be put on commit: " + sign.toString());
-    if (readFile.exists(repoFullPath + "/.git/MERGE_HEAD")) {
-      let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
-      console.log("head commit on remote: " + tid);
-      console.log("head commit on local repository: " + parent.id.toString());
-      return repository.createCommit("HEAD", sign, sign, commitMessage, oid, [parent.id().toString(), tid.trim()]);
-    } else {
-      console.log('This is not a merging commit');
-      let array;
-      if (parent==null){
-        array = []; //parent is null hence this is the first commit
-      }else{
-        array = [parent];
-      }
-      return repository.createCommit("HEAD", sign, sign, commitMessage, oid, array);
-    }
-  })
-  .then(function(oid) {
-    theirCommit = null;
-    console.log("Committing");
-	changes = 0;
-	CommitButNoPush = 1;
-    console.log("Commit successful: " + oid.tostrS());
+        .then(function(parent) {
+          console.log("Verifying account");
+          let sign;
+          if (getUsernameTemp() !== null && getPasswordTemp !== null) {
+            sign = Git.Signature.now(getUsernameTemp(), getPasswordTemp());
+          } else {
+            sign = Git.Signature.default(repository);
+          }
 
-    hideDiffPanel();
-    clearModifiedFilesList();
-    clearCommitMessage();
-    clearSelectAllCheckbox();
-    for (let i = 0; i < filesToAdd.length; i++) {
-      addCommand("git add " + filesToAdd[i]);
-    }
-    addCommand('git commit -m "' + commitMessage + '"');
-    refreshAll(repository);
-  }, function(err) {
-    console.log("git.ts, line 112, could not commit, " + err);
-    // Added error thrown for if files not selected
-    if (err.message == "No files selected to commit.") {
-      displayModal(err.message);
-    } else {
-      updateModalText("You have not logged in. Please login to commit a change");
-    }
-  });
+          console.log("Signature to be put on commit: " + sign.toString());
+          if (readFile.exists(repoFullPath + "/.git/MERGE_HEAD")) {
+            let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
+            console.log("head commit on remote: " + tid);
+            console.log("head commit on local repository: " + parent.id.toString());
+            return repository.createCommit("HEAD", sign, sign, commitMessage, oid, [parent.id().toString(), tid.trim()]);
+          } else {
+            console.log('This is not a merging commit');
+            let array;
+            if (parent==null){
+              array = []; //parent is null hence this is the first commit
+            }else{
+              array = [parent];
+            }
+            return repository.createCommit("HEAD", sign, sign, commitMessage, oid, array);
+          }
+        })
+        .then(function(oid) {
+          theirCommit = null;
+          console.log("Committing");
+          changes = 0;
+          CommitButNoPush = 1;
+          console.log("Commit successful: " + oid.tostrS());
+
+          hideDiffPanel();
+          clearModifiedFilesList();
+          clearCommitMessage();
+          clearSelectAllCheckbox();
+          for (let i = 0; i < filesToAdd.length; i++) {
+            addCommand("git add " + filesToAdd[i]);
+          }
+          addCommand('git commit -m "' + commitMessage + '"');
+          refreshAll(repository);
+        }, function(err) {
+          console.log("git.ts, line 112, could not commit, " + err);
+          // Added error thrown for if files not selected
+          if (err.message == "No files selected to commit.") {
+            displayModal(err.message);
+          } else {
+            updateModalText("You have not logged in. Please login to commit a change");
+          }
+        });
+  } else {
+    window.alert("Cannot commit without a commit message. Please add a commit message before committing");
+  }
 }
 
 // Clear all modified files from the left file panel
