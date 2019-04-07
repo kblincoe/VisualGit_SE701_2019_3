@@ -13,7 +13,11 @@ function openWiki() {
     wikis.style.width = "100%";
     wikis.style.height = "100%";
     console.log(repoFullPath);
-    cloneWiki();
+    if(!fs.exists(repoFullPath + "\\wiki")){
+        cloneWiki();
+    }else{
+        findPageNames(repoFullPath + "\\wiki")
+    }
 }
 
 function cloneWiki() {
@@ -35,7 +39,7 @@ function cloneWiki() {
     };
     
     let cloneUrl = "https://github.com/kblincoe/VisualGit_SE701_2019_3.wiki.git";
-
+    
     let wikiPath = repoFullPath + "\\wiki";
     console.log("The wiki path is: ", wikiPath);
     let repository = Git.Clone.clone(cloneUrl, wikiPath, options)
