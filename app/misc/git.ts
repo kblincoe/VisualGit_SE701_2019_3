@@ -689,6 +689,15 @@ function displayModifiedFiles() {
     displayModifiedFile(file);
   }
 
+  // TODO
+      document.getElementById("stage-all").onclick = function() {
+        console.log("hi");
+      };
+
+      document.getElementById("unstage-all").onclick = function () {
+        console.log("bye");
+      };
+
       function displayModifiedFile(file) {
         let filePath = document.createElement("p");
         filePath.className = "file-path";
