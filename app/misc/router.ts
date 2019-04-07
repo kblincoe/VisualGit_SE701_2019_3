@@ -72,6 +72,7 @@ function displayFilePanel() {
   document.getElementById("file-panel").style.zIndex = "10";
   document.getElementById("commit-message-input").style="visibility: visible";
   document.getElementById("commit-button").style="visiblity: visible";
+  document.getElementById("fileEdit-button").style="visiblity: visible";
 }
 
 function displayGraphPanel() {
@@ -87,6 +88,7 @@ function hideFilePanel() {
   document.getElementById("file-panel").style.zIndex = "-10";
   document.getElementById("commit-message-input").style="visibility: hidden";
   document.getElementById("commit-button").style="visibility: hidden";
+  document.getElementById("fileEdit-button").style="visibility: hidden";
 }
 
 function hideGraphPanel() {
