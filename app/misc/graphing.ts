@@ -495,6 +495,33 @@ function makeNode(c, column: number) {
   });
 
   console.log("commit: "+ id + ", message: " +commitList[id-1]['id']);
+  if (id===10) {
+    c.getDiff()
+      .then(function (arrayDiff) {
+        return arrayDiff[0].patches();
+      }).then(function (patches) {
+      patches.forEach(function (patch) {
+        patch.hunks().then(function (hunks) {
+          hunks.forEach(function(hunk){
+            hunk.lines().then(function(lines){
+              let oldFilePath = patch.oldFile().path();
+              let newFilePath = patch.newFile().path();
+              lines.forEach(function(line){
+                if(line.origin()!=62){
+                  console.log("not end of line");
+                  console.log( String.fromCharCode(line.origin())
+                    + (line.oldLineno() != -1 ? line.oldLineno() : "")
+                    + "\t" + (line.newLineno() != -1 ? line.newLineno() : "")
+                    + "\t" + String.fromCharCode(line.origin())
+                    + "\t" + line.content());
+                }
+              })
+            })
+          })
+        })
+      })
+    });
+  }
 }
 
 function makeEdge(sha: string, parentSha: string) {
