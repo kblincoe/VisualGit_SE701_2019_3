@@ -655,7 +655,7 @@ function displayModifiedFiles() {
   modifiedFiles = [];
 
   let selectedFile = "";
-  let diffPanelWidth = 0;
+  
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
     console.log("Is repo merging: " + repo.isMerging());
@@ -883,49 +883,27 @@ function displayModifiedFiles() {
 
         // If not a changed line, origin will be a space character, so still need to slice
         line = line.slice(1, line.length);
-
-        //element.style.minWidth = document.getElementById("diff-panel").offsetWidth;
-        //element.style.display = "table-row-group";
-        // element.style.minWidth = "max-content";
-        
         element.innerText = line;
 
-        // let windowWidth = document.getElementById("diff-panel").offsetWidth;
-        // console.log("window width:"+windowWidth);
-        // let textWidth = document.getElementById("diff-panel-body").scrollWidth;
-        // console.log("text width:"+textWidth);
-        // element.style.minWidth = textWidth+"px";
-
+        // The spacer is needed to pad out the line to highlight the whole row
         let spacer = document.createElement("spacer");
-        // spacer.innerText = "----";
-        spacer.style.width = document.getElementById("diff-panel-body").scrollWidth+"px";
-        element!.appendChild(spacer);
+        spacer.style.width = document.getElementById("diff-panel-body")!.scrollWidth+"px";
+        element.appendChild(spacer);
 
-        document.getElementById("diff-panel-body").appendChild(element);
+        document.getElementById("diff-panel-body")!.appendChild(element);
       }
 
       function formatNewFileLine(text) {
         let element = document.createElement("div");
         element.style.backgroundColor = green;
-        
-        //element.style.minWidth = document.getElementById("diff-panel").offsetWidth;
-        //element.style.display = "table-row-group";
-        // element.style.minWidth = "max-content";
-        
         element.innerHTML = text;
 
-        // let windowWidth = document.getElementById("diff-panel").offsetWidth;
-        // console.log("window width:"+windowWidth);
-        // let textWidth = document.getElementById("diff-panel-body").scrollWidth;
-        // console.log("text width:"+textWidth);
-        // element.style.minWidth = textWidth+"px";
-
+        // The spacer is needed to pad out the line to highlight the whole row
         let spacer = document.createElement("spacer");
-        // spacer.innerText = "----";
-        spacer.style.width = document.getElementById("diff-panel-body").scrollWidth+"px";
-        element!.appendChild(spacer);
+        spacer.style.width = document.getElementById("diff-panel-body")!.scrollWidth+"px";
+        element.appendChild(spacer);
         
-        document.getElementById("diff-panel-body").appendChild(element);
+        document.getElementById("diff-panel-body")!.appendChild(element);
       }
     });
   },
