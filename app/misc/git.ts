@@ -691,7 +691,10 @@ function displayModifiedFiles() {
 
   // TODO
       document.getElementById("stage-all").onclick = function() {
-        console.log("hi");
+        let unstagedFileElements = document.getElementById('files-changed').children;
+        while (unstagedFileElements.length > 0) {
+          unstagedFileElements[0].getElementsByTagName("input")[0].click();
+        }
       };
 
       document.getElementById("unstage-all").onclick = function () {
@@ -725,10 +728,6 @@ function displayModifiedFiles() {
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
         checkbox.onclick = function(event){
-          if(!checkbox.checked){
-            document.getElementById('select-all-checkbox').checked = false;
-          }
-
           if (checkbox.checked) {
             stage();
             displayStagedFile(file, fileElement.id);
@@ -818,10 +817,7 @@ function displayModifiedFiles() {
         checkbox.className = "checkbox";
         checkbox.checked = true;
         checkbox.onclick = function(event){
-          if(!checkbox.checked){
-            document.getElementById('select-all-checkbox').checked = false;
-            unstage(file, fileId);
-          }
+          unstage(file, fileId);
           // Stops a click from propagating to the other layers
           event.stopPropagation();
         }
