@@ -249,9 +249,19 @@ function drawGraph() {
     let commitPanel = document.getElementById("selected-commit-diff-panel");
     console.log("inside display selected commit");
     if (commitPanel != null) {
-      commitPanel.style.height = "100vh"
-      commitPanel.style.width = "100vw"
+      commitPanel.style.height = "100vh";
+      commitPanel.style.width = "100vw";
       commitPanel.style.zIndex = "10";
+    }
+
+    let footer = document.getElementById("footer");
+    if (footer != null) {
+      footer.hidden = true;
+    }
+
+    let editorPanel = document.getElementById("editor-panel");
+    if (editorPanel != null){
+      editorPanel.hidden = true;
     }
   }
 
