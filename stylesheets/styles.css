@@ -164,7 +164,7 @@ body .file-panel {
   overflow-y: auto;
 }
 
-body .file-panel .modified-files-header .select-all-message {
+body .file-panel .modified-files-header .staged-files-header .select-all-message {
   width: 77.5%;
   display: inline-block;
   margin-left: 10px;
@@ -175,6 +175,10 @@ body .file-panel .files-changed .modified-files-message {
   padding: 20px;
 }
 
+body .file-panel .files-staged .modified-files-message {
+    padding: 20px;
+}
+
 body .file-panel .files-changed .file {
   width: 99%;
   height: 10%;
@@ -183,7 +187,7 @@ body .file-panel .files-changed .file {
   border: 1px solid #fff;
 }
 
-body .file-panel .files-changed .file p {
+body .file-panel .files-changed .files-staged .file p {
   color: #fff;
   display: inline-block;
   vertical-align: middle;
@@ -194,11 +198,11 @@ body .file-panel .files-changed .file p {
   width: 80%;
 }
 
-body .file-panel .files-changed .file input {
+body .file-panel .files-changed .files-staged .file input {
   vertical-align: middle;
 }
 
-body .file-panel .files-changed .file:hover {
+body .file-panel .files-changed .files-staged .file:hover {
   opacity: 0.8;
 }
 
@@ -208,7 +212,7 @@ body .file-panel .commit-panel .commit-message-input {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 20px;
+  margin-top: 90%;
   margin-bottom: 5px;
   height: 50px;
   border-radius: 5px;
@@ -227,6 +231,24 @@ body .file-panel .commit-panel .commit-button {
   padding: 0 15px;
   background-color: #39c0ba;
   color: #fff;
+}
+
+body .file-panel .staging-buttons {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 15px;
+  background-color: #39c0ba;
+  color: #fff;
+}
+
+body .file-panel .staging-buttons:hover {
+  opacity: 0.8;
 }
 
 body .file-panel .commit-panel .commit-button:hover {
@@ -411,7 +433,39 @@ body .footer p {
   margin: 0;
 }
 
-body .footer .git-command {
+body .footer .commit-panel .commit-message-input {
+  resize: none;
+  width: 275px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 50px;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+body .footer .commit-panel .commit-button {
+  display: block;
+  margin-left: 35px;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float: left;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 15px;
+  background-color: #39c0ba;
+  color: #fff;
+}
+
+body .footer .commit-panel .commit-button:hover {
+  opacity: 0.8;
+}
+
+body .footer .terminal .git-command {
   margin: 10px;
 }
 
