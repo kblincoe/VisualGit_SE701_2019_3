@@ -1,4 +1,7 @@
 let pageTitles = {}
+let path = require('path');
+let wikiPath = "";
+
 function openWiki() {
     console.log("hi");
     let wikis = document.getElementById("wiki-panel")!;
@@ -27,17 +30,40 @@ function cloneWiki() {
         }
     };
     let cloneUrl = "https://github.com/kblincoe/VisualGit_SE701_2019_3.wiki.git";
-    
-    repoFullPath += "\\wiki";
-    console.log(repoFullPath);
-    let repository = Git.Clone.clone(cloneUrl, repoFullPath, options)
+
+    let wikiPath = repoFullPath + "\\wiki";
+    console.log("The wiki path is: ", wikiPath);
+    let repository = Git.Clone.clone(cloneUrl, wikiPath, options)
         .then(function (repository) {
             console.log("Wiki successfully cloned")
+            findPageNames(wikiPath)
         }, function (err) {
             updateModalText("Clone Failed - " + err);
             console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
             switchToAddRepositoryPanel();
         }
         );
-    
+}
+
+//Extract list of all files (pages) in the wiki
+function findPageNames(wikiPath: string) {
+
+    var EXTENSION = '.md';
+
+    fs.readdir(wikiPath, function (err, files) {
+        console.log("The items are: ", files);
+
+        var files = files.filter(function (file) {
+            return path.extname(file).toLowerCase() === EXTENSION;
+        });
+        
+        pageTitles = files.map(function(d) { 
+            ;
+            return d.replace(/-/g, ' ').replace('.md',''); 
+        });
+        console.log(pageTitles);
+    });
+
+
+
 }
