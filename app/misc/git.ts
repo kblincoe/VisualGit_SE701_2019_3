@@ -678,7 +678,10 @@ function displayModifiedFiles() {
   function unstage(file, fileId) {
     // Get the fileId element and remove it
     document.getElementById(fileId).remove();
-    document.getElementById("modified-files-message").remove();
+    let modFilesMessage = document.getElementById("modified-files-message");
+    if (modFilesMessage != null) {
+      modFilesMessage.remove();
+    }
     // Check if there's no staged files, in case we need to print the "Your staged..."
     stagedFiles = index.remove(file);
     if (document.getElementById("files-staged").children.length == 0) {
