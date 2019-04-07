@@ -319,15 +319,7 @@ function pullFromRemote() {
       refreshAll(repository);
     }
   });
-//   .then(function(updatedRepository) {
-//     refreshAll(updatedRepository);
-
-// });
 }
-
-
-
-
 
 function pushToRemote() {
   let branch = document.getElementById("branch-name").innerText;
