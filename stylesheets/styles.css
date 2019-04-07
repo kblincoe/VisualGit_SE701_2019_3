@@ -615,3 +615,8 @@ div.editor-area textarea.lines {
      font-size: 14px;
      color: white;
  }
+
+ #open-editor-button {
+  float: right;
+  visibility: hidden;
+}
