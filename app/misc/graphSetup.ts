@@ -163,9 +163,19 @@ function drawGraph() {
         easingFunction: "easeInOutQuad",
       }
     };
-
     network.focus(callback.nodes[0], moveOptions);
   }, false);
+
+  network.on("click", function (callback) {
+      if (callback.nodes[0] == undefined) {
+      return;
+    } else {
+      let nodeId: number = callback.nodes[0];
+    }
+
+    displaySelectedCommitDiffPanel()
+    console.log("onclick event is fired");
+  });
 
   let flag = "basic";
 
@@ -234,4 +244,22 @@ function drawGraph() {
   //  });
   //   }
   });
+
+  function displaySelectedCommitDiffPanel(): void {
+    let commitPanel = document.getElementById("selected-commit-diff-panel");
+    console.log("inside display selected commit");
+    if (commitPanel != null) {
+      commitPanel.style.height = "100vh"
+      commitPanel.style.width = "100vw"
+      commitPanel.style.zIndex = "10";
+    }
+  }
+
+  function closeSelectedCommitDiffPanel(): void {
+    // Hide commit panel.
+    let commitPanel = document.getElementById("selected-commit-diff-panel")!;
+    commitPanel.style.height = "0vh";
+    commitPanel.style.width = "0vw";
+    commitPanel.style.zIndex = "-10";
+  }
 }
