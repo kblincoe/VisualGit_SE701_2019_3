@@ -448,10 +448,11 @@ body .footer .commit-panel .commit-message-input {
 
 body .footer .commit-panel .commit-button {
   display: block;
-  margin-left: auto;
+  margin-left: 35px;
   margin-right: auto;
   margin-top: 10px;
   margin-bottom: 10px;
+  float: left;
   height: 30px;
   border-radius: 10px;
   border: 0;
