@@ -33,6 +33,7 @@ function cloneWiki() {
             }
         }
     };
+    
     let cloneUrl = "https://github.com/kblincoe/VisualGit_SE701_2019_3.wiki.git";
 
     let wikiPath = repoFullPath + "\\wiki";
@@ -60,26 +61,21 @@ function findPageNames(wikiPath: string) {
         var files = files.filter(function (file) {
             return path.extname(file).toLowerCase() === EXTENSION;
         });
+
         //Remove filler element
         wikiContent.shift()
-        
+
         files.forEach(file => {
-            //var fileName = file;
             wikiContent.push({
                 "pageName": file.replace(/-/g, ' ').replace('.md', ''),
                 "pageContent": readFileContents(wikiPath + "\\" + file)
             })
         });
-        console.log("The page name is: ",wikiContent[0]['pageName']);
-        console.log("The page content is: ",wikiContent[0]['pageContent']);
 
     });
-
 }
 
 function readFileContents(wikiDirectory: string) {
-
     let markdownFile = readFile.read(wikiDirectory, null);
-    //console.log("The contents of the file are: ", markdownFile);
     return markdownFile;
 }
