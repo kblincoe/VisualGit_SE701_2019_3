@@ -297,8 +297,8 @@ function refreshAll(repository) {
             breakStringFrom = i;
           }
         }
+        repoLocalPath = "..." + repoLocalPath.slice(breakStringFrom,repoLocalPath.length); 
       }
-      repoLocalPath = "..." + repoLocalPath.slice(breakStringFrom,repoLocalPath.length); 
       document.getElementById("repo-name").innerHTML = repoLocalPath;
       document.getElementById("branch-name").innerHTML = branch + '<span class="caret"></span>';
     }, function (err) {
