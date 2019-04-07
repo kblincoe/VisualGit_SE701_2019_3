@@ -22,46 +22,46 @@ var changes = 0;
 
 //Called then user pushes to sign out even if they have commited changes but not pushed; prompts a confirmation modal
 
-function CommitNoPush(){
-	if (CommitButNoPush == 1){
-		$("#modalW2").modal();
-	}
+function CommitNoPush() {
+        if (CommitButNoPush == 1) {
+                $("#modalW2").modal();
+        }
 }
 
 function signInHead(callback) {
-	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-	if (signed == 1){
-		if ((changes == 1) || (CommitButNoPush == 1)){
-			$("#modalW2").modal();
-		}
-		else {
-			getUserInfo(callback);
-		}
-	}
-	else{
-	  getUserInfo(callback);
-	}
+        encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+        if (signed == 1) {
+                if ((changes == 1) || (CommitButNoPush == 1)) {
+                        $("#modalW2").modal();
+                }
+                else {
+                        getUserInfo(callback);
+                }
+        }
+        else {
+          getUserInfo(callback);
+        }
 }
 
-function LogInAfterConfirm(callback){
-	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-	getUserInfo(callback);
+function LogInAfterConfirm(callback) {
+        encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+        getUserInfo(callback);
 }
 
-function ModalSignIn(callback){
-	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-	getUserInfo(callback);
+function ModalSignIn(callback) {
+        encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+        getUserInfo(callback);
 }
 
 
 
 function loginWithSaved(callback) {
-  
+
     document.getElementById("username").value = getUsername();
     document.getElementById("password").value = getPassword(); //get decrypted username n password  
-  
-  }
-  
+
+}
+
 function searchRepoName() {
   let ul = document.getElementById("repo-dropdown");
 
@@ -99,7 +99,7 @@ function searchRepoName() {
 }
 
 function getUserInfo(callback) {
-  
+
   encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
 
   cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
@@ -137,7 +137,7 @@ function getUserInfo(callback) {
 
       let doc = document.getElementById("avatar");
       //doc.innerHTML = 'Sign out'; //HAD TO REMOVE THIS LINE OR THE PROGRAM BROKE.
-	  signed = 1;
+          signed = 1;
 
       callback();
     }
@@ -151,9 +151,9 @@ function getUserInfo(callback) {
       for (let i = 0; i < data.length; i++) {
         let rep = Object.values(data)[i];
         console.log("url of repo: " + rep['html_url']);
-      
+
         if(rep['fork'] == false) {
-          if(parseInt(rep['forks_count']) == 0 ) {
+          if(parseInt(rep['forks_count']) == 0) {
             displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
             repoList[rep['full_name']] = rep['html_url'];
           }
@@ -164,10 +164,10 @@ function getUserInfo(callback) {
             //Reiterate through and get all the forks of the repo and add to list
             for(let i = 0; i < data.length; i++) {
               let rep2 = Object.values(data)[i];
-                if(rep2['name'] == rep['name']) {
-                  displayBranch("&nbsp; &nbsp;" +rep2['full_name'],rep['full_name'],"selectRepo(this)")
-                  repoList["&nbsp; &nbsp;"+rep2['full_name']] = rep2['html_url'];
-                }
+              if(rep2['name'] == rep['name']) {
+                displayBranch("&nbsp; &nbsp;" +rep2['full_name'],rep['full_name'],"selectRepo(this)")
+                repoList["&nbsp; &nbsp;"+rep2['full_name']] = rep2['html_url'];
+              }
             }
           }
         }
