@@ -1,7 +1,7 @@
 /// <reference path="git.ts" />
 
 import { Json } from "@angular/core/src/facade/lang";
-
+let $ = require("jquery");
 
 //import * as nodegit from "git";
 //import NodeGit, { Status } from "nodegit";
@@ -10,6 +10,7 @@ let Git = require("nodegit");
 let repo;
 
 let github = require("octonode");
+
 let aid, atoken;
 let client;
 let avaterImg;
@@ -52,20 +53,6 @@ function ModalSignIn(callback){
 	getUserInfo(callback);
 }
 
-function signInPage(callback) {
-    // assigning the check box to a variable to check the value
-    let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
-
-    // username and password values taken to be stored.
-    let username: any = (<HTMLInputElement>document.getElementById("username")).value;
-    let password: any = (<HTMLInputElement>document.getElementById("password")).value;
-
-    if (rememberLogin.checked == true) {
-        encrypt(username, password);
-    }
-
-  getUserInfo(callback);
-}
 
 
 function loginWithSaved(callback) {
@@ -75,6 +62,41 @@ function loginWithSaved(callback) {
   
   }
   
+function searchRepoName() {
+  let ul = document.getElementById("repo-dropdown");
+
+  ul.innerHTML = ''; // clears the dropdown menu which shows all the repos
+
+  // Gets users name and password
+  encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+
+  cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
+
+  client = github.client({
+    username: getUsernameTemp(),
+    password: getPasswordTemp()
+  });
+
+  var ghme = client.me();
+  ghme.repos(function (err, data, head) {
+    var ghme = client.me();
+
+    for (let i = 0; i < data.length; i++) {
+
+      let rep = Object.values(data)[i];
+      console.log("url of repo: " + rep['html_url']);
+      
+      // Searches from the text input and adds to the list if repo name is found
+      if (parseInt(rep['forks_count']) == 0) {
+        if (rep['full_name'].search(document.getElementById("searchRep").value) != -1) {
+          displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
+          repoList[rep['full_name']] = rep['html_url'];
+        }
+      }
+
+    }
+  });
+}
 
 function getUserInfo(callback) {
   
@@ -91,6 +113,15 @@ function getUserInfo(callback) {
     if (err) {
       displayModal(err);
     } else {
+     // assigning the check box to a variable to check the value
+    let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
+
+    // username and password values taken to be stored.
+    let username: any = (<HTMLInputElement>document.getElementById("username")).value;
+    let password: any = (<HTMLInputElement>document.getElementById("password")).value;
+    if (rememberLogin.checked == true) {
+        encrypt(username, password);
+    }
       avaterImg = Object.values(data)[2]
       // let doc = document.getElementById("avater");
       // doc.innerHTML = "";
@@ -144,24 +175,14 @@ function getUserInfo(callback) {
     }
   });
 
-  // let scopes = {
-  //   'add_scopes': ['user', 'repo', 'gist'],
-  //   'note': 'admin script'
-  // };
-  //
-  // github.auth.config({
-  //   username: username,
-  //   password: password
-  // }).login(scopes, function (err, id, token) {
-  //   if (err !== null) {
-  //     console.log("login fail -- " + err);
-  //   }
-  //   aid = id;
-  //   atoken = token;
-  //   console.log(id, token);
-  // });
 }
 
+//Converts string to base 64 to be used for Basic Authorization in external API calls
+function make_base_auth(user, password) {
+  var tok = user + ':' + password;
+  var hash = btoa(tok);
+  return 'Basic ' + hash;
+}
 
 function showDropDown(ele) {
   //If the forked Repo is clicked collapse or uncollapse the forked repo list

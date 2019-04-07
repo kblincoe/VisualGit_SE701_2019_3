@@ -307,7 +307,7 @@ function makeBasicNode(c, column: number) {
       title: title,
       image: img4User(name),
       physics: false,
-      fixed: (id === 1),
+      fixed: false,
       x: (column - 1) * spacingX,
       y: (id - 1) * spacingY,
     });
@@ -389,7 +389,7 @@ function makeAbsNode(c, column: number) {
       title: title,
       image: img4User(name),
       physics: false,
-      fixed: (id === 1),
+      fixed: false,
       x: (column - 1) * spacingX,
       y: (id - 1) * spacingY,
     });
@@ -451,7 +451,7 @@ function makeNode(c, column: number) {
     title: title,
     image: img4User(name),
     physics: false,
-    fixed: true,
+    fixed: false,
     x: (column - 1) * spacingX,
     y: (id - 1) * spacingY,
   });

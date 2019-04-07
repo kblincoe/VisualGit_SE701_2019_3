@@ -110,6 +110,22 @@ function hideDiffPanel() {
   hideDiffPanelButtons();
 }
 
+function hideDiffPanelIfNoChange() {
+  let filename = document.getElementById("diff-panel-file-name") == null ? null : document.getElementById("diff-panel-file-name").innerHTML;
+  let filePaths = document.getElementsByClassName('file-path');
+  let nochange = true;
+  for (let i = 0; i < filePaths.length; i++) {
+    if (filePaths[i].innerHTML === filename) {
+
+      nochange = false;
+    }
+  }
+  if (nochange == true){
+    hideDiffPanel();
+  }
+  filename = null;
+}
+
 function hideAuthenticatePanel() {
   document.getElementById("authenticate").style.zIndex = "-20";
 }

@@ -61,19 +61,40 @@ function stage() {
 }
 
 function addAndCommit() {
-
-  if (stagedFiles == null) {
-    displayModal("You haven't staged anything");
+  commitMessage = document.getElementById('commit-message-input').value;
+  if (commitMessage == null || commitMessage == "") {
+    window.alert("Cannot commit without a commit message. Please add a commit message before committing");
     return;
   }
-
   let repository;
 
   Git.Repository.open(repoFullPath)
   .then(function(repoResult) {
     repository = repoResult;
     console.log("found a repository");
-    return stagedFiles;
+    return repository.refreshIndex();
+  })
+
+  .then(function(indexResult) {
+    console.log("found a file to stage");
+    index = indexResult;
+    let filesToStage = [];
+    filesToAdd = [];
+    let fileElements = document.getElementsByClassName('file');
+    for (let i = 0; i < fileElements.length; i++) {
+      let fileElementChildren = fileElements[i].childNodes;
+      if (fileElementChildren[1].checked === true) {
+        filesToStage.push(fileElementChildren[0].innerHTML);
+        filesToAdd.push(fileElementChildren[0].innerHTML);
+      }
+    }
+    if (filesToStage.length > 0) {
+      console.log("staging files");
+      return index.addAll(filesToStage);
+    } else {
+      //If no files checked, then throw error to stop empty commits
+      throw new Error("No files selected to commit.");
+    }
   })
 
   .then(function() {
@@ -353,6 +374,16 @@ function pushToRemote() {
   });
 }
 
+function commitModal() {
+  // TODO: implement commit modal
+  displayModal("Commit inside a modal yet to be implemented");
+}
+
+function openBranch() {
+  // TODO: implement branch functionality like sourcetree branching modal
+  displayModal("Branch yet to be implemented");
+}
+
 function createBranch() {
   if (typeof repoFullPath === "undefined") {
     // repository not selected
@@ -384,6 +415,66 @@ function createBranch() {
     });
     document.getElementById("branchName").value = "";
   }
+}
+
+// Deletes a local branch
+function deleteLocalBranch() {
+  $('#delete-branch-modal').modal('toggle') // open warning modal
+  let branchName = document.getElementById("branch-to-delete").value; // selected branch name
+  console.log("deleting branch: " + branchName)
+  let repos;
+  console.log(branchName + " is being deleted...")
+  Git.Repository.open(repoFullPath)
+  .then(function(repo) {
+    repos = repo;
+    addCommand("git branch --delete " + branchName);
+
+    //check if the selected branch is a local branch
+    repo.getBranch(branchName).then(function(reference) {
+      Git.Branch.delete(reference) // delete local branch
+    })
+    }).then(function() {
+      // refresh graph
+      console.log("deleted the local branch")
+      refreshAll(repos);
+   })
+}
+
+// Deletes a remote branch
+function deleteRemoteBranch() {
+  $('#delete-branch-modal').modal('toggle') // open warning modal
+  let branchName = document.getElementById("branch-to-delete").value; // selected branch name
+  let repos;
+  console.log(branchName + " is being deleted...");
+
+  Git.Repository.open(repoFullPath)
+  .then(function(repo) {
+    Git.Reference.list(repo).then(function(array) {
+      if (array.includes("refs/remotes/origin/" + branchName)) {  // check if the branch is remote
+        console.log("this is a remote branch")
+
+         // delete the remote branch
+        repo.getRemote('origin').then(function(remote) {
+          remote.push((':refs/heads/' + branchName),
+          {
+            callbacks: { // pass in user credentials as a parameter
+              credentials: function() {
+                return cred;
+              }
+            }
+          }).then(function() {
+              console.log("deleted the remote branch")
+              updateModalText("The remote branch: " + branchName + " has been deleted")
+          });
+        })
+      }
+      else{
+        console.log("this is a local branch")
+        updateModalText("A remote branch called: " + branchName + " does not exist.")
+        return;
+      }
+    })
+  })
 }
 
 function mergeLocalBranches(element) {
@@ -673,36 +764,46 @@ function displayModifiedFiles() {
 	  function Confirmation(){
 		$("#modalW").modal();
 		return 'Hi';
-  }
-  
-  function unstage(file, fileId) {
-    // Get the fileId element and remove it
-    document.getElementById(fileId).remove();
-    let modFilesMessage = document.getElementById("modified-files-message");
-    if (modFilesMessage != null) {
-      modFilesMessage.remove();
-    }
-    // Check if there's no staged files, in case we need to print the "Your staged..."
-    stagedFiles = index.remove(file);
-    if (document.getElementById("files-staged").children.length == 0) {
-      clearStagedFilesList();
-      stagedFiles = null;
-    }
+	}
 
-    displayModifiedFile(file);
-  }
+      function unstage(file, fileId) {
+        // Get the fileId element and remove it
+        document.getElementById(fileId).remove();
+        let modFilesMessage = document.getElementById("modified-files-message");
+        if (modFilesMessage != null) {
+          modFilesMessage.remove();
+        }
+        // Check if there's no staged files, in case we need to print the "Your staged..."
+        stagedFiles = index.remove(file);
+        if (document.getElementById("files-staged").children.length == 0) {
+          clearStagedFilesList();
+          stagedFiles = null;
+        }
+
+        displayModifiedFile(file);
+      }
 
       document.getElementById("stage-all").onclick = function() {
         let unstagedFileElements = document.getElementById('files-changed').children;
         while (unstagedFileElements.length > 0) {
-          unstagedFileElements[0].getElementsByTagName("input")[0].click();
+          let checkbox = unstagedFileElements[0].getElementsByTagName("input")[0];
+          try {
+            checkbox.click();
+          } catch (err) {
+            break;
+          }
         }
       };
 
       document.getElementById("unstage-all").onclick = function () {
         let stagedFileElements = document.getElementById('files-staged').children;
         while (stagedFileElements.length > 0){
-          stagedFileElements[0].getElementsByTagName("input")[0].click();
+          let checkbox = stagedFileElements[0].getElementsByTagName("input")[0];
+          try {
+            checkbox.click()
+          } catch (err) {
+            break;
+          }
         }
       };
 
@@ -830,7 +931,7 @@ function displayModifiedFiles() {
 
         document.getElementById("files-staged").appendChild(fileElement);
         document.getElementById(fileId).remove();
-        
+
         if (document.getElementById("files-changed").children.length == 0) {
           clearModifiedFilesList();
         }
@@ -840,7 +941,7 @@ function displayModifiedFiles() {
           console.log("width of document: " + doc.style.width);
           let fileName = document.createElement("p");
           fileName.innerHTML = file.filePath
-          // Get the filename being edited and displays on top of the window
+            // Get the filename being edited and displays on top of the window
           if (doc.style.width === '0px' || doc.style.width === '') {
             displayDiffPanel();
 
