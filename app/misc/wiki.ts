@@ -1,6 +1,10 @@
 let pageTitles = {}
 let path = require('path');
 let wikiPath = "";
+let wikiContent: [any] = [{
+    "pageName": "",
+    "pageContent": ""
+}]
 
 function openWiki() {
     console.log("hi");
@@ -56,14 +60,26 @@ function findPageNames(wikiPath: string) {
         var files = files.filter(function (file) {
             return path.extname(file).toLowerCase() === EXTENSION;
         });
+        //Remove filler element
+        wikiContent.shift()
         
-        pageTitles = files.map(function(d) { 
-            ;
-            return d.replace(/-/g, ' ').replace('.md',''); 
+        files.forEach(file => {
+            //var fileName = file;
+            wikiContent.push({
+                "pageName": file.replace(/-/g, ' ').replace('.md', ''),
+                "pageContent": readFileContents(wikiPath + "\\" + file)
+            })
         });
-        console.log(pageTitles);
+        console.log("The page name is: ",wikiContent[0]['pageName']);
+        console.log("The page content is: ",wikiContent[0]['pageContent']);
+
     });
 
+}
 
+function readFileContents(wikiDirectory: string) {
 
+    let markdownFile = readFile.read(wikiDirectory, null);
+    //console.log("The contents of the file are: ", markdownFile);
+    return markdownFile;
 }
