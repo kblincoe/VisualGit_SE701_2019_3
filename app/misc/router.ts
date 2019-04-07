@@ -21,6 +21,7 @@ function switchToMainPanel() {
   hideAddRepositoryPanel();
   displayFilePanel();
   displayGraphPanel();
+  document.getElementById("Button_Sign_in").style.display="hidden";
   
 }
 
