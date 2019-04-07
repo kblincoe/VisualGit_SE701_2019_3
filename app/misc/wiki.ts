@@ -29,10 +29,6 @@ function cloneWiki() {
                 },
                 credentials: function () {
                     return cred;
-                },
-                transferProgress: function (data) {
-                    let bytesRatio = data.receivedObjects() / data.totalObjects();
-                    updateProgressBar(bytesRatio);
                 }
             }
         }
