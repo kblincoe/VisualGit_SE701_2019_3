@@ -159,19 +159,6 @@ function clearSelectAllCheckbox() {
 
 function getAllCommits(callback) {
   clearModifiedFilesList();
-  // Git.Repository.open(repoFullPath)
-  // .then(function(repo) {
-  //   return repo.getHeadCommit();
-  // })
-  // .then(function(firstCommitOnMaster){
-  //   let history = firstCommitOnMaster.history(Git.Revwalk.SORT.Time);
-  //
-  //   history.on("end", function(commits) {
-  //     callback(commits);
-  //   });
-  //
-  //   history.start();
-  // });
   let repos;
   let allCommits = [];
   let aclist = [];
