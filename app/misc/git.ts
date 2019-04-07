@@ -20,6 +20,7 @@ function cloneFromRemote(){
 }
 
 function addAndCommit() {
+    console.log("commit");
   let repository;
 
   Git.Repository.open(repoFullPath)
@@ -296,10 +297,6 @@ function pullFromRemote() {
 // });
 }
 
-
-
-
-
 function pushToRemote() {
   let branch = document.getElementById("branch-name").innerText;
   Git.Repository.open(repoFullPath)
@@ -331,6 +328,16 @@ function pushToRemote() {
       });
     });
   });
+}
+
+function commitModal() {
+  // TODO: implement commit modal
+  displayModal("Commit inside a modal yet to be implemented");
+}
+
+function openBranch() {
+  // TODO: implement branch functionality like sourcetree branching modal
+  displayModal("Branch yet to be implemented");
 }
 
 function createBranch() {
@@ -384,7 +391,7 @@ function deleteLocalBranch() {
     })
     }).then(function() {
       // refresh graph
-      console.log("deleted the local branch") 
+      console.log("deleted the local branch")
       refreshAll(repos);
    })
 }
@@ -412,7 +419,7 @@ function deleteRemoteBranch() {
               }
             }
           }).then(function() {
-              console.log("deleted the remote branch") 
+              console.log("deleted the remote branch")
               updateModalText("The remote branch: " + branchName + " has been deleted")
           });
         })
@@ -641,6 +648,7 @@ function displayModifiedFiles() {
   clearModifiedFilesList();
 
   modifiedFiles = [];
+
   let selectedFile = "";
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
