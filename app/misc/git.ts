@@ -175,6 +175,16 @@ function clearStagedFilesList() {
   filesChangedMessage.id = "staged-files-message";
   filesChangedMessage.innerHTML = "Your staged files will appear here";
   filePanel.appendChild(filesChangedMessage);
+  const userColorFilePath = ".settings/user_color.txt";
+
+  // If user has previously saved a color, then set the app to that color
+  if (fs.existsSync(userColorFilePath)) {
+    fs.readFile(userColorFilePath, function(err, buffer) {
+      console.log(buffer.toString());
+      let color = buffer.toString();
+      changeColor(color);
+    });
+  }
 }
 
 // Clear all modified files from the left file panel
@@ -188,6 +198,16 @@ function clearModifiedFilesList() {
   filesChangedMessage.id = "modified-files-message";
   filesChangedMessage.innerHTML = "Your modified files will appear here";
   filePanel.appendChild(filesChangedMessage);
+  const userColorFilePath = ".settings/user_color.txt";
+
+  // If user has previously saved a color, then set the app to that color
+  if (fs.existsSync(userColorFilePath)) {
+    fs.readFile(userColorFilePath, function(err, buffer) {
+      console.log(buffer.toString());
+      let color = buffer.toString();
+      changeColor(color);
+    });
+  }
 }
 
 function clearCommitMessage() {
