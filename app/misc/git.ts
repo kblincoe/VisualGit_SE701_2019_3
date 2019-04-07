@@ -199,19 +199,7 @@ function clearSelectAllCheckbox() {
 }
 
 function getAllCommits(callback) {
-  // Git.Repository.open(repoFullPath)
-  // .then(function(repo) {
-  //   return repo.getHeadCommit();
-  // })
-  // .then(function(firstCommitOnMaster){
-  //   let history = firstCommitOnMaster.history(Git.Revwalk.SORT.Time);
-  //
-  //   history.on("end", function(commits) {
-  //     callback(commits);
-  //   });
-  //
-  //   history.start();
-  // });
+  clearModifiedFilesList();
   let repos;
   let allCommits = [];
   let aclist = [];
@@ -718,7 +706,7 @@ function displayModifiedFiles() {
           }
           // If previously displayed file is not the new modified file
           // then check if it exists, else remove 
-          let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
+          let filePath = repoFullPath + "\/" + filePaths[i].innerHTML;
           if (fs.existsSync(filePath)) {
             // exists
             console.log("exists");
