@@ -158,6 +158,7 @@ function clearSelectAllCheckbox() {
 }
 
 function getAllCommits(callback) {
+  clearModifiedFilesList();
   // Git.Repository.open(repoFullPath)
   // .then(function(repo) {
   //   return repo.getHeadCommit();
@@ -638,8 +639,6 @@ function Reload(){
 }
 
 function displayModifiedFiles() {
-  clearModifiedFilesList();
-
   modifiedFiles = [];
   let selectedFile = "";
   Git.Repository.open(repoFullPath)
@@ -670,7 +669,7 @@ function displayModifiedFiles() {
           }
           // If previously displayed file is not the new modified file
           // then check if it exists, else remove 
-          let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
+          let filePath = repoFullPath + "/" + filePaths[i].innerHTML;
           if (fs.existsSync(filePath)) {
             // exists
             console.log("exists");
