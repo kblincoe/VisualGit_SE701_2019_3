@@ -104,10 +104,10 @@ function getEmail(c) {
 
 function makeAbsNode(c, column: number, count:number) {
   let id = nodeId++;
-  let name = "Node " + id;
+  let name = getName(c.author().toString());
   let reference;
   let email = getEmail(c);
-  let title = "Author: " + email + "<br>" + "Number of Commits: " + count;
+  let title = "Author: " + name + "<br>" + "Number of Commits: " + count;
   nodes.add({
     id: id,
     shape: "circularImage",
