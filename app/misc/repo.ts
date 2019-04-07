@@ -17,11 +17,17 @@ function downloadRepository() {
   let fullLocalPath;
   // Full path is determined by either handwritten directory or selected by file browser
   if (document.getElementById("repoSave").value != null || document.getElementById("repoSave").value != "") {
+    // if the user entered a file location to save to
+    // set that as the path
     let localPath = document.getElementById("repoSave").value;
     fullLocalPath = require("path").join(__dirname, localPath);
   } else {
+
     fullLocalPath = document.getElementById("dirPickerSaveNew").files[0].path;
+
+
   }
+
   let cloneURL = document.getElementById("repoClone").value;
 
   if (!cloneURL || cloneURL.length === 0) {
