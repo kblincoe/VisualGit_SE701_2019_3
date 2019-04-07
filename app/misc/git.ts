@@ -672,6 +672,7 @@ function displayModifiedFiles() {
   modifiedFiles = [];
 
   let selectedFile = "";
+  
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
     console.log("Is repo merging: " + repo.isMerging());
@@ -1023,24 +1024,33 @@ function displayModifiedFiles() {
 
         if (line.charAt(0) === "+") {
           element.style.backgroundColor = "#84db00";
-          element.style.display = "table-row";
         } else if (line.charAt(0) === "-") {
           element.style.backgroundColor = "#ff2448";
-          element.style.display = "table-row";
         }
 
         // If not a changed line, origin will be a space character, so still need to slice
         line = line.slice(1, line.length);
-
         element.innerText = line;
-        document.getElementById("diff-panel-body").appendChild(element);
+
+        // The spacer is needed to pad out the line to highlight the whole row
+        let spacer = document.createElement("spacer");
+        spacer.style.width = document.getElementById("diff-panel-body")!.scrollWidth+"px";
+        element.appendChild(spacer);
+
+        document.getElementById("diff-panel-body")!.appendChild(element);
       }
 
       function formatNewFileLine(text) {
         let element = document.createElement("div");
         element.style.backgroundColor = green;
         element.innerHTML = text;
-        document.getElementById("diff-panel-body").appendChild(element);
+
+        // The spacer is needed to pad out the line to highlight the whole row
+        let spacer = document.createElement("spacer");
+        spacer.style.width = document.getElementById("diff-panel-body")!.scrollWidth+"px";
+        element.appendChild(spacer);
+        
+        document.getElementById("diff-panel-body")!.appendChild(element);
       }
     });
   },
