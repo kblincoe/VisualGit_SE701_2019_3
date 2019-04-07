@@ -13,6 +13,7 @@ let modal;
 let span;
 let contributors: [any] = [0];
 let previousOpen;
+let repoName : string = "";
 
 function downloadRepository() {
   let fullLocalPath;
@@ -142,7 +143,7 @@ function openRepository() {
         }
 
         let repoOwner = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 2]
-        let repoName = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 1]
+        repoName = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 1]
         //If the user is signed in, an API call can performed
         if(!continuedWithoutSignIn){
           //Call to get all usernames
