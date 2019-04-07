@@ -84,11 +84,6 @@ function displayAddRepositoryPanel() {
   $("#open-local-repository").show();
 }
 
-function  displaySelectedCommitDiffPanel() {
-  document.getElementById("selected-commit-diff-panel").style.zIndex = "50";
-
-}
-
 function hideFilePanel() {
   document.getElementById("file-panel").style.zIndex = "-10";
   document.getElementById("commit-message-input").style="visibility: hidden";
