@@ -80,7 +80,7 @@ function loginWithSaved(callback) {
 
 function getUserInfo(callback) {
   
-  if (signedAfter == true){  // if the trys to login after clicking "continues without sign in" 
+  if (signedAfter === true){  // if the trys to login after clicking "continues without sign in" 
     encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
   }
   else {
