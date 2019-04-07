@@ -12,6 +12,7 @@ let repoCurrentBranch = "master";
 let modal;
 let span;
 let contributors: [any] = [0];
+let previousOpen;
 
 function downloadRepository() {
   let fullLocalPath;
@@ -88,10 +89,15 @@ function updateProgressBar(ratio) {
 }
 
 function openRepository() {
+  console.log("Open Repository")
+  if(document.getElementById("dirPickerOpenLocal").value === previousOpen && previousOpen != undefined){
+    return;
+  }
   // Full path is determined by either handwritten directory or selected by file browser
   if (document.getElementById("repoOpen").value == null || document.getElementById("repoOpen").value == "") {
     let localPath = document.getElementById("dirPickerOpenLocal").files[0].webkitRelativePath;
     let fullLocalPath = document.getElementById("dirPickerOpenLocal").files[0].path;
+    previousOpen = document.getElementById("dirPickerOpenLocal").value;
     document.getElementById("repoOpen").value = fullLocalPath;
     document.getElementById("repoOpen").text = fullLocalPath;
   } else {
@@ -164,7 +170,7 @@ function openRepository() {
     console.log("repo.ts, line 101, cannot open repository: "+err); // TODO show error on screen
     switchToAddRepositoryPanel();
   });
-
+  document.getElementById("dirPickerOpenLocal").value = "";
 }
 
 function createLocalRepository() {
