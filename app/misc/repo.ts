@@ -1,5 +1,4 @@
 let Git = require("nodegit");
-let $ = require('jQuery');
 let repoFullPath;
 let repoLocalPath;
 let bname = {};
