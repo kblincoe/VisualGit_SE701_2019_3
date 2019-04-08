@@ -59,7 +59,8 @@ function wait(ms) {
 
 function displayUsername() {
   console.log(getUsername());
-  if (getUsername() != null) {
+  let existing_username = document.getElementById("githubname").innerHTML;
+  if (getUsername() != null && existing_username == null) {
     document.getElementById("githubname").innerHTML = getUsername();
   }
 }

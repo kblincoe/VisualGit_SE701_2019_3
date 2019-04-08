@@ -140,6 +140,7 @@ function getUserInfo(callback) {
       // doc.appendChild(elem);
       // doc = document.getElementById("log");
       // doc.innerHTML = 'sign out';
+      document.getElementById("githubname").innerHTML = data["login"]
       var docGitUser = document.getElementById("githubname");
       //docGitUser.innerHTML = Object.values(data)[0];
 
