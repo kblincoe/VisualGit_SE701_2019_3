@@ -626,3 +626,7 @@ div.editor-area textarea.lines {
   margin-right: 10px; 
   visibility: hidden;
 }
+
+.diff-panel {
+  background-color: #282828;
+}
