@@ -413,10 +413,28 @@ function displayBranch(name, id, onclick) {
   li.setAttribute("role", "presentation")
   a.appendChild(document.createTextNode(name));
   a.innerHTML = name;
+  //li.appendChild("asdf");
   li.appendChild(a);
-
+  //li.appendChild("asdsad");
   // Adding a delete button beside the branch
   if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
+    
+    Git.Repository.open(repoFullPath)
+    .then(function(repo) {
+      Git.Reference.list(repo).then(function(array) {
+        if (array.includes("refs/remotes/origin/" + name)) {
+            a.innerHTML += "<img src ='http://www.twentyonepilots.com/sites/g/files/g2000004896/f/Sample-image10-highres.jpg' width='20' height='20' align='right' title='Remote'>";
+        }
+      })
+    })
+
+    Git.Repository.open(repoFullPath)
+    .then(function(repo) {
+      repo.getBranch(name).then(function() {
+        a.innerHTML += "<img src ='https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-sample-grunge-red-round-stamp.jpg' width='20' height='20' align='right' title='Local'>";
+      })
+    })
+
     var button = document.createElement("Button");
     button.innerHTML = "Delete";
     button.classList.add('btn-danger');
