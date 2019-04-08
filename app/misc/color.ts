@@ -39,8 +39,9 @@ function changeColor(color) {
 
   // Text editor panel
   let editor = document.getElementById('editor-panel');
-  let editorHeader = document.getElementsByClassName('editor-header');;
-  // let editorTab = document.getElementById('file-tab');
+  let editorHeader = document.getElementsByClassName('editor-header');
+  let editorFileTab = document.getElementById('file-tab');
+  let editorEditors = document.getElementById('file-editors');
 
   if (color === 'white') {
     for (let i = 0; i < head.length; i++) {
@@ -309,10 +310,22 @@ function changeColor(color) {
   // Match the style of the file editor to the rest of the app
   if (editor !== null) {
     editor!.style.color = diffp.style.color;
-    editor!.style.backgroundColor = diffp.style.backgroundColor;
+    // editor!.style.backgroundColor = diffp.style.backgroundColor;
     editor!.style.backgroundColor = network.style.backgroundColor;
 
-    // Use the same css settings for the editor header
+    editorFileTab!.style.color = fp.style.color;
+    editorFileTab!.style.backgroundColor = fp.style.backgroundColor;
+    editorEditors!.style.color = "black";
+    editorEditors!.style.backgroundColor = diffp.style.backgroundColor;
+
+    // let a = document.getElementsByClassName('file-editors');
+    // let editorTextElements = a!.children;
+    // editorTextElements.forEach(function(e) {
+    //   e!.style.color = diffp.style.color;
+    //   e!.style.backgroundColor = diffp.style.backgroundColor;
+    // });
+
+    // Use the same css settings for the editor header as the navbar
     let navbarStyle = head[0].className.split(" ")[1];
     for (let i = 0; i < editorHeader.length; i++) {
       editorHeader[i].className = 'editor-header ' + navbarStyle;
