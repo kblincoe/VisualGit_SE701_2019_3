@@ -20,6 +20,19 @@ function cloneFromRemote(){
   switchToClonePanel();
 }
 
+function refreshColor() {
+  const userColorFilePath = ".settings/user_color.txt";
+
+  // If user has previously saved a color, then set the app to that color
+  if (fs.existsSync(userColorFilePath)) {
+    fs.readFile(userColorFilePath, function(err, buffer) {
+      console.log(buffer.toString());
+      let color = buffer.toString();
+      changeColor(color);
+    });
+  }
+}
+
 function stage() {
   let repository;
 
@@ -175,16 +188,8 @@ function clearStagedFilesList() {
   filesChangedMessage.id = "staged-files-message";
   filesChangedMessage.innerHTML = "Your staged files will appear here";
   filePanel.appendChild(filesChangedMessage);
-  const userColorFilePath = ".settings/user_color.txt";
 
-  // If user has previously saved a color, then set the app to that color
-  if (fs.existsSync(userColorFilePath)) {
-    fs.readFile(userColorFilePath, function(err, buffer) {
-      console.log(buffer.toString());
-      let color = buffer.toString();
-      changeColor(color);
-    });
-  }
+  changeColor();
 }
 
 // Clear all modified files from the left file panel
@@ -200,14 +205,7 @@ function clearModifiedFilesList() {
   filePanel.appendChild(filesChangedMessage);
   const userColorFilePath = ".settings/user_color.txt";
 
-  // If user has previously saved a color, then set the app to that color
-  if (fs.existsSync(userColorFilePath)) {
-    fs.readFile(userColorFilePath, function(err, buffer) {
-      console.log(buffer.toString());
-      let color = buffer.toString();
-      changeColor(color);
-    });
-  }
+  refreshColor();
 }
 
 function clearCommitMessage() {
@@ -707,7 +705,7 @@ function displayModifiedFiles() {
       }
       
       modifiedFiles.forEach(displayModifiedFile);
-
+      refreshColor();
       // Add modified file to array of modified files 'modifiedFiles'
       function addModifiedFile(file) {
 
@@ -782,6 +780,7 @@ function displayModifiedFiles() {
         }
 
         displayModifiedFile(file);
+        refreshColor();
       }
 
       document.getElementById("stage-all").onclick = function() {
@@ -838,6 +837,7 @@ function displayModifiedFiles() {
           if (checkbox.checked) {
             stage();
             displayStagedFile(file, fileElement.id);
+            refreshColor();
           }
           // Stops a click from propagating to the other layers
           event.stopPropagation();

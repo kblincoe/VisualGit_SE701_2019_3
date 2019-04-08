@@ -11,10 +11,12 @@ function changeColor(color) {
   }
 
   // Save user color selection
-  fs.writeFile(userColorFilePath, color, function(err) {
-      if (err) console.log(err);
-      console.log("Written user color to file");
-  });
+  if (color != null) {
+    fs.writeFile(userColorFilePath, color, function(err) {
+        if (err) console.log(err);
+        console.log("Written user color to file");
+    });
+  }
 
   let head = document.getElementsByClassName('navbar');
   let headButton = document.getElementsByClassName('navbar-btn');
