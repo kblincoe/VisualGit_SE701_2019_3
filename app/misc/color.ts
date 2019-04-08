@@ -42,6 +42,11 @@ function changeColor(color) {
   let editorHeader = document.getElementsByClassName('editor-header');
   let editorFileTab = document.getElementById('file-tab');
   let editorEditors = document.getElementById('file-editors');
+  let editorIndentDropdown = document.getElementById('selected-indent');
+  let editorTab = document.getElementsByClassName("tablinks");
+  let editorTabHover = document.getElementsByClassName("tablinks hover");
+  let editorTabActive = document.getElementsByClassName("tablinks active");
+  let editorTabcontent = document.getElementsByClassName('tabcontent');
 
   if (color === 'white') {
     for (let i = 0; i < head.length; i++) {
@@ -129,7 +134,7 @@ function changeColor(color) {
           stagedMessageColor.style.color = '#fff';
         }
 
-    before = 'pink';
+        before = 'pink';
     }
     else if (color === 'blue') {
       for (var i = 0; i < head.length; i++) {
@@ -308,27 +313,42 @@ function changeColor(color) {
   }
 
   // Match the style of the file editor to the rest of the app
-  if (editor !== null) {
-    editor!.style.color = diffp.style.color;
-    // editor!.style.backgroundColor = diffp.style.backgroundColor;
-    editor!.style.backgroundColor = network.style.backgroundColor;
+  editor!.style.color = diffp.style.color;
+  editor!.style.backgroundColor = network.style.backgroundColor;
+  // editor!.style.backgroundColor = footer.style.backgroundColor;
+  // editor!.style.backgroundColor = fp.style.backgroundColor;
+  // editor!.style.backgroundColor = network.style.backgroundColor;
 
-    editorFileTab!.style.color = fp.style.color;
-    editorFileTab!.style.backgroundColor = fp.style.backgroundColor;
-    editorEditors!.style.color = "black";
-    editorEditors!.style.backgroundColor = diffp.style.backgroundColor;
-
-    // let a = document.getElementsByClassName('file-editors');
-    // let editorTextElements = a!.children;
-    // editorTextElements.forEach(function(e) {
-    //   e!.style.color = diffp.style.color;
-    //   e!.style.backgroundColor = diffp.style.backgroundColor;
-    // });
-
-    // Use the same css settings for the editor header as the navbar
-    let navbarStyle = head[0].className.split(" ")[1];
-    for (let i = 0; i < editorHeader.length; i++) {
-      editorHeader[i].className = 'editor-header ' + navbarStyle;
-    }
+  // Use the same css settings for the editor header as the navbar
+  let navbarStyle = head[0].className.split(" ")[1];
+  for (let i = 0; i < editorHeader.length; i++) {
+    editorHeader[i].className = 'editor-header ' + navbarStyle;
   }
+
+  // for (let i = 0; i < editorTabcontent.length; i++) {
+  //   editorTabcontent[i]!.style.color = diffp.style.color;
+  //   editorTabcontent[i]!.style.backgroundColor = diffp.style.backgroundColor;
+  // }
+
+  // // Modify the filename tabs' colors
+  // for (let i = 0; i < editorTab.length; i++) {
+  //   editorTab[i]!.style.color = fp.style.color;
+  //   editorTab[i]!.style.backgroundColor = footer.style.backgroundColor;
+  // }
+  // // Note that to modify hover, the css stylesheet would need to be changed dynamically
+  // // for (let i = 0; i < editorTabHover.length; i++) {
+  // //   editorTabHover[i]!.style.color = fp.style.color;
+  // //   editorTabHover[i]!.style.backgroundColor = diffp.style.backgroundColor;
+  // // }
+  // for (let i = 0; i < editorTabActive.length; i++) {
+  //   editorTabActive[i]!.style.color = fp.style.color;
+  //   editorTabActive[i]!.style.backgroundColor = network.style.backgroundColor;
+  // }
+
+  editorFileTab!.style.color = fp.style.color;
+  editorFileTab!.style.backgroundColor = fp.style.backgroundColor;
+  editorEditors!.style.color = diffp.style.color;
+  editorEditors!.style.backgroundColor = diffp.style.backgroundColor;
+  editorIndentDropdown!.style.color = diffp.style.color;
+  editorIndentDropdown!.style.backgroundColor = diffp.style.backgroundColor;
 }

@@ -520,7 +520,8 @@ body .footer .terminal .git-command {
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
-  color: inherit;
+  /* color: inherit; */
+  /* background-color: inherit; */
 }
 
 div.editor-header button.close-button, div.editor-header button.open-button {
@@ -570,6 +571,8 @@ div.editor-area textarea.file {
   height: 100%;
   overflow: auto;
   white-space: nowrap;
+  color: inherit;
+  background-color: inherit;
 }
 
 div.editor-area textarea.lines {
@@ -582,6 +585,7 @@ div.editor-area textarea.lines {
   overflow: hidden;
   text-align:right;
   color: inherit;
+  background-color: inherit;
 }
 
 .close-button {
