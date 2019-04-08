@@ -11,6 +11,29 @@ export class WikiComponent {
     editor.style.height = "0vh";
     editor.style.width = "0vw";
     editor.style.zIndex = "-999";
+    
+    //Delete on close for testing purposes
+    let localWikiPath = repoFullPath + "\\wiki"
+    var rmdir = function (directory: string) {
+      var list = fs.readdirSync(directory);
+      for (var i = 0; i < list.length; i++) {
+        var filename = path.join(directory, list[i]);
+        var stat = fs.statSync(filename);
+
+        if (filename == "..") {
+          // pass these files
+        } else if (stat.isDirectory()) {
+          // rmdir recursively
+          rmdir(filename);
+        } else {
+          // rm filename
+          fs.unlinkSync(filename);
+        }
+      }
+      fs.rmdirSync(directory);
+
+    }
+    rmdir(localWikiPath)
   }
   resetWiki(): void {
     //Method 1
