@@ -20,12 +20,12 @@ function downloadRepository() {
   if (document.getElementById("repoSave").value != null || document.getElementById("repoSave").value != "") {
     // if the user entered a file location to save to
     // set that as the path
-    let localPath = document.getElementById("repoSave").value;
-    fullLocalPath = require("path").join(__dirname, localPath);
+    fullLocalPath = document.getElementById("repoSave").value;
+
   } else {
 
     fullLocalPath = document.getElementById("dirPickerSaveNew").files[0].path;
-
+    console.log(repoFullPath)
 
   }
 
@@ -506,10 +506,37 @@ function checkoutRemoteBranch(element) {
 }
 
 function updateLocalPath() {
+  let fullLocalPath;
+  // get the name of the repo from the usere entered URL
   let text = document.getElementById("repoClone").value;
   let splitText = text.split(/\.|:|\//);
+
   if (splitText.length >= 2) {
-    document.getElementById("repoSave").value = splitText[splitText.length - 2];
+    // Get the path location for this local folder, and join it with the repo name (from the URL)
+    fullLocalPath = require("path").join(__dirname, splitText[splitText.length - 2]);
+    // Save this path location into the repoSave text field 
+    document.getElementById("repoSave").value = fullLocalPath;
+    document.getElementById("repoSave").text = fullLocalPath;
+  }
+}
+
+// This function helps display the users chosen folder location on repoSave
+function chooseLocalPath() {
+  if (document.getElementById("repoClone").value == null || document.getElementById("repoClone").value == "") {
+    window.alert("Please enter the URL of the repository you wish to clone");
+  } else {
+    // get the name of the repo from the usere entered URL
+    let text = document.getElementById("repoClone").value;
+    let splitText = text.split(/\.|:|\//);
+    let fullLocalPath;
+
+    // get the users selected folder
+    localPath = document.getElementById("dirPickerSaveNew").files[0].webkitRelativePath;
+    fullLocalPath = document.getElementById("dirPickerSaveNew").files[0].path;
+
+    // display the new folder location on repoSave text field 
+    document.getElementById("repoSave").value = fullLocalPath;
+    document.getElementById("repoSave").text = fullLocalPath;
   }
 }
 
