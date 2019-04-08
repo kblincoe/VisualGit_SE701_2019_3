@@ -64,13 +64,11 @@ function switchToAddRepositoryPanel() {
   if(showUsername){
     document.getElementById("Button_Sign_out").style.display = "block";
     document.getElementById("Button_Sign_in").style.display = "none";
-    console.log("Add Repo Panel Sign Out SHOWN");
     displayUsername();
   }else{
     $("#nav-collapse1").collapse("hide");
     document.getElementById("Button_Sign_out").style.display = "none";
     document.getElementById("Button_Sign_in").style.display = "block";
-    console.log("Add Repo Panel Sign Out HIDDEN");
   }
   document.getElementById("repoOpen").value = "";
   previousWindow = "repoPanel";
@@ -99,9 +97,6 @@ function displayUsername() {
   let existing_username = document.getElementById("githubname").innerHTML;
   if (getUsername() != null && existing_username == null) {
     document.getElementById("githubname").innerHTML = getUsername();
-   
-    console.log("Add Repo Panel Sign Out SHOWN");
-    
   }
 }
 
