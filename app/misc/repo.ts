@@ -468,11 +468,17 @@ function createDropDownFork(name, id, onclick) {
 
 function checkoutLocalBranch(element) {
   let bn;
+  let img = "<img"
   console.log(typeof element);
   if (typeof element === "string") {
     bn = element;
+    console.log("bn string is: " + bn)
   } else {
     bn = element.innerHTML;
+    if (bn.includes(img)) {
+      bn = bn.substr(0, bn.lastIndexOf(img))
+    }
+    console.log("bn not string is: " + bn)
   }
   console.log("name of branch being checked out: " + bn);
   Git.Repository.open(repoFullPath)
