@@ -89,6 +89,31 @@ ul{
   border-bottom: 2px solid #00990D;
 }
 
+.editor-white {
+  background-color: #E3E3E3;
+  border-bottom: 2px solid #181818;
+}
+
+.editor-pink {
+  background-color: #FFA3A3;
+  border-bottom: 2px solid #FFA3A3;
+}
+
+.editor-blue {
+  background-color: #58A6FD;
+  border-bottom: 2px solid #58A6FD;
+}
+
+.editor-navy {
+  background-color: #001C83;
+  border-bottom: 2px solid #001C83;
+}
+
+.editor-green {
+  background-color: #00990D;
+  border-bottom: 2px solid #00990D;
+}
+
 #branchOptions {
   position: absolute;
   display:none;

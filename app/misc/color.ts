@@ -37,6 +37,17 @@ function changeColor(color) {
   let modifiedTitle = document.getElementById('unstaged-files-heading');
   let stagedTitle = document.getElementById('staged-files-heading');
 
+  // Text editor panel
+  let editor = document.getElementById('editor-panel');
+  let editorHeader = document.getElementById('editor-header');
+  // let editorTab = document.getElementById('file-tab');
+
+  if (editor !== null) {
+    editor!.style.backgroundColor = '#5E5E5E';
+    // editorHeader!.style.backgroundColor = '#5E5E5E';
+    // editorTab!.style.backgroundColor = '#5E5E5E';
+  }
+
   if (color === 'white') {
     for (let i = 0; i < head.length; i++) {
       console.log(head[i]);
@@ -79,6 +90,10 @@ function changeColor(color) {
     if (stagedMessageColor != null) {
       stagedMessageColor.style.color = '#000000';
     }
+    
+    // if (editor !== null) {
+    //   editor!.style.backgroundColor = '#D2D3D4';
+    // }
     
     before = 'white';
   }
@@ -123,7 +138,7 @@ function changeColor(color) {
           stagedMessageColor.style.color = '#fff';
         }
 
-        before = 'pink';
+    before = 'pink';
     }
     else if (color === 'blue') {
       for (var i = 0; i < head.length; i++) {
@@ -299,5 +314,34 @@ function changeColor(color) {
     }
 
     before = 'default';
+  }
+
+  // Match the style of the file editor to the rest of the app
+  if (editor !== null) {
+    editor!.style.color = diffp.style.color;
+    // editor!.style.backgroundColor = diffp.style.backgroundColor;
+    editor!.style.backgroundColor = network.style.backgroundColor;
+    // editorHeader!.style.backgroundColor = rememberLogin.style.color;
+    // if (color === 'default') {
+    //   editorHeader!.style.backgroundColor = diffp.style.backgroundColor;
+    // }
+
+    // let u = document.getElementsByClassName('editor-header');
+    // let a = u[0] as HTMLElement;
+    // let v = document.getElementsByClassName('navbar');
+    // let b = v[0] as HTMLElement;
+    // console.log("color: "+document.getElementsByClassName('navbar').item(0).style.backgroundColor);
+    // a.style.backgroundColor = b.style.backgroundColor;
+
+    // editorTab!.style.backgroundColor = '#5E5E5E';
+    // document.getElementsByClassName('editor-header')!.className = 'editor-header editor-navy';
+
+    let h = document.getElementsByClassName('editor-header');
+    let navbarStyle = head[0].className.split(" ")[1];
+
+    // Use the same css settings for the editor header
+    for (let i = 0; i < h.length; i++) {
+      h[i].className = 'editor-header ' + navbarStyle;
+    }
   }
 }
