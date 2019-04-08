@@ -1,10 +1,17 @@
 let pageTitles = {}
 let path = require('path');
 let wikiPath = "";
-let wikiContent: [any] = [{
-    "pageName": "",
-    "pageContent": ""
-}]
+let wikiContent: [wikiPage];
+
+export class wikiPage {
+    pageName:string;
+    pageContent:string;
+
+    constructor(pageName,pageContent){
+        this.pageName = pageName;
+        this.pageContent = pageContent;
+    }
+}
 
 function openWiki() {
     console.log("hi");
@@ -18,6 +25,12 @@ function openWiki() {
     }else{
         findPageNames(repoFullPath + "\\wiki")
     }
+
+    let wiki_titles = document.getElementById("wiki-titles")!;
+    console.log(wiki_titles);
+    console.log(wikiContent);
+    console.log(wikiContent[1]);
+
 }
 
 function cloneWiki() {
@@ -66,10 +79,10 @@ function findPageNames(wikiPath: string) {
         wikiContent.shift()
 
         files.forEach(file => {
-            wikiContent.push({
-                "pageName": file.replace(/-/g, ' ').replace('.md', ''),
-                "pageContent": readFileContents(wikiPath + "\\" + file)
-            })
+            wikiContent.push(new wikiPage(
+                file.replace(/-/g, ' ').replace('.md', ''),
+                readFileContents(wikiPath + "\\" + file))
+                )
         });
 
     });
