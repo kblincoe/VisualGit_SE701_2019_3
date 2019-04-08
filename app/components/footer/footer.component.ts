@@ -6,5 +6,13 @@ import { Component } from "@angular/core";
 })
 
 export class FooterComponent {
+  displayFileEditor(): void {
+    let editor = document.getElementById("editor-panel");
 
+    if (editor != null) {
+      editor.style.height = "100vh"
+      editor.style.width = "100vw"
+      editor.style.zIndex = "10";
+    }
+  }
 }

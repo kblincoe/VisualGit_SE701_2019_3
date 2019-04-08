@@ -307,7 +307,7 @@ function makeBasicNode(c, column: number) {
       title: title,
       image: img4User(name),
       physics: false,
-      fixed: (id === 1),
+      fixed: false,
       x: (column - 1) * spacingX,
       y: (id - 1) * spacingY,
     });
@@ -389,7 +389,7 @@ function makeAbsNode(c, column: number) {
       title: title,
       image: img4User(name),
       physics: false,
-      fixed: (id === 1),
+      fixed: false,
       x: (column - 1) * spacingX,
       y: (id - 1) * spacingY,
     });
@@ -443,7 +443,7 @@ function makeNode(c, column: number) {
   let name = getName(c.author().toString());
   let stringer = c.author().toString().replace(/</, "%").replace(/>/, "%");
   let email = stringer.split("%")[1];
-  let title = "Author: " + email + "<br>" + "Message: " + c.message();
+  let title = "Author: " + name + "<br>" + "Message: " + c.message();
   let flag = false;
   nodes.add({
     id: id,
@@ -451,7 +451,7 @@ function makeNode(c, column: number) {
     title: title,
     image: img4User(name),
     physics: false,
-    fixed: true,
+    fixed: false,
     x: (column - 1) * spacingX,
     y: (id - 1) * spacingY,
   });

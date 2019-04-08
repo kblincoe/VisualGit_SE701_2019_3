@@ -1,6 +1,5 @@
 /// <reference path="git.ts" />
 
-import { Json } from "@angular/core/src/facade/lang";
 let $ = require("jquery");
 
 //import * as nodegit from "git";
@@ -18,6 +17,7 @@ let repoList = {};
 let url;
 var signed = 0;
 var changes = 0;
+let signedAfter = false;
 
 
 //Called then user pushes to sign out even if they have commited changes but not pushed; prompts a confirmation modal
@@ -29,18 +29,20 @@ function CommitNoPush() {
 }
 
 function signInHead(callback) {
-        encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-        if (signed == 1) {
-                if ((changes == 1) || (CommitButNoPush == 1)) {
-                        $("#modalW2").modal();
-                }
-                else {
-                        getUserInfo(callback);
-                }
-        }
-        else {
-          getUserInfo(callback);
-        }
+	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+	continuedWithoutSignIn = false;
+  signedAfter = true;
+  if (signed == 1){
+		if ((changes == 1) || (CommitButNoPush == 1)){
+			$("#modalW2").modal();
+		}
+		else {
+			getUserInfo(callback);
+		}
+	}
+	else{
+	  getUserInfo(callback);
+	}
 }
 
 function LogInAfterConfirm(callback) {
@@ -100,7 +102,13 @@ function searchRepoName() {
 
 function getUserInfo(callback) {
 
-  encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+  
+  if (signedAfter === true){  // if the trys to login after clicking "continues without sign in" 
+    encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+  }
+  else {
+    encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+  }
 
   cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
@@ -132,6 +140,7 @@ function getUserInfo(callback) {
       // doc.appendChild(elem);
       // doc = document.getElementById("log");
       // doc.innerHTML = 'sign out';
+      document.getElementById("githubname").innerHTML = data["login"]
       var docGitUser = document.getElementById("githubname");
       //docGitUser.innerHTML = Object.values(data)[0];
 
@@ -147,6 +156,8 @@ function getUserInfo(callback) {
     if (err) {
       return;
     } else {
+       displayUsername();
+      document.getElementById("avatar").innerHTML = "Sign out"; 
       console.log("number of repos: " + data.length);
       for (let i = 0; i < data.length; i++) {
         let rep = Object.values(data)[i];
@@ -177,6 +188,7 @@ function getUserInfo(callback) {
 
 }
 
+//Converts string to base 64 to be used for Basic Authorization in external API calls
 function make_base_auth(user, password) {
   var tok = user + ':' + password;
   var hash = btoa(tok);
@@ -230,7 +242,14 @@ function cloneRepo() {
 
 function signInOrOut() {
   let doc = document.getElementById("avatar");
-  if (doc.innerHTML == "Sign out") {
+  if(doc.innerHTML === "Sign In"){
+    doc.innerHTML = "";
+  }
+  else if(doc.innerHTML === ""){
+      doc.innerHTML = "Sign In";
+  }
+    
+  if (doc.innerHTML === "Sign out") {
     $("#avatar").removeAttr("data-toggle");
 
     if (changes == 1 || CommitButNoPush == 1) {

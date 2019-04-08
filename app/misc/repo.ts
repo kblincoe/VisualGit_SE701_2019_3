@@ -12,16 +12,23 @@ let repoCurrentBranch = "master";
 let modal;
 let span;
 let contributors: [any] = [0];
+let previousOpen;
 
 function downloadRepository() {
   let fullLocalPath;
   // Full path is determined by either handwritten directory or selected by file browser
   if (document.getElementById("repoSave").value != null || document.getElementById("repoSave").value != "") {
+    // if the user entered a file location to save to
+    // set that as the path
     let localPath = document.getElementById("repoSave").value;
     fullLocalPath = require("path").join(__dirname, localPath);
   } else {
+
     fullLocalPath = document.getElementById("dirPickerSaveNew").files[0].path;
+
+
   }
+
   let cloneURL = document.getElementById("repoClone").value;
 
   if (!cloneURL || cloneURL.length === 0) {
@@ -30,7 +37,6 @@ function downloadRepository() {
   } else {
     downloadFunc(cloneURL, fullLocalPath);
   }
-
 }
 
 function downloadFunc(cloneURL, fullLocalPath) {
@@ -89,10 +95,15 @@ function updateProgressBar(ratio) {
 }
 
 function openRepository() {
+  console.log("Open Repository")
+  if(document.getElementById("dirPickerOpenLocal").value === previousOpen && previousOpen != undefined){
+    return;
+  }
   // Full path is determined by either handwritten directory or selected by file browser
   if (document.getElementById("repoOpen").value == null || document.getElementById("repoOpen").value == "") {
     let localPath = document.getElementById("dirPickerOpenLocal").files[0].webkitRelativePath;
     let fullLocalPath = document.getElementById("dirPickerOpenLocal").files[0].path;
+    previousOpen = document.getElementById("dirPickerOpenLocal").value;
     document.getElementById("repoOpen").value = fullLocalPath;
     document.getElementById("repoOpen").text = fullLocalPath;
   } else {
@@ -115,55 +126,67 @@ function openRepository() {
         let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
         console.log("current HEAD commit: " + tid);
       }
-      //Reads the git config file and extracts info about the remote on GitHub
+      //Reads the git config file and extracts info about the remote "origin" branch on GitHub
       if (readFile.exists(repoFullPath + "/.git/config")) {
-        let text = readFile.read(repoFullPath + "/.git/config", null);
+        let gitConfigFileText = readFile.read(repoFullPath + "/.git/config", null);
         let searchString = "[remote \"origin\"]";
 
-        text = text.substr(text.indexOf(searchString) + searchString.length, text.length);
-        text = text.substr(0, text.indexOf(".git"));
+        gitConfigFileText = gitConfigFileText.substr(gitConfigFileText.indexOf(searchString) + searchString.length, gitConfigFileText.length);
+        gitConfigFileText = gitConfigFileText.substr(0, gitConfigFileText.indexOf(".git"));
 
-        let array = text.split('/');
-        if (array[0].indexOf("@") != -1) {
-          array[0] = array[0].substring(array[0].indexOf(":") + 1);
+        let gitConfigFileSubstrings = gitConfigFileText.split('/');
+
+        //If the remote branch was set up using ssh, separate the elements between colons"
+        if (gitConfigFileSubstrings[0].indexOf("@") != -1) {
+          gitConfigFileSubstrings[0] = gitConfigFileSubstrings[0].substring(gitConfigFileSubstrings[0].indexOf(":") + 1);
         }
-        let repoOwner = array[array.length - 2]
-        let repoName = array[array.length - 1]
 
-        //Call to get all usernames
-        $.ajax({
-          url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
-          type: "GET",
-          beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
-          },
-          headers: {
-            'Accept': 'application/vnd.github.v3+json'
-          },
-          success: function (response) {
+        let repoOwner = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 2]
+        let repoName = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 1]
+        //If the user is signed in, an API call can performed
+        if(!continuedWithoutSignIn){
+          //Call to get all usernames
+          $.ajax({
+            url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
+            type: "GET",
+            beforeSend: function (xhr) {
+              xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
+            },
+            headers: {
+              'Accept': 'application/vnd.github.v3+json'
+            },
+            success: function (response) {
 
-            for (var i = 0; i < response.length; i++) {
-              //Store list of logins here.
-              contributors[i] = {
-                "username": response[i].login,
-                "name": "",
-                "email": ""
+              for (var i = 0; i < response.length; i++) {
+                //Store list of logins here.
+                contributors[i] = {
+                  "username": response[i].login,
+                  "name": "",
+                  "email": ""
+                }
               }
+              console.log("The contributors for this project are ", contributors)
+            },
+            error(xhr,status,error){
+              console.log("The XML Http Request of the GitHub API call is: ", xhr);
+              console.log("The status of the GitHub API call is: ", status);
+              console.log("The error of the GitHub API call is: ", error);
             }
-            console.log("The contributors for this project are ", contributors)
-          }
-        })
+          })
+        }
 
-      }
-      displayModal("Drawing graph, please wait");
-      refreshAll(repository);
-      console.log("Repo successfully opened");
-      updateModalText("Repository successfully opened");
-    },
-    function (err) {
-      updateModalText("Opening Failed - " + err);
-      console.log("repo.ts, line 101, cannot open repository: " + err); // TODO show error on screen
-    });
+    }
+    displayModal("Drawing graph, please wait");
+    refreshAll(repository);
+    console.log("Repo successfully opened");
+    updateModalText("Repository successfully opened");
+  },
+  function(err) {
+    updateModalText("No repository found. Select a folder with a repository.");
+    console.log("repo.ts, line 101, cannot open repository: "+err); // TODO show error on screen
+    switchToAddRepositoryPanel();
+  });
+  document.getElementById("dirPickerOpenLocal").value = "";
 }
 
 function createLocalRepository() {
@@ -379,7 +402,6 @@ function clearBranchElement() {
   ul.innerHTML = '';
   ul.appendChild(li);
 }
-
 
 function displayBranch(name, id, onclick) {
   let ul = document.getElementById(id);
