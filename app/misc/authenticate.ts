@@ -238,6 +238,9 @@ function cloneRepo() {
   $('#repo-modal').modal('hide');
 
   switchToMainPanel();
+  let butt = document.getElementById("cloneButton");
+  butt.innerHTML = 'Clone';
+  butt.setAttribute('class', 'btn btn-primary');
 }
 
 function signInOrOut() {

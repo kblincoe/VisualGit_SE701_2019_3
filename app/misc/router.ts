@@ -29,6 +29,9 @@ function checkSignedIn() {
     $('#repo-name').removeAttr("data-target");
   } else {
     // Ensure repo modal is connected
+    let butt = document.getElementById("cloneButton");
+    butt.innerHTML = 'Clone';
+    butt.setAttribute('class', 'btn btn-primary');
     $('#repo-name').attr("data-target", "#repo-modal");
   }
 }
