@@ -171,9 +171,11 @@ function drawGraph() {
       return;
     } else {
       let nodeId: number = callback.nodes[0];
+      if (flag === 'node') {
+        console.log("node clicked");
+        displaySelectedCommitDiffPanel(callback.nodes[0]);
+      }
     }
-
-    displaySelectedCommitDiffPanel()
     console.log("onclick event is fired");
   });
 
@@ -245,7 +247,59 @@ function drawGraph() {
   //   }
   });
 
-  function displaySelectedCommitDiffPanel(): void {
+  function showDiff(commitId): void {
+    let commitPanelBody = document.getElementById("commit-diff-panel-body");
+    if (commitPanelBody != null) {
+      commitPanelBody.innerHTML = "";
+      Git.Repository.open(repoFullPath).then(function(repository){
+        return repository.getCommit(commitList[commitId-1].sha);
+      }).then(function(commit){
+        return commit.getDiff()
+      }).then(function (arrayDiff) {
+        return arrayDiff[0].patches();
+      }).then(function (patches) {
+        patches.forEach(function (patch) {
+          patch.hunks().then(function (hunks) {
+            hunks.forEach(function(hunk){
+              hunk.lines().then(function(lines){
+                let oldFilePath = patch.oldFile().path();
+                let newFilePath = patch.newFile().path();
+                lines.forEach(function(line){
+                  if(line.origin()!=62){
+                    line = String.fromCharCode(line.origin())
+                      + (line.oldLineno() != -1 ? line.oldLineno() : "")
+                      + "\t" + (line.newLineno() != -1 ? line.newLineno() : "")
+                      + "\t" + String.fromCharCode(line.origin())
+                      + "\t" + line.content();
+
+                    let element = document.createElement("div");
+
+                    if (line.charAt(0) === "+") {
+                      element.style.backgroundColor = "#84db00";
+                    } else if (line.charAt(0) === "-") {
+                      element.style.backgroundColor = "#ff2448";
+                    }
+
+                    // If not a changed line, origin will be a space character, so still need to slice
+                    line = line.slice(1, line.length);
+                    element.innerText = line;
+
+                    // The spacer is needed to pad out the line to highlight the whole row
+                    let spacer = document.createElement("spacer");
+                    spacer.style.width = commitPanelBody!.scrollWidth+"px";
+                    element.appendChild(spacer);
+                    commitPanelBody.appendChild(element);
+                  }
+                })
+              })
+            })
+          })
+        })
+      });
+    }
+  }
+
+  function displaySelectedCommitDiffPanel(commitId): void {
     let commitPanel = document.getElementById("selected-commit-diff-panel");
     console.log("inside display selected commit");
     if (commitPanel != null) {
@@ -253,6 +307,7 @@ function drawGraph() {
       commitPanel.style.width = "100vw";
       commitPanel.style.zIndex = "10";
     }
+    showDiff(commitId);
 
     let footer = document.getElementById("footer");
     if (footer != null) {
@@ -268,6 +323,10 @@ function drawGraph() {
   function closeSelectedCommitDiffPanel(): void {
     // Hide commit panel.
     let commitPanel = document.getElementById("selected-commit-diff-panel")!;
+    var myNode = document.getElementById("commit-diff-panel-body");
+    while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
+    }
     commitPanel.style.height = "0vh";
     commitPanel.style.width = "0vw";
     commitPanel.style.zIndex = "-10";
