@@ -173,6 +173,14 @@ body .navbar .dropdown-toggle {
   margin-top: 10px;
 }*/
 
+body .pull-request-panel {
+  width: 20%;
+  height: 70vh;
+  background-color: #282828;
+  float: right;
+  z-index: 0;
+  overflow-y: auto;
+}
 
 body .file-panel {
   width: 20%;
