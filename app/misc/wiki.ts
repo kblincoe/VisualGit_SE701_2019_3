@@ -1,16 +1,11 @@
 let pageTitles = {}
 let path = require('path');
 let wikiPath = "";
-let wikiContent: [wikiPage];
+let wikiContent: wikiPage[] = [];
 
-export class wikiPage {
-    pageName:string;
-    pageContent:string;
-
-    constructor(pageName,pageContent){
-        this.pageName = pageName;
-        this.pageContent = pageContent;
-    }
+interface wikiPage {
+    pageName: string;
+    pageContent: string;
 }
 
 function openWiki() {
@@ -25,11 +20,6 @@ function openWiki() {
     }else{
         findPageNames(repoFullPath + "\\wiki")
     }
-
-    let wiki_titles = document.getElementById("wiki-titles")!;
-    console.log(wiki_titles);
-    console.log(wikiContent);
-    console.log(wikiContent[1]);
 
 }
 
@@ -61,6 +51,11 @@ function cloneWiki() {
             switchToAddRepositoryPanel();
         }
         );
+
+    let wiki_titles = document.getElementById("wiki-titles")!;
+    console.log(wiki_titles);
+    console.log(wikiContent);
+    console.log(wikiContent[1]);
 }
 
 //Extract list of all files (pages) in the wiki
@@ -75,14 +70,12 @@ function findPageNames(wikiPath: string) {
             return path.extname(file).toLowerCase() === EXTENSION;
         });
 
-        //Remove filler element
-        wikiContent.shift()
-
         files.forEach(file => {
-            wikiContent.push(new wikiPage(
-                file.replace(/-/g, ' ').replace('.md', ''),
-                readFileContents(wikiPath + "\\" + file))
-                )
+            var page :wikiPage = {
+                pageName: file.replace(/-/g, ' ').replace('.md', ''),
+                pageContent: readFileContents(wikiPath + "\\" + file)
+            }
+            wikiContent.push(page);
         });
 
     });
