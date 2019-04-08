@@ -3,7 +3,7 @@ let blue = "#39c0ba";
 let gray = "#5b6969";
 let continuedWithoutSignIn = false;
 let showUsername = true;
-
+let previousWindow = "repoPanel";
 function collapseSignPanel() {
   $("#nav-collapse1").collapse("hide");
 }
@@ -21,7 +21,18 @@ function switchToMainPanel() {
   hideAddRepositoryPanel();
   displayFilePanel();
   displayGraphPanel();
-  document.getElementById("Button_Sign_in").style.display="hidden";
+  
+  document.getElementById("Button_Sign_in").style.display="none";
+  $("#nav-collapse1").collapse("hide");
+  if(previousWindow == "repoPanel"){
+    if(showUsername){
+      document.getElementById("Button_Sign_out").style.display = "block";
+      document.getElementById("Button_Sign_in").style.display="none";
+    }else{
+      document.getElementById("Button_Sign_out").style.display = "none";
+      document.getElementById("Button_Sign_in").style.display="block";
+    }
+  }
   
 }
 
@@ -37,7 +48,6 @@ function checkSignedIn() {
 }
 
 function switchToAddRepositoryPanelWhenNotSignedIn() {
-  document.getElementById("avatar").innerHTML= "Sign In" ;
   continuedWithoutSignIn = true;
   showUsername = false;
   switchToAddRepositoryPanel();
@@ -53,13 +63,20 @@ function switchToAddRepositoryPanel() {
   
   if(showUsername){
     document.getElementById("Button_Sign_out").style.display = "block";
-    //document.getElementById("Button_Sign_in").style.display = "none";
+    document.getElementById("Button_Sign_in").style.display = "none";
     displayUsername();
   }else{
     document.getElementById("Button_Sign_out").style.display = "none";
-    //document.getElementById("Button_Sign_in").style.display = "block";
+    document.getElementById("Button_Sign_in").style.display = "block";
   }
   document.getElementById("repoOpen").value = "";
+}
+
+function hideSignInButton():void{
+  document.getElementById("Button_Sign_in").style.display = "none";
+  if(previousWindow!="repoPanel"){
+    switchToMainPanel();
+  }
 }
 
 function wait(ms) {
@@ -75,6 +92,8 @@ function displayUsername() {
   let existing_username = document.getElementById("githubname").innerHTML;
   if (getUsername() != null && existing_username == null) {
     document.getElementById("githubname").innerHTML = getUsername();
+    showUsername = true;
+    document.getElementById("Button_Sign_out").style.display = "block";
   }
 }
 
@@ -95,6 +114,7 @@ function displayGraphPanel() {
 }
 
 function displayAddRepositoryPanel() {
+  previousWindow = "repoPanel";
   document.getElementById("add-repository-panel").style.zIndex = "10";
   $("#open-local-repository").show();
 }
