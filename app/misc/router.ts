@@ -2,6 +2,7 @@ let cred;
 let blue = "#39c0ba";
 let gray = "#5b6969";
 let continuedWithoutSignIn = false;
+let inTheApp = false;
 
 function collapseSignPanel() {
   $("#nav-collapse1").collapse("hide");
@@ -33,12 +34,17 @@ function checkSignedIn() {
   }
 }
 
+function checkIfInTheApp(){
+  return inTheApp;
+} 
+
 function switchToAddRepositoryPanelWhenNotSignedIn() {
   continuedWithoutSignIn = true;
   switchToAddRepositoryPanel();
 }
 
 function switchToAddRepositoryPanel() {
+  inTheApp = true
   console.log("Switching to add repo panel");
   hideAuthenticatePanel();
   hideFilePanel();

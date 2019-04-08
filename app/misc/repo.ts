@@ -290,6 +290,15 @@ function refreshAll(repository) {
     .then(function () {
       console.log("Updating the graph and the labels");
       drawGraph();
+      let breakStringFrom;
+      if(repoLocalPath.length > 20){
+        for(var i = 0; i < repoLocalPath.length ; i++ ){
+          if(repoLocalPath[i] == "/"){
+            breakStringFrom = i;
+          }
+        }
+        repoLocalPath = "..." + repoLocalPath.slice(breakStringFrom,repoLocalPath.length); 
+      }
       document.getElementById("repo-name").innerHTML = repoLocalPath;
       document.getElementById("branch-name").innerHTML = branch + '<span class="caret"></span>';
     }, function (err) {
