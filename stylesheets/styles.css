@@ -256,7 +256,7 @@ body .file-panel .commit-panel .commit-button:hover {
 }
 
 body .body-panel {
-  width: 80%;
+  width: 60%;
   float: right;
   z-index: 0;
 }
