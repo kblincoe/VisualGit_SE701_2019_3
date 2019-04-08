@@ -71,6 +71,11 @@ function downloadFunc(cloneURL, fullLocalPath) {
         updateProgressBar(0);
         console.log("Repo successfully cloned");
         displayModal("Drawing graph, please wait");
+
+        // var src = "pexels-photo-414612.jpeg"
+        // var docs = document.getElementById("img");
+        // docs.setAttribute("src", src);
+
         refreshAll(repository);
         updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
         addCommand("git clone " + cloneURL + " " + fullLocalPath);
