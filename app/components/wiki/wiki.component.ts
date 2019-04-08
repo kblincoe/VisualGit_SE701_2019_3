@@ -77,4 +77,7 @@ export class WikiComponent {
         console.log("reset done");
       });*/
   }
+  updateWiki() : void {
+    updateWiki();
+  }
 }

@@ -15,9 +15,9 @@ function openWiki() {
     wikis.style.width = "100%";
     wikis.style.height = "100%";
     console.log(repoFullPath);
-    if(!fs.exists(repoFullPath + "\\wiki")){
+    if (!fs.existsSync(repoFullPath + "\\wiki")) {
         cloneWiki();
-    }else{
+    } else {
         findPageNames(repoFullPath + "\\wiki")
     }
 
@@ -36,9 +36,9 @@ function cloneWiki() {
             }
         }
     };
-    
+
     let cloneUrl = "https://github.com/kblincoe/VisualGit_SE701_2019_3.wiki.git";
-    
+
     let wikiPath = repoFullPath + "\\wiki";
     console.log("The wiki path is: ", wikiPath);
     let repository = Git.Clone.clone(cloneUrl, wikiPath, options)
@@ -47,7 +47,7 @@ function cloneWiki() {
             var promisewiki = Promise.resolve(wikiPath);
             promisewiki.then(function(x){
                 findPageNames(x);
-            }).then(function() {
+            }).then(function () {
                 displayWiki();
             });
             //findPageNames(wikiPath)
@@ -91,7 +91,35 @@ function readFileContents(wikiDirectory: string) {
 function displayWiki() {
     let wiki_titles = document.getElementById("wiki-titles")!;
     console.log(wiki_titles);
-    //console.log(nigaa);
-    //console.log(wikiContent[1].pageName);
-    console.log(wikiContent);
+    console.log("appropriate");
+    console.log("The wiki name is: ",wikiContent[1].pageName);
+    console.log("The entire content is: ",wikiContent);
+}
+
+function updateWiki() {
+    let localWikiPath = repoFullPath + "\\wiki";
+    let repository;
+    Git.Repository.open(localWikiPath)
+        .then(function (repo) {
+            repository = repo;
+            console.log("Pulling new changes from the remote repository");
+            addCommand("git pull");
+            displayModal("Pulling new changes from the remote repository");
+
+            return repository.fetchAll({
+                callbacks: {
+                    credentials: function () {
+                        return Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
+                    },
+                    certificateCheck: function () {
+                        return 1;
+                    }
+                }
+            });
+        }).then(function () {
+            return repo.mergeBranches("master", "origin/master");
+        }, function (err) {
+            console.log("Error occurred in wiki.ts. Description: " + err);
+        })
+
 }
