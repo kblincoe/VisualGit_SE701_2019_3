@@ -126,7 +126,7 @@ body .navbar .dropdown-menu a {
   color: #000;
 }
 
-.modal-content{
+#repo-list-modal{
   max-height: 90vh;
   overflow: scroll;
 }
@@ -278,9 +278,14 @@ body .body-panel .diff-panel .diff-panel-body {
 }
 
 body .body-panel .diff-panel .diff-panel-body div {
+  display: table-row-group;
   padding: 1px 5px 1px 5px;
   white-space: pre;
   font-family: monospace;
+}
+
+body .body-panel .diff-panel .diff-panel-body spacer {
+  display: block;
 }
 
 body .body-panel .diff-panel .diff-panel-minimise:hover {
