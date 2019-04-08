@@ -7,8 +7,12 @@ import { Component } from "@angular/core";
 
 export class AddRepositoryComponent {
 
+  addRepository(): void {
+    downloadRepository();
+  }
 
   selectClone(): void {
+
     if (document.getElementById("repoClone").value == null || document.getElementById("repoClone").value == "") {
       window.alert("Please enter the URL of the repository you wish to clone");
     } else if (document.getElementById("repoSave").value == null || document.getElementById("repoSave").value == "") {
@@ -18,11 +22,18 @@ export class AddRepositoryComponent {
       // If directory is specified, continue as normal
       this.addRepository();
     }
+
   }
 
-  // this function opens the browse folder window, which lets the user select a folder location
-  selectBrowse(): void {
-    document.getElementById("dirPickerSaveNew").click();
+  //Add function that determines if directory written or not
+  selectSave(): void {
+    if (document.getElementById("repoSave").value == null || document.getElementById("repoSave").value == "") {
+      // If no directory specified, launch file browser
+      document.getElementById("dirPickerSaveNew").click();
+    } else {
+      // If directory is specified, continue as normal
+      this.addRepository();
+    }
   }
 
   //Add function that determines if directory written or not
@@ -44,17 +55,9 @@ export class AddRepositoryComponent {
     }
   }
 
-  addRepository(): void {
-    downloadRepository();
-  }
-
   openRepository(): void {
     openRepository();
     switchToMainPanel();
-  }
-
-  chooseLocalPath(): void {
-    chooseLocalPath();
   }
 
   createLocalRepository(): void {
