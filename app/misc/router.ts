@@ -21,8 +21,7 @@ function switchToMainPanel() {
   hideAddRepositoryPanel();
   displayFilePanel();
   displayGraphPanel();
-  
-  document.getElementById("Button_Sign_in").style.display="none";
+
   $("#nav-collapse1").collapse("hide");
   if(previousWindow == "repoPanel"){
     if(showUsername){
@@ -33,7 +32,7 @@ function switchToMainPanel() {
       document.getElementById("Button_Sign_in").style.display="block";
     }
   }
-  
+  previousWindow = "mainPanel";
 }
 
 function checkSignedIn() {
@@ -48,6 +47,7 @@ function checkSignedIn() {
 }
 
 function switchToAddRepositoryPanelWhenNotSignedIn() {
+  previousWindow = "repoPanel";
   continuedWithoutSignIn = true;
   showUsername = false;
   switchToAddRepositoryPanel();
@@ -64,12 +64,16 @@ function switchToAddRepositoryPanel() {
   if(showUsername){
     document.getElementById("Button_Sign_out").style.display = "block";
     document.getElementById("Button_Sign_in").style.display = "none";
+    console.log("Add Repo Panel Sign Out SHOWN");
     displayUsername();
   }else{
+    $("#nav-collapse1").collapse("hide");
     document.getElementById("Button_Sign_out").style.display = "none";
     document.getElementById("Button_Sign_in").style.display = "block";
+    console.log("Add Repo Panel Sign Out HIDDEN");
   }
   document.getElementById("repoOpen").value = "";
+  previousWindow = "repoPanel";
 }
 
 function hideSignInButton():void{
@@ -88,12 +92,16 @@ function wait(ms) {
 }
 
 function displayUsername() {
+  console.log("Display Username called");
+  document.getElementById("Button_Sign_out").style.display = "block";
+  showUsername = true;
   console.log(getUsername());
   let existing_username = document.getElementById("githubname").innerHTML;
   if (getUsername() != null && existing_username == null) {
     document.getElementById("githubname").innerHTML = getUsername();
-    showUsername = true;
-    document.getElementById("Button_Sign_out").style.display = "block";
+   
+    console.log("Add Repo Panel Sign Out SHOWN");
+    
   }
 }
 
