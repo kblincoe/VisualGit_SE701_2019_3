@@ -413,12 +413,9 @@ function displayBranch(name, id, onclick) {
   li.setAttribute("role", "presentation")
   a.appendChild(document.createTextNode(name));
   a.innerHTML = name;
-  //li.appendChild("asdf");
   li.appendChild(a);
-  //li.appendChild("asdsad");
-  // Adding a delete button beside the branch
-  if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
-    
+  if (id == "branch-dropdown") {
+    // Add a remote branch icon for remote branches
     Git.Repository.open(repoFullPath)
     .then(function(repo) {
       Git.Reference.list(repo).then(function(array) {
@@ -427,7 +424,7 @@ function displayBranch(name, id, onclick) {
         }
       })
     })
-
+    // Add a local branch icon for local branches
     Git.Repository.open(repoFullPath)
     .then(function(repo) {
       repo.getBranch(name).then(function() {
@@ -435,18 +432,21 @@ function displayBranch(name, id, onclick) {
       })
     })
 
-    var button = document.createElement("Button");
-    button.innerHTML = "Delete";
-    button.classList.add('btn-danger');
+    // Adding a delete button for each branch
+    if (name.toLowerCase() != "master") {
+      var button = document.createElement("Button");
+      button.innerHTML = "Delete";
+      button.classList.add('btn-danger');
 
-    // Function to execute when button is clicked
-    $(button).click(function () {
-      // Display delete branch warning modal
-      $('#branch-to-delete').val(name);
-      document.getElementById("displayedBranchName").innerHTML = name;
-      $('#delete-branch-modal').modal();
-    });
-    li.appendChild(button); // Add delete button to the branch dropdown list
+      // Function to execute when button is clicked
+      $(button).click(function () {
+        // Display delete branch warning modal
+        $('#branch-to-delete').val(name);
+        document.getElementById("displayedBranchName").innerHTML = name;
+        $('#delete-branch-modal').modal();
+      });
+      li.appendChild(button); // Add delete button to the branch dropdown list
+    }
   }
   ul.appendChild(li);
 }
@@ -467,19 +467,17 @@ function createDropDownFork(name, id, onclick) {
 }
 
 function checkoutLocalBranch(element) {
-  console.log("entered local checkout")
   let bn;
   let img = "<img"
-  console.log(typeof element);
   if (typeof element === "string") {
     bn = element;
   } else {
     bn = element.innerHTML;
   }
   if (bn.includes(img)) {
-    bn = bn.substr(0, bn.lastIndexOf(img))
+    bn = bn.substr(0, bn.lastIndexOf(img)) // remove local branch <img> tag from branch name string
     if (bn.includes(img)) {
-      bn = bn.substr(0, bn.lastIndexOf(img))
+      bn = bn.substr(0, bn.lastIndexOf(img)) // remove remote branch <img> tag from branch name string
     }
   }
   console.log("name of branch being checked out: " + bn);
@@ -505,9 +503,9 @@ function checkoutRemoteBranch(element) {
     bn = element.innerHTML;
   }
   if (bn.includes(img)) {
-    bn = bn.substr(0, bn.lastIndexOf(img))
+    bn = bn.substr(0, bn.lastIndexOf(img)) // remove remote branch <img> tag from branch name string
     if (bn.includes(img)) {
-      bn = bn.substr(0, bn.lastIndexOf(img))
+      bn = bn.substr(0, bn.lastIndexOf(img))  // remove local branch <img> tag from branch name string
     }
   }
   console.log("current branch name: " + bn);
