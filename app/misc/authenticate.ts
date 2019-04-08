@@ -119,12 +119,16 @@ function getUserInfo(callback) {
   var ghme = client.me();
   ghme.info(function(err, data, head) {
     if (err) {
-      if (err == "Error: Bad credentials" || "Error: Requires authentication"){
-        $('#username').css('border-color', 'red');
-        $('#password').css('border-color', 'red');
-        // displayModal("Error: Incorrect Username or Password");
+      if (err == "Error: getaddrinfo ENOTFOUND api.github.com api.github.com:443"){
+        displayModal("No internet connection");
       }else{
-        displayModal(err);
+        if (err == "Error: Bad credentials" || "Error: Requires authentication"){
+          $('#username').css('border-color', 'red');
+          $('#password').css('border-color', 'red');
+          // displayModal("Error: Incorrect Username or Password");
+        }else{
+          displayModal(err);
+        }
       }
     } else {
      // assigning the check box to a variable to check the value
