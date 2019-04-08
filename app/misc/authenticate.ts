@@ -119,7 +119,13 @@ function getUserInfo(callback) {
   var ghme = client.me();
   ghme.info(function(err, data, head) {
     if (err) {
-      displayModal(err);
+      if (err == "Error: Bad credentials" || "Error: Requires authentication"){
+        $('#username').css('border-color', 'red');
+        $('#password').css('border-color', 'red');
+        // displayModal("Error: Incorrect Username or Password");
+      }else{
+        displayModal(err);
+      }
     } else {
      // assigning the check box to a variable to check the value
     let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
