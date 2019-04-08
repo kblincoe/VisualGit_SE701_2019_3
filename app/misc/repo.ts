@@ -467,18 +467,20 @@ function createDropDownFork(name, id, onclick) {
 }
 
 function checkoutLocalBranch(element) {
+  console.log("entered local checkout")
   let bn;
   let img = "<img"
   console.log(typeof element);
   if (typeof element === "string") {
     bn = element;
-    console.log("bn string is: " + bn)
   } else {
     bn = element.innerHTML;
+  }
+  if (bn.includes(img)) {
+    bn = bn.substr(0, bn.lastIndexOf(img))
     if (bn.includes(img)) {
       bn = bn.substr(0, bn.lastIndexOf(img))
     }
-    console.log("bn not string is: " + bn)
   }
   console.log("name of branch being checked out: " + bn);
   Git.Repository.open(repoFullPath)
@@ -496,10 +498,17 @@ function checkoutLocalBranch(element) {
 
 function checkoutRemoteBranch(element) {
   let bn;
+  let img = "<img"
   if (typeof element === "string") {
     bn = element;
   } else {
     bn = element.innerHTML;
+  }
+  if (bn.includes(img)) {
+    bn = bn.substr(0, bn.lastIndexOf(img))
+    if (bn.includes(img)) {
+      bn = bn.substr(0, bn.lastIndexOf(img))
+    }
   }
   console.log("current branch name: " + bn);
   let repos;
