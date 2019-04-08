@@ -423,7 +423,7 @@ function displayBranch(name, id, onclick) {
     .then(function(repo) {
       Git.Reference.list(repo).then(function(array) {
         if (array.includes("refs/remotes/origin/" + name)) {
-            a.innerHTML += "<img src ='http://www.twentyonepilots.com/sites/g/files/g2000004896/f/Sample-image10-highres.jpg' width='20' height='20' align='right' title='Remote'>";
+            a.innerHTML += "<img src='./assets/remote-branch.png' width='20' height='20' align='right' title='Remote'>";
         }
       })
     })
@@ -431,7 +431,7 @@ function displayBranch(name, id, onclick) {
     Git.Repository.open(repoFullPath)
     .then(function(repo) {
       repo.getBranch(name).then(function() {
-        a.innerHTML += "<img src ='https://previews.123rf.com/images/aquir/aquir1311/aquir131100316/23569861-sample-grunge-red-round-stamp.jpg' width='20' height='20' align='right' title='Local'>";
+        a.innerHTML += "<img src='./assets/local-branch.png' width='20' height='20' align='right' title='Local'>";
       })
     })
 
