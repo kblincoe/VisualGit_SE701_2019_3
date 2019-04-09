@@ -275,9 +275,9 @@ function drawGraph() {
                     let element = document.createElement("div");
 
                     if (line.charAt(0) === "+") {
-                      element.style.backgroundColor = "#84db00";
+                      element.style.backgroundColor = "rgba(132,219,0,0.7)"
                     } else if (line.charAt(0) === "-") {
-                      element.style.backgroundColor = "#ff2448";
+                      element.style.backgroundColor = "rgba(255,36,72,0.6)";
                     }
 
                     // If not a changed line, origin will be a space character, so still need to slice
