@@ -992,8 +992,11 @@ function displayModifiedFiles() {
           input: fs.createReadStream(fileLocation)
         });
 
+        var lineNumber;
+        lineNumber = 0;
         lineReader.on("line", function (line) {
-          formatNewFileLine(line);
+          lineNumber++;
+          formatNewFileLine(lineNumber + "  " + line);
         });
       }
 
