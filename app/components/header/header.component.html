@@ -66,22 +66,14 @@
         </li>
       </ul>
 
-      
       <ul class="navbar-nav navbar-right hidden-xs">
         <li>
           <label id="githubname" style="color:white"></label>
-          <div id="Button_Sign_out">
-              <a class="btn btn-default btn-outline btn-circle"  id="avatar" data-toggle="collapse" href="#nav-collapse1" aria-expanded="false" aria-controls="nav-collapse1" onclick="signInOrOut()">Sign out</a>
-          </div>
-          <div id="Button_Sign_in">
-              <a class="btn btn-default btn-outline btn-circle"  id="avatar" data-toggle="collapse" href="#nav-collapse1" aria-expanded="false" aria-controls="nav-collapse1" onclick="hideSignInButton()">Sign in</a>
-          </div>
-          </li>
+          <a class="btn btn-default btn-outline btn-circle"  id="avatar" data-toggle="collapse" href="#nav-collapse1" aria-expanded="false" aria-controls="nav-collapse1" onclick="signInOrOut()">Sign out</a>
+        </li>
       </ul>
-
-
       <div class="collapse nav navbar-nav nav-collapse" id="nav-collapse1">
-        <form class="navbar-form navbar-right form-inline" role="form" style="width:280px;">
+        <form class="navbar-form navbar-right form-inline" role="form">
           <div class="form-group">
             <label class="sr-only" for="Email">User name</label>
             <input type="text" class="form-control" id="Email1" placeholder="Username or Email" autofocus required style="width: 206px !important"/>
@@ -90,7 +82,7 @@
             <label class="sr-only" for="Password">Password</label>
             <input type="password" class="form-control" id="Password1" placeholder="Password" required />
           </div>
-          <button type="submit" class="btn btn-success" (click)="switchToMainPanel()">Sign in</button>
+          <button type="submit" class="btn btn-success" (click)="switchToMainPanel()">Sign In</button>
         </form>
       </div>
 
