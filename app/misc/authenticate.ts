@@ -9,7 +9,8 @@ let Git = require("nodegit");
 let repo;
 
 let github = require("octonode");
-
+let repoName;
+let githubName;
 let aid, atoken;
 let client;
 let avaterImg;
@@ -331,10 +332,13 @@ function redirectToHomePage() {
   //LogInAfterConfirm();
 }
 
+<<<<<<< HEAD
 function closeIssue() {
 
 }
 
+=======
+>>>>>>> added issues, issues panel lists all issues for repo
 function addIssue(rep,id, onclick) {
   let ul = document.getElementById(id);
   let li = document.createElement("li");
@@ -449,7 +453,12 @@ function createIssue() {
           $('#errorModal').modal('show');
         }
         else {
+<<<<<<< HEAD
           document.getElementById("issue-error-title").innerHTML = "Sucessfuly added new Issue" + theArray[0]["value"];
+=======
+          document.getElementById("issue-error-title").innerHTML = "Success"
+          document.getElementById("error-text-box").innerHTML = "Successfuly added new Issue " + theArray[0]["value"];
+>>>>>>> added issues, issues panel lists all issues for repo
           $('#errorModal').modal('show');
         }
       }); //issue
@@ -488,4 +497,8 @@ function displayIssues() {
               }
           });
       }
+<<<<<<< HEAD
+=======
+      
+>>>>>>> added issues, issues panel lists all issues for repo
 }

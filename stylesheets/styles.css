@@ -760,7 +760,11 @@ div.selected-commit-diff-panel button.close-button {
 #password-error-icon, #username-error-icon {
   visibility: hidden;
 }
+<<<<<<< HEAD
   .issue-panel {
+=======
+.issue-panel {
+>>>>>>> added issues, issues panel lists all issues for repo
   position: absolute;
   z-index: -10;
   height: 0vh;
