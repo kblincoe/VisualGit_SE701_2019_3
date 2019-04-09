@@ -579,8 +579,13 @@ div.editor-area textarea.lines {
   text-align:right;
 }
 
+div.selected-commit-diff-panel .commit-diff-panel-body{
+  overflow-y:scroll;
+  height:90%;
+  width: 100%;
+}
 div.selected-commit-diff-panel button.close-button {
-  display: inline;
+  display: none;
   margin-top: 10px;
   margin-bottom: 10px;
   height: 30px;

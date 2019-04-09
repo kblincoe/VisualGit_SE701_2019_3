@@ -300,6 +300,10 @@ function drawGraph() {
   }
 
   function displaySelectedCommitDiffPanel(commitId): void {
+    let closeButton = document.getElementById("commit-close");
+    if (closeButton != null) {
+      closeButton.style.display = "inline";
+    }
     let commitPanel = document.getElementById("selected-commit-diff-panel");
     console.log("inside display selected commit");
     if (commitPanel != null) {
