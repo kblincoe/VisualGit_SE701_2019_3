@@ -520,8 +520,6 @@ body .footer .terminal .git-command {
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
-  /* color: inherit; */
-  /* background-color: inherit; */
 }
 
 div.editor-header button.close-button, div.editor-header button.open-button {
