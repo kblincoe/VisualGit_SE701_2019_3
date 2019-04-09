@@ -994,7 +994,7 @@ function displayModifiedFiles() {
         let lineNumber = 0;
         lineReader.on("line", function (line) {
           lineNumber++;
-          formatNewFileLine(lineNumber + "  " + line);
+          formatNewFileLine(lineNumber + "\t" + "+" + "\t" + line);
         });
       }
 
