@@ -991,10 +991,14 @@ function displayModifiedFiles() {
             input: fs.createReadStream(fileLocation)
           });
 
-          lineReader.on("line", function (line) {
-            formatNewFileLine(line);
-          });
-        }
+
+        var lineNumber;
+        lineNumber = 0;
+        lineReader.on("line", function (line) {
+          lineNumber++;
+          formatNewFileLine(lineNumber + "  " + line);
+        });
+      }
 
         function printFileDiff(filePath) {
           repo.getHeadCommit().then(function (commit) {
