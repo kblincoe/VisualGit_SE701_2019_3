@@ -282,7 +282,7 @@ function drawGraph() {
 
                     // If not a changed line, origin will be a space character, so still need to slice
                     line = line.slice(1, line.length);
-                    element.innerText = line;
+                    element.textContent = line;
 
                     // The spacer is needed to pad out the line to highlight the whole row
                     let spacer = document.createElement("spacer");
@@ -318,17 +318,5 @@ function drawGraph() {
     if (editorPanel != null){
       editorPanel.hidden = true;
     }
-  }
-
-  function closeSelectedCommitDiffPanel(): void {
-    // Hide commit panel.
-    let commitPanel = document.getElementById("selected-commit-diff-panel")!;
-    var myNode = document.getElementById("commit-diff-panel-body");
-    while (myNode.firstChild) {
-      myNode.removeChild(myNode.firstChild);
-    }
-    commitPanel.style.height = "0vh";
-    commitPanel.style.width = "0vw";
-    commitPanel.style.zIndex = "-10";
   }
 }

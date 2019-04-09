@@ -14,6 +14,13 @@ export class selectedCommitDiffPanelComponent {
     closeSelectedCommitDiffPanel(): void {
         // Hide commit panel.
         let commitPanel = document.getElementById("selected-commit-diff-panel")!;
+
+        let myNode = document.getElementById("commit-diff-panel-body");
+        if (myNode != null) {
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+        }
         commitPanel.style.height = "0vh";
         commitPanel.style.width = "0vw";
         commitPanel.style.zIndex = "-10";
