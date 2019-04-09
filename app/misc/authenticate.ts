@@ -112,11 +112,66 @@ function getUserInfo(callback) {
 
   cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
-  client = github.client({
+
+  github.auth.config({
     username: getUsernameTemp(),
     password: getPasswordTemp()
+  }).login({
+    "add_scopes": [
+      "user",
+      "repo"
+    ],
+    "note": Math.random().toString()
+  }, function (err, id, token, headers) {
+    if (err) {
+      if (err.toString().indexOf("OTP") !== -1)
+      {
+        document.getElementById("submitOtpButton")!.onclick = function() {
+          submitOTP(callback);
+        }
+        $("#otpModal").modal('show');
+      }
+      else {
+        displayModal(err);
+      }
+    }
+
+    if (!err) {
+      client = github.client(token);
+      var ghme = client.me();
+      processLogin(ghme, callback);
+    }
+    
   });
-  var ghme = client.me();
+
+
+}
+
+function submitOTP(callback) {
+  github.auth.config({
+    username: getUsernameTemp(),
+    password: getPasswordTemp(),
+    otp: document.getElementById("otp")!.value
+  }).login({
+    "add_scopes": [
+      "user",
+      "repo"
+    ],
+    "note": Math.random().toString()
+  }, function (err, id, token, headers) {
+    if (err) {
+      displayModal(err);
+    }
+    else {
+      client = github.client(token);
+      var ghme = client.me();
+      processLogin(ghme, callback);
+    }
+  });
+}
+
+
+function processLogin(ghme, callback) {
   ghme.info(function(err, data, head) {
     if (err) {
       displayModal(err);
@@ -185,7 +240,6 @@ function getUserInfo(callback) {
       }
     }
   });
-
 }
 
 //Converts string to base 64 to be used for Basic Authorization in external API calls
