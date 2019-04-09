@@ -708,14 +708,16 @@ function displayModifiedFiles() {
         // If files displayed does not exist, remove them
         let filePaths = document.getElementsByClassName('file-path');
         for (let i = 0; i < filePaths.length; i++) {
-          let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
-          if (fs.existsSync(filePath)) {
-            // exists
-            console.log("exists");
-          } else {
-            // doesn't exist
-            console.log("doesn't exists");
-            filePaths[i].parentElement.remove();
+          if (filePaths[i].parentElement.className !== "file file-deleted") {
+            let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
+            if (fs.existsSync(filePath)) {
+              // exists
+              console.log("exists");
+            } else {
+              // doesn't exist
+              console.log("doesn't exists");
+              filePaths[i].parentElement.remove();
+            }
           }
         }
 
