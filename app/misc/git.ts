@@ -991,8 +991,7 @@ function displayModifiedFiles() {
             input: fs.createReadStream(fileLocation)
           });
 
-        let lineNumber;
-        lineNumber = 0;
+        let lineNumber = 0;
         lineReader.on("line", function (line) {
           lineNumber++;
           formatNewFileLine(lineNumber + "  " + line);
