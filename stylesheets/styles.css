@@ -754,3 +754,10 @@ div.selected-commit-diff-panel button.close-button {
 #password-error-icon, #username-error-icon {
   visibility: hidden;
 }
+  .issue-panel {
+  position: absolute;
+  z-index: -10;
+  height: 0vh;
+  width: 0vw;
+  background-color: white;
+}

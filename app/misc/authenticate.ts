@@ -326,3 +326,47 @@ function redirectToHomePage() {
   //LogInAfterConfirm();
 }
 
+function addIssue(name, id, onclick) {
+  let ul = document.getElementById(id);
+  let li = document.createElement("li");
+  let a = document.createElement("a");
+  a.setAttribute("href", "#");
+  a.setAttribute("class", "list-group-item");
+  a.setAttribute("onclick", onclick + ";event.stopPropagation()");
+  li.setAttribute("role", "presentation")
+  a.appendChild(document.createTextNode(name));
+  a.innerHTML = name;
+  li.appendChild(a);
+  ul.appendChild(li);
+}
+
+
+function displayIssues() {
+  let repoName = document.getElementById("repo-name").innerHTML
+      let githubName = document.getElementById("githubname").innerHTML
+      if (repoName != "repository") {
+
+          let ul = document.getElementById("issue-dropdown");
+
+          ul.innerHTML = ''; // clears the dropdown menu which shows all the repos
+
+          // Gets users name and password
+          encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+
+          cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
+
+          client = github.client({
+              username: getUsernameTemp(),
+              password: getPasswordTemp()
+          });
+
+          var ghme = client.me();
+          var ghrepo = client.repo(githubName + '/' + repoName);
+          ghrepo.issues(function (err, data, head) {
+              for (let i = 0; i < data.length; i++) {
+                  let rep = Object.values(data)[i];
+                  addIssue(rep["title"], "issue-dropdown", "dielit");
+              }
+          });
+      }
+}
