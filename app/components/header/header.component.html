@@ -141,7 +141,29 @@
   </div>
 </nav>
 
-
+<div id="otpModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Two Factor Authentication</h4>
+      </div>
+      <div class="modal-body">
+        Please enter your authentication code (SMS or from authenticator app)
+        <div class="input-group">
+          <br>
+          <input id="otp" type="text" class="form-control" placeholder="Authentication Code" aria-describedby="basic-addon1">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="submitOtpButton" class="btn btn-primary" data-dismiss="modal">Submit</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
