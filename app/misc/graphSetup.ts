@@ -234,4 +234,35 @@ function drawGraph() {
   //  });
   //   }
   });
+
+  network.on('click', function(properties) {
+    if (properties.nodes.length > 0) {
+      let clicknode = properties.nodes[0];
+
+      if (flag === 'node') {
+        clicknode = nodes.get(clicknode);
+      } else if (flag === 'abstract') {
+        clicknode = abNodes.get(clicknode);
+      } else if (flag === 'basic') {
+        clicknode = bsNodes.get(clicknode);
+      } else {
+        clicknode = undefined;
+      }
+
+      if (clicknode != undefined) {
+        let name = clicknode.author.name().toString();
+        let email = clicknode.author.email().toString();
+
+        document.getElementById("authorModalDetails")!.innerHTML = "Author Name: " + clicknode.author.toString() + "<br>" + "Email: " + email;
+        document.getElementById("authorModalProfileButton")!.onclick = function() {
+          window.open("https://github.com/" + name, "Author Profile");
+        }
+
+        imageForUser(name, email, function(pic) {
+          document.getElementById("authorModalImage")!.src = pic;
+          $("#authorProfileModal").modal('show');
+        })
+      }
+    }
+  })
 }
