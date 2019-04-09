@@ -2,7 +2,8 @@ let cred;
 let blue = "#39c0ba";
 let gray = "#5b6969";
 let continuedWithoutSignIn = false;
-
+let showUsername = true;
+let previousWindow = "repoPanel";
 function collapseSignPanel() {
   $("#nav-collapse1").collapse("hide");
 }
@@ -20,6 +21,18 @@ function switchToMainPanel() {
   hideAddRepositoryPanel();
   displayFilePanel();
   displayGraphPanel();
+
+  $("#nav-collapse1").collapse("hide");
+  if(previousWindow == "repoPanel"){
+    if(showUsername){
+      document.getElementById("Button_Sign_out").style.display = "block";
+      document.getElementById("Button_Sign_in").style.display="none";
+    }else{
+      document.getElementById("Button_Sign_out").style.display = "none";
+      document.getElementById("Button_Sign_in").style.display="block";
+    }
+  }
+  previousWindow = "mainPanel";
 }
 
 function checkSignedIn() {
@@ -34,8 +47,11 @@ function checkSignedIn() {
 }
 
 function switchToAddRepositoryPanelWhenNotSignedIn() {
+  previousWindow = "repoPanel";
   continuedWithoutSignIn = true;
+  showUsername = false;
   switchToAddRepositoryPanel();
+  
 }
 
 function switchToAddRepositoryPanel() {
@@ -44,8 +60,25 @@ function switchToAddRepositoryPanel() {
   hideFilePanel();
   hideGraphPanel();
   displayAddRepositoryPanel();
-  displayUsername();
+  
+  if(showUsername){
+    document.getElementById("Button_Sign_out").style.display = "block";
+    document.getElementById("Button_Sign_in").style.display = "none";
+    displayUsername();
+  }else{
+    $("#nav-collapse1").collapse("hide");
+    document.getElementById("Button_Sign_out").style.display = "none";
+    document.getElementById("Button_Sign_in").style.display = "block";
+  }
   document.getElementById("repoOpen").value = "";
+  previousWindow = "repoPanel";
+}
+
+function hideSignInButton():void{
+  document.getElementById("Button_Sign_in").style.display = "none";
+  if(previousWindow!="repoPanel"){
+    switchToMainPanel();
+  }
 }
 
 function wait(ms) {
@@ -57,8 +90,12 @@ function wait(ms) {
 }
 
 function displayUsername() {
+  console.log("Display Username called");
+  document.getElementById("Button_Sign_out").style.display = "block";
+  showUsername = true;
   console.log(getUsername());
-  if (getUsername() != null) {
+  let existing_username = document.getElementById("githubname").innerHTML;
+  if (getUsername() != null && existing_username == null) {
     document.getElementById("githubname").innerHTML = getUsername();
   }
 }
@@ -70,6 +107,9 @@ function displayClonePanel() {
 
 function displayFilePanel() {
   document.getElementById("file-panel").style.zIndex = "10";
+  document.getElementById("commit-message-input").style="visibility: visible";
+  document.getElementById("commit-button").style="visiblity: visible";
+  document.getElementById("fileEdit-button").style="visiblity: visible";
 }
 
 function displayGraphPanel() {
@@ -77,12 +117,16 @@ function displayGraphPanel() {
 }
 
 function displayAddRepositoryPanel() {
+  previousWindow = "repoPanel";
   document.getElementById("add-repository-panel").style.zIndex = "10";
   $("#open-local-repository").show();
 }
 
 function hideFilePanel() {
   document.getElementById("file-panel").style.zIndex = "-10";
+  document.getElementById("commit-message-input").style="visibility: hidden";
+  document.getElementById("commit-button").style="visibility: hidden";
+  document.getElementById("fileEdit-button").style="visibility: hidden";
 }
 
 function hideGraphPanel() {
@@ -104,6 +148,22 @@ function hideDiffPanel() {
   document.getElementById("graph-panel").style.width = "100%";
   disableDiffPanelEditOnHide();
   hideDiffPanelButtons();
+}
+
+function hideDiffPanelIfNoChange() {
+  let filename = document.getElementById("diff-panel-file-name") == null ? null : document.getElementById("diff-panel-file-name").innerHTML;
+  let filePaths = document.getElementsByClassName('file-path');
+  let nochange = true;
+  for (let i = 0; i < filePaths.length; i++) {
+    if (filePaths[i].innerHTML === filename) {
+
+      nochange = false;
+    }
+  }
+  if (nochange == true){
+    hideDiffPanel();
+  }
+  filename = null;
 }
 
 function hideAuthenticatePanel() {

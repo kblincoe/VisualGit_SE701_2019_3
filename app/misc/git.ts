@@ -14,12 +14,71 @@ let theirCommit = null;
 let modifiedFiles;
 let warnbool;
 var CommitButNoPush = 0;
+let stagedFiles: any;
 
 function cloneFromRemote(){
   switchToClonePanel();
 }
 
+function refreshColor() {
+  const userColorFilePath = ".settings/user_color.txt";
+
+  // If user has previously saved a color, then set the app to that color
+  if (fs.existsSync(userColorFilePath)) {
+    fs.readFile(userColorFilePath, function(err, buffer) {
+      console.log(buffer.toString());
+      let color = buffer.toString();
+      changeColor(color);
+    });
+  }
+}
+
+function stage() {
+  let repository;
+
+  Git.Repository.open(repoFullPath)
+      .then(function(repoResult) {
+        repository = repoResult;
+        console.log("found a repository");
+        return repository.refreshIndex();
+      })
+
+      .then(function(indexResult) {
+        console.log("found a file to stage");
+        index = indexResult;
+        let filesToStage = [];
+        filesToAdd = [];
+        let fileElements = document.getElementsByClassName('file');
+        for (let i = 0; i < fileElements.length; i++) {
+          let fileElementChildren = fileElements[i].childNodes;
+          if (fileElementChildren[1].checked === true) {
+            filesToStage.push(fileElementChildren[0].innerHTML);
+            filesToAdd.push(fileElementChildren[0].innerHTML);
+          }
+        }
+        if (filesToStage.length > 0) {
+          console.log("staging files");
+          stagedFiles = index.addAll(filesToStage);
+        } else {
+          //If no files checked, then throw error to stop empty commits
+          throw new Error("No files selected to commit.");
+        }
+      });
+
+  if (stagedFiles == null || stagedFiles.length !== 0) {
+    if (document.getElementById("staged-files-message") !== null) {
+      let filePanelMessage = document.getElementById("staged-files-message");
+      filePanelMessage.parentNode.removeChild(filePanelMessage);
+    }
+  }
+}
+
 function addAndCommit() {
+  commitMessage = document.getElementById('commit-message-input').value;
+  if (commitMessage == null || commitMessage == "") {
+    window.alert("Cannot commit without a commit message. Please add a commit message before committing");
+    return;
+  }
   let repository;
 
   Git.Repository.open(repoFullPath)
@@ -64,23 +123,12 @@ function addAndCommit() {
   .then(function(oidResult) {
     console.log("changing " + oid + " to " + oidResult);
     oid = oidResult;
-    return Git.Reference.nameToId(repository, "HEAD").then((head)=>{
-        console.log("the current head is: " + head);
-        return head;
-    }).catch(() => {
-      console.log("there is no head commit, passing null as head");
-      return null;
-    });
+    return Git.Reference.nameToId(repository, "HEAD");
   })
 
   .then(function(head) {
-    if (head==null){
-      console.log("there is no head commit, passing null as parent");
-      return null;
-    }else {
-      console.log("found the current head commit");
-      return repository.getCommit(head);
-    }
+    console.log("founf the current commit");
+    return repository.getCommit(head);
   })
 
   .then(function(parent) {
@@ -99,14 +147,8 @@ function addAndCommit() {
       console.log("head commit on local repository: " + parent.id.toString());
       return repository.createCommit("HEAD", sign, sign, commitMessage, oid, [parent.id().toString(), tid.trim()]);
     } else {
-      console.log('This is not a merging commit');
-      let array;
-      if (parent==null){
-        array = []; //parent is null hence this is the first commit
-      }else{
-        array = [parent];
-      }
-      return repository.createCommit("HEAD", sign, sign, commitMessage, oid, array);
+      console.log('no other commits');
+      return repository.createCommit("HEAD", sign, sign, commitMessage, oid, [parent]);
     }
   })
   .then(function(oid) {
@@ -115,9 +157,9 @@ function addAndCommit() {
 	changes = 0;
 	CommitButNoPush = 1;
     console.log("Commit successful: " + oid.tostrS());
-
+    stagedFiles = null;
     hideDiffPanel();
-    clearModifiedFilesList();
+    clearStagedFilesList();
     clearCommitMessage();
     clearSelectAllCheckbox();
     for (let i = 0; i < filesToAdd.length; i++) {
@@ -136,6 +178,20 @@ function addAndCommit() {
   });
 }
 
+function clearStagedFilesList() {
+  let filePanel = document.getElementById("files-staged");
+  while (filePanel.firstChild) {
+    filePanel.removeChild(filePanel.firstChild);
+  }
+  let filesChangedMessage = document.createElement("p");
+  filesChangedMessage.className = "modified-files-message";
+  filesChangedMessage.id = "staged-files-message";
+  filesChangedMessage.innerHTML = "Your staged files will appear here";
+  filePanel.appendChild(filesChangedMessage);
+
+  changeColor();
+}
+
 // Clear all modified files from the left file panel
 function clearModifiedFilesList() {
   let filePanel = document.getElementById("files-changed");
@@ -147,6 +203,9 @@ function clearModifiedFilesList() {
   filesChangedMessage.id = "modified-files-message";
   filesChangedMessage.innerHTML = "Your modified files will appear here";
   filePanel.appendChild(filesChangedMessage);
+  const userColorFilePath = ".settings/user_color.txt";
+
+  refreshColor();
 }
 
 function clearCommitMessage() {
@@ -158,19 +217,7 @@ function clearSelectAllCheckbox() {
 }
 
 function getAllCommits(callback) {
-  // Git.Repository.open(repoFullPath)
-  // .then(function(repo) {
-  //   return repo.getHeadCommit();
-  // })
-  // .then(function(firstCommitOnMaster){
-  //   let history = firstCommitOnMaster.history(Git.Revwalk.SORT.Time);
-  //
-  //   history.on("end", function(commits) {
-  //     callback(commits);
-  //   });
-  //
-  //   history.start();
-  // });
+  clearModifiedFilesList();
   let repos;
   let allCommits = [];
   let aclist = [];
@@ -290,15 +337,7 @@ function pullFromRemote() {
       refreshAll(repository);
     }
   });
-//   .then(function(updatedRepository) {
-//     refreshAll(updatedRepository);
-
-// });
 }
-
-
-
-
 
 function pushToRemote() {
   let branch = document.getElementById("branch-name").innerText;
@@ -331,6 +370,16 @@ function pushToRemote() {
       });
     });
   });
+}
+
+function commitModal() {
+  // TODO: implement commit modal
+  displayModal("Commit inside a modal yet to be implemented");
+}
+
+function openBranch() {
+  // TODO: implement branch functionality like sourcetree branching modal
+  displayModal("Branch yet to be implemented");
 }
 
 function createBranch() {
@@ -384,7 +433,7 @@ function deleteLocalBranch() {
     })
     }).then(function() {
       // refresh graph
-      console.log("deleted the local branch") 
+      console.log("deleted the local branch")
       refreshAll(repos);
    })
 }
@@ -412,7 +461,7 @@ function deleteRemoteBranch() {
               }
             }
           }).then(function() {
-              console.log("deleted the remote branch") 
+              console.log("deleted the remote branch")
               updateModalText("The remote branch: " + branchName + " has been deleted")
           });
         })
@@ -641,6 +690,7 @@ function displayModifiedFiles() {
   modifiedFiles = [];
 
   let selectedFile = "";
+  
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
     console.log("Is repo merging: " + repo.isMerging());
@@ -655,7 +705,7 @@ function displayModifiedFiles() {
       }
       
       modifiedFiles.forEach(displayModifiedFile);
-
+      refreshColor();
       // Add modified file to array of modified files 'modifiedFiles'
       function addModifiedFile(file) {
 
@@ -667,7 +717,7 @@ function displayModifiedFiles() {
           }
           // If previously displayed file is not the new modified file
           // then check if it exists, else remove 
-          let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
+          let filePath = repoFullPath + "\/" + filePaths[i].innerHTML;
           if (fs.existsSync(filePath)) {
             // exists
             console.log("exists");
@@ -715,6 +765,48 @@ function displayModifiedFiles() {
 		return 'Hi';
 	}
 
+      function unstage(file, fileId) {
+        // Get the fileId element and remove it
+        document.getElementById(fileId).remove();
+        let modFilesMessage = document.getElementById("modified-files-message");
+        if (modFilesMessage != null) {
+          modFilesMessage.remove();
+        }
+        // Check if there's no staged files, in case we need to print the "Your staged..."
+        stagedFiles = index.remove(file);
+        if (document.getElementById("files-staged").children.length == 0) {
+          clearStagedFilesList();
+          stagedFiles = null;
+        }
+
+        displayModifiedFile(file);
+        refreshColor();
+      }
+
+      document.getElementById("stage-all").onclick = function() {
+        let unstagedFileElements = document.getElementById('files-changed').children;
+        while (unstagedFileElements.length > 0) {
+          let checkbox = unstagedFileElements[0].getElementsByTagName("input")[0];
+          try {
+            checkbox.click();
+          } catch (err) {
+            break;
+          }
+        }
+      };
+
+      document.getElementById("unstage-all").onclick = function () {
+        let stagedFileElements = document.getElementById('files-staged').children;
+        while (stagedFileElements.length > 0){
+          let checkbox = stagedFileElements[0].getElementsByTagName("input")[0];
+          try {
+            checkbox.click()
+          } catch (err) {
+            break;
+          }
+        }
+      };
+
       function displayModifiedFile(file) {
         let filePath = document.createElement("p");
         filePath.className = "file-path";
@@ -736,13 +828,16 @@ function displayModifiedFiles() {
         }
 
         fileElement.appendChild(filePath);
+        fileElement.id = file.filePath;
 
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "checkbox";
         checkbox.onclick = function(event){
-          if(!checkbox.checked){
-            document.getElementById('select-all-checkbox').checked = false;
+          if (checkbox.checked) {
+            stage();
+            displayStagedFile(file, fileElement.id);
+            refreshColor();
           }
           // Stops a click from propagating to the other layers
           event.stopPropagation();
@@ -751,6 +846,96 @@ function displayModifiedFiles() {
 
         document.getElementById("files-changed").appendChild(fileElement);
 
+
+        fileElement.onclick = function() {
+          let doc = document.getElementById("diff-panel");
+          console.log("width of document: " + doc.style.width);
+          let fileName = document.createElement("p");
+          fileName.innerHTML = file.filePath
+            // Get the filename being edited and displays on top of the window
+          if (doc.style.width === '0px' || doc.style.width === '') {
+            displayDiffPanel();
+
+            document.getElementById("diff-panel-body")!.innerHTML = "";
+            document.getElementById("diff-panel-body").appendChild(fileName);
+            if (fileElement.className === "file file-created") {
+              // set the selected file
+              selectedFile = file.filePath;
+              printNewFile(file.filePath);
+            } else {
+
+              let diffCols = document.createElement("div");
+              diffCols.innerText = "Old" + "\t" + "New" + "\t" + "+/-" + "\t" + "Content";
+              document.getElementById("diff-panel-body")!.appendChild(diffCols);
+              selectedFile = file.filePath;
+              printFileDiff(file.filePath);
+            }
+          }
+          else if (doc.style.width === '40%') {
+            document.getElementById("diff-panel-body").innerHTML = "";
+            document.getElementById("diff-panel-body").appendChild(fileName);
+            if (selectedFile === file.filePath) {
+              // clear the selected file when diff panel is hidden
+              selectedFile = "";
+              hideDiffPanel()
+            } else {
+              if (fileElement.className === "file file-created") {
+                selectedFile = file.filePath;
+                printNewFile(file.filePath);
+              } else {
+                selectedFile = file.filePath;
+                printFileDiff(file.filePath);
+              }
+            }
+          }
+          else {
+            // clear the selected file when diff panel is hidden
+            selectedFile = "";
+            hideDiffPanel();
+          }
+        };
+      }
+
+      function displayStagedFile(file, fileId) {
+        let filePath = document.createElement("p");
+        filePath.className = "file-path";
+        filePath.innerHTML = file.filePath;
+        let fileElement = document.createElement("div");
+        window.onbeforeunload = Confirmation;
+        changes = 1;
+        // Set how the file has been modified
+        if (file.fileModification === "NEW") {
+          fileElement.className = "file file-created";
+        } else if (file.fileModification === "MODIFIED") {
+          fileElement.className = "file file-modified";
+        } else if (file.fileModification === "DELETED") {
+          fileElement.className = "file file-deleted";
+        }  else if (file.fileModification === "RENAMED") {
+          fileElement.className = "file file-renamed";
+        }else {
+          fileElement.className = "file";
+        }
+
+        fileElement.id = fileId;
+        fileElement.appendChild(filePath);
+
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "checkbox";
+        checkbox.checked = true;
+        checkbox.onclick = function(event){
+          unstage(file, fileId);
+          // Stops a click from propagating to the other layers
+          event.stopPropagation();
+        }
+        fileElement.appendChild(checkbox);
+
+        document.getElementById("files-staged").appendChild(fileElement);
+        document.getElementById(fileId).remove();
+
+        if (document.getElementById("files-changed").children.length == 0) {
+          clearModifiedFilesList();
+        }
 
         fileElement.onclick = function() {
           let doc = document.getElementById("diff-panel");
@@ -859,24 +1044,33 @@ function displayModifiedFiles() {
 
         if (line.charAt(0) === "+") {
           element.style.backgroundColor = "#84db00";
-          element.style.display = "table-row";
         } else if (line.charAt(0) === "-") {
           element.style.backgroundColor = "#ff2448";
-          element.style.display = "table-row";
         }
 
         // If not a changed line, origin will be a space character, so still need to slice
         line = line.slice(1, line.length);
-
         element.innerText = line;
-        document.getElementById("diff-panel-body").appendChild(element);
+
+        // The spacer is needed to pad out the line to highlight the whole row
+        let spacer = document.createElement("spacer");
+        spacer.style.width = document.getElementById("diff-panel-body")!.scrollWidth+"px";
+        element.appendChild(spacer);
+
+        document.getElementById("diff-panel-body")!.appendChild(element);
       }
 
       function formatNewFileLine(text) {
         let element = document.createElement("div");
         element.style.backgroundColor = green;
         element.innerHTML = text;
-        document.getElementById("diff-panel-body").appendChild(element);
+
+        // The spacer is needed to pad out the line to highlight the whole row
+        let spacer = document.createElement("spacer");
+        spacer.style.width = document.getElementById("diff-panel-body")!.scrollWidth+"px";
+        element.appendChild(spacer);
+        
+        document.getElementById("diff-panel-body")!.appendChild(element);
       }
     });
   },
