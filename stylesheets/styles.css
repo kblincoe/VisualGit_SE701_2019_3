@@ -1,6 +1,8 @@
 p, h1 {
   color: #ccc;
   font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-size: 1.2vw;
 }
 
 ul{
@@ -27,7 +29,7 @@ ul{
 .navbar-nav.navbar-right .btn {
   position: relative; z-index: 2;
   padding: 4px 20px;
-  margin: 10px auto;
+  margin: 0 auto;
 }
 
 .navbar .navbar-collapse {
@@ -329,7 +331,7 @@ body .add-repository-panel h1 {
 }
 
 body .add-repository-panel .open-local-repo {
-  margin-top: 70px;
+  margin-top: 25px;
 }
 
 body .add-repository-panel p {
@@ -628,11 +630,13 @@ div.selected-commit-diff-panel button.close-button {
   text-align: center;
   cursor: pointer;
   padding: 10px;
+  margin: 0 auto;
   max-width: 75px;
 }
 
 .toolbar-Text {
      font-size: 14px;
+     margin: 0 auto;
      color: white;
  }
 
