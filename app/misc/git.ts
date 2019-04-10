@@ -134,13 +134,12 @@ function addAndCommit() {
     .then(function (parent) {
       console.log("Verifying account");
       let sign;
-      if (getUsernameTemp() !== null && getPasswordTemp !== null) {
-        sign = Git.Signature.now(getUsernameTemp(), getPasswordTemp());
-      } else {
-        sign = Git.Signature.default(repository);
-      }
+
+      sign = repository.defaultSignature();
+
       commitMessage = document.getElementById('commit-message-input').value;
       console.log("Signature to be put on commit: " + sign.toString());
+
       if (readFile.exists(repoFullPath + "/.git/MERGE_HEAD")) {
         let tid = readFile.read(repoFullPath + "/.git/MERGE_HEAD", null);
         console.log("head commit on remote: " + tid);
