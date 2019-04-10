@@ -362,6 +362,11 @@ body .add-repository-panel .button-clone, body .add-repository-panel .button-ope
   float: right;
 }
 
+body .add-repository-panel .path-textbox {
+  min-width: 30%;
+  max-width: 50%;
+}
+
 body .add-repository-panel .button-clone:hover, body .add-repository-panel .button-open:hover {
   opacity: 0.8;
 }
@@ -392,9 +397,11 @@ body .add-repository-panel .left {
 
 body .add-repository-panel .right {
   float: left;
-  width: 70%;
+  width: 50%;
   height: 100%;
 }
+
+
 
 body .add-repository-panel .right .button {
   height: 100%;
