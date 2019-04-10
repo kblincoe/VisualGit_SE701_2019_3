@@ -4,8 +4,7 @@ import { Component, OnInit } from "@angular/core";
     selector: "issue-panel",
     templateUrl: "app/components/issuePanel/issue.panel.component.html"
 })
-
-export class IssuePanelComponent implements OnInit {
+export class IssuePanelComponent  {
 
     closePanel(): void {
         let panel = document.getElementById("issue-panel")!;
@@ -14,6 +13,13 @@ export class IssuePanelComponent implements OnInit {
         panel.style.zIndex = "-10";
     }
 
+    openModal(id: string){
+        $('#'+id).modal('show');
+    }
+
+    closeModal(id: string){
+        $('#'+id).modal('hide');
+    }
 
     addIssue(name, id, onclick) {
         let ul = document.getElementById(id);
