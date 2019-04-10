@@ -458,15 +458,15 @@ body .footer .terminal .git-command {
 }
 
 .file-created {
-  background-color: #84db00;
+  background-color: #4c994c;
 }
 
 .file-modified {
-  background-color: #ff7514;
+  background-color: #e07b16;
 }
 
 .file-deleted {
-  background-color: #ff2448;
+  background-color: #cc3d3d;
 }
 
 .file-tab {
