@@ -11,6 +11,9 @@
     "start": "tsc & electron index.js",
     "macstart": "tsc; electron index.js",
     "build": "electron-packager . --out=dist --app-version=$npm_package_version --prune --asar --overwrite --all",
+    "winApplication": "electron-packager ./ --overwrite --platform=win32 --arch=x64 --out=distribution --icon=./assets/icons/Icon.ico",
+    "macApplication": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=distribution --icon=./assets/icons/Icon.icns",
+    "linuxApplication": "electron-packager . --overwrite --platform=linux --arch=x64 --prune=true --out=distribution --icon=./assets/icons/Icon.png",
     "postinstall": "typings install",
     "auto": "nodemon --watch * -e ts,html,css --exec \"npm start\"",
     "automac": "nodemon --watch * -e ts,html,css --exec \"npm macstart\""
