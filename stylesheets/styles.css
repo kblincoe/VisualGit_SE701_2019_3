@@ -657,6 +657,7 @@ div.selected-commit-diff-panel button.close-button {
   position: absolute;
   z-index: 10;
   text-align: center;
+  display: none;
 }
 
 .loader {

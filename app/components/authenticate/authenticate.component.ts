@@ -16,6 +16,7 @@ export class AuthenticateComponent implements OnInit {
   }
 
   switchToMainPanel(): void {
+    document.getElementById('grey-out').style.display = 'block';
     getUserInfo(switchToAddRepositoryPanel);
   }
 
