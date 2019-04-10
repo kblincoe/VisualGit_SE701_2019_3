@@ -10,16 +10,35 @@
 <div id="issue-modal" class="modal fade"  role="dialog" aria-hidden="true">
         <div class="modal-dialog">
                 <div class="modal-content">
-                    <h1 style="color: black">&nbsp; New Issue </h1>
+                    <h1 class="modal-title">&nbsp; New Issue </h1>
                     <br>
+                    <form id="newIssue">
                        &nbsp; Title: <input type="text" name="title"><br><br>
                        &nbsp; Body: <input type="text" name="body"><br><br>
-                       &nbsp; Assignee: <input type="text" name="body"><br><br>
-                       &nbsp; Milestone: <input type="text" name="body"><br><br>
-                       &nbsp; Labels: <input type="text" name=""><br><br>
+                       &nbsp; Assignee: <input type="text" name="Assignee"><br><br>
+                    </form>
                   <div class="modal-footer">  
-                    <button type="button" class="btn btn-primary" id="sumbitIssue" onclick="sumbitIssue()">Sumbit Issue</button>
+                    <button type="button" class="btn btn-primary" id="sumbitIssue" onclick="createIssue()">Sumbit Issue</button>
                   </div>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->
   </div>
+
+  <div id="errorModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Error</h4>
+            </div>
+            <div class="modal-body" id="error-text-box">
+              unset
+            </div>
+            <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>

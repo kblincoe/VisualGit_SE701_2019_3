@@ -371,6 +371,33 @@ function addIssue(rep,id, onclick) {
 }
 
 
+function createIssue() {
+  var theArray = $('#newIssue').serializeArray();
+  let repoName = document.getElementById("repo-name").innerHTML
+  let githubName = document.getElementById("githubname").innerHTML
+  
+  if (repoName != "repository" && theArray != null) {
+      encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+      cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
+      client = github.client({
+          username: getUsernameTemp(),
+          password: getPasswordTemp()
+      });
+      var ghme = client.me();
+      var ghrepo = client.repo(githubName + '/' + repoName);
+      ghrepo.issue({
+        "title": theArray[0]["value"],
+        "body": theArray[1]["value"],
+        "assignee": theArray[2]["value"]
+      }, function (err, data, head) {
+        document.getElementById("error-text-box").innerHTML = "Invalid Assignee: " + theArray[2]["value"];
+        $('#errorModal').modal('show');
+      }); //issue
+      displayIssues();
+      $('#issue-modal').modal('hide');
+    }
+}
+
 function displayIssues() {
   let repoName = document.getElementById("repo-name").innerHTML
       let githubName = document.getElementById("githubname").innerHTML
@@ -378,7 +405,7 @@ function displayIssues() {
 
           let ul = document.getElementById("issue-dropdown");
 
-          ul.innerHTML = ''; // clears the dropdown menu which shows all the repos
+          ul.innerHTML = ''; // clears the dropdown menu which shows all the issues
 
           // Gets users name and password
           encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
