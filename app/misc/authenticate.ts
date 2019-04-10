@@ -58,10 +58,8 @@ function ModalSignIn(callback) {
 
 
 function loginWithSaved(callback) {
-
     document.getElementById("username").value = getUsername();
     document.getElementById("password").value = getPassword(); //get decrypted username n password  
-
 }
 
 function searchRepoName() {
@@ -182,9 +180,17 @@ function processLogin(ghme, callback) {
     // username and password values taken to be stored.
     let username: any = (<HTMLInputElement>document.getElementById("username")).value;
     let password: any = (<HTMLInputElement>document.getElementById("password")).value;
+
+    // If password needs remembering encrypt it within data.json
     if (rememberLogin.checked == true) {
         encrypt(username, password);
     }
+    // Else remove the file
+    else {
+      let credentialFile = './data.json';
+      if (fs.existsSync(credentialFile)){
+        fs.unlinkSync(credentialFile);
+      }}
       avaterImg = Object.values(data)[2]
       // let doc = document.getElementById("avater");
       // doc.innerHTML = "";
