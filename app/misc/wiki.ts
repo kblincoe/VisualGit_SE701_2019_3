@@ -18,7 +18,7 @@ function openWiki() {
     if (!fs.existsSync(repoFullPath + "\\wiki")) {
         cloneWiki();
     } else {
-        findPageNames(repoFullPath + "\\wiki")
+        findPageNames(repoFullPath + "\\wiki",displayWiki)
     }
 
 }
@@ -66,7 +66,7 @@ function cloneWiki() {
 function findPageNames(wikiPath: string, callback: () => void) {
 
     var EXTENSION = '.md';
-
+    wikiContent = [];
     fs.readdir(wikiPath, function (err, files) {
         console.log("The items are: ", files);
 
@@ -92,7 +92,7 @@ function readFileContents(wikiDirectory: string) {
     return markdownFile;
 }
 
-function displayWiki() {
+function displayWiki() : void {
     let wiki_titles = document.getElementById("wiki-titles")!;
     console.log(wiki_titles);
     console.log("appropriate");
@@ -106,6 +106,7 @@ function displayWiki() {
 function updateWiki() {
     let localWikiPath = repoFullPath + "\\wiki";
     let repository;
+    let theirCommit;
     Git.Repository.open(localWikiPath)
         .then(function (repo) {
             repository = repo;
@@ -123,10 +124,24 @@ function updateWiki() {
                     }
                 }
             });
-        }).then(function () {
-            return repo.mergeBranches("master", "origin/master");
-        }, function (err) {
-            console.log("Error occurred in wiki.ts. Description: " + err);
+        })  
+        // Now that we're finished fetching, go ahead and merge our local branch
+        // with the new one
+        .then(function() {
+          return Git.Reference.nameToId(repository, "refs/remotes/origin/master");
+        })
+        .then(function(oid) {
+          console.log("Looking up commit with id " + oid + " in all wiki repositories");
+          return Git.AnnotatedCommit.lookup(repository, oid);
+        }, function(err) {
+          console.log("Error is " + err);
+        })
+        .then(function(annotated) {
+          console.log("merging " + annotated + "with local forcefully");
+          Git.Merge.merge(repository, annotated, null, {
+            checkoutStrategy: Git.Checkout.STRATEGY.FORCE,
+          });
+          theirCommit = annotated;
         })
 
 }

@@ -14,7 +14,7 @@ export class WikiComponent {
     
     //Delete on close for testing purposes
     let localWikiPath = repoFullPath + "\\wiki"
-    var rmdir = function (directory: string) {
+    /*var rmdir = function (directory: string) {
       var list = fs.readdirSync(directory);
       for (var i = 0; i < list.length; i++) {
         var filename = path.join(directory, list[i]);
@@ -33,7 +33,7 @@ export class WikiComponent {
       fs.rmdirSync(directory);
 
     }
-    rmdir(localWikiPath)
+    rmdir(localWikiPath)*/
   }
   resetWiki(): void {
     //Method 1
