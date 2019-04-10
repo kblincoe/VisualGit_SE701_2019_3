@@ -414,21 +414,39 @@ function displayBranch(name, id, onclick) {
   a.appendChild(document.createTextNode(name));
   a.innerHTML = name;
   li.appendChild(a);
+  if (id == "branch-dropdown") {
+    // Add a remote branch icon for remote branches
+    Git.Repository.open(repoFullPath)
+    .then(function(repo) {
+      Git.Reference.list(repo).then(function(array) {
+        if (array.includes("refs/remotes/origin/" + name)) {
+            a.innerHTML += "<img src='./assets/remote-branch.png' width='20' height='20' align='right' title='Remote'>";
+        }
+      })
+    })
+    // Add a local branch icon for local branches
+    Git.Repository.open(repoFullPath)
+    .then(function(repo) {
+      repo.getBranch(name).then(function() {
+        a.innerHTML += "<img src='./assets/local-branch.png' width='20' height='20' align='right' title='Local'>";
+      })
+    })
 
-  // Adding a delete button beside the branch
-  if ((id == "branch-dropdown") && (name.toLowerCase() != "master")) {
-    var button = document.createElement("Button");
-    button.innerHTML = "Delete";
-    button.classList.add('btn-danger');
+    // Adding a delete button for each branch
+    if (name.toLowerCase() != "master") {
+      var button = document.createElement("Button");
+      button.innerHTML = "Delete";
+      button.classList.add('btn-danger');
 
-    // Function to execute when button is clicked
-    $(button).click(function () {
-      // Display delete branch warning modal
-      $('#branch-to-delete').val(name);
-      document.getElementById("displayedBranchName").innerHTML = name;
-      $('#delete-branch-modal').modal();
-    });
-    li.appendChild(button); // Add delete button to the branch dropdown list
+      // Function to execute when button is clicked
+      $(button).click(function () {
+        // Display delete branch warning modal
+        $('#branch-to-delete').val(name);
+        document.getElementById("displayedBranchName").innerHTML = name;
+        $('#delete-branch-modal').modal();
+      });
+      li.appendChild(button); // Add delete button to the branch dropdown list
+    }
   }
   ul.appendChild(li);
 }
@@ -450,11 +468,17 @@ function createDropDownFork(name, id, onclick) {
 
 function checkoutLocalBranch(element) {
   let bn;
-  console.log(typeof element);
+  let img = "<img"
   if (typeof element === "string") {
     bn = element;
   } else {
     bn = element.innerHTML;
+  }
+  if (bn.includes(img)) {
+    bn = bn.substr(0, bn.lastIndexOf(img)) // remove local branch <img> tag from branch name string
+    if (bn.includes(img)) {
+      bn = bn.substr(0, bn.lastIndexOf(img)) // remove remote branch <img> tag from branch name string
+    }
   }
   console.log("name of branch being checked out: " + bn);
   Git.Repository.open(repoFullPath)
@@ -472,10 +496,17 @@ function checkoutLocalBranch(element) {
 
 function checkoutRemoteBranch(element) {
   let bn;
+  let img = "<img"
   if (typeof element === "string") {
     bn = element;
   } else {
     bn = element.innerHTML;
+  }
+  if (bn.includes(img)) {
+    bn = bn.substr(0, bn.lastIndexOf(img)) // remove remote branch <img> tag from branch name string
+    if (bn.includes(img)) {
+      bn = bn.substr(0, bn.lastIndexOf(img))  // remove local branch <img> tag from branch name string
+    }
   }
   console.log("current branch name: " + bn);
   let repos;
