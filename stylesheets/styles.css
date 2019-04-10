@@ -684,6 +684,10 @@ div.selected-commit-diff-panel button.close-button {
   height: 0%;
 }
 
+#wiki-header {
+  padding: 5px 20px 10px;
+}
+
  #open-editor-button {
   float: right;
   margin-right: 10px; 
@@ -822,4 +826,13 @@ div.wiki-header button.close-button, div.wiki-header button.open-button {
   padding: 0 15px;
   background-color: #39c0ba;
   color: #fff;
+}
+
+#wiki-titles {
+  float: left;
+  margin-right: 8px;
+}
+
+#wiki-content {
+  margin-left: 108px;
 }

@@ -94,12 +94,21 @@ function readFileContents(wikiDirectory: string) {
 
 function displayWiki() : void {
     let wiki_titles = document.getElementById("wiki-titles")!;
-    console.log(wiki_titles);
-    console.log("appropriate");
-    console.log("The wiki name is: ",wikiContent[1].pageName);
+    while (wiki_titles.firstChild){
+        wiki_titles.removeChild(wiki_titles.firstChild);
+    }
     console.log("The entire content is: ",wikiContent);
     wikiContent.forEach(page => {
-        console.log("Page names: ", page.pageName);
+        //console.log("Page names: ", page.pageName);
+        let wiki_title_template =   document.createElement("div");
+        wiki_title_template.className = "panel panel-default";
+        let panel_body = document.createElement("div");
+        panel_body.className = "panel-body";
+        panel_body.innerHTML = page.pageName;
+        
+        wiki_title_template.appendChild(panel_body);
+        wiki_titles.appendChild(wiki_title_template);
+
     });
 }
 
