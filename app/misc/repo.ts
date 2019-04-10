@@ -544,8 +544,7 @@ function chooseLocalPath() {
     fullLocalPath = document.getElementById("dirPickerSaveNew").files[0].path;
 
     // display the new folder location on repoSave text field 
-    document.getElementById("repoSave").value = fullLocalPath;
-    document.getElementById("repoSave").text = fullLocalPath;
+    updateRepoSaveText(fullLocalPath);
   }
 }
 
