@@ -130,6 +130,12 @@ body .navbar .dropdown-menu a {
   max-height: 90vh;
   overflow: scroll;
 }
+
+#visual-git-logo{
+  width: 150px; 
+  height: 150px; 
+}
+
 /*body .navbar .repo-name {
   margin-left: 30px;
 }*/
