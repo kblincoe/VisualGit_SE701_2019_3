@@ -655,6 +655,8 @@ div.selected-commit-diff-panel button.close-button {
   background-color: black;
   opacity: 0.5;
   position: absolute;
+  z-index: 10;
+  display: none;
 }
 
 .loader {
@@ -669,6 +671,7 @@ div.selected-commit-diff-panel button.close-button {
   margin-left: -60px;
   top: 50%;
   margin-top: -120px;
+  display: none;
 }
 
 @keyframes spin {
