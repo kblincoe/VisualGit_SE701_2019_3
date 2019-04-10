@@ -44,13 +44,15 @@ function cloneWiki() {
     let repository = Git.Clone.clone(cloneUrl, wikiPath, options)
         .then(function (repository) {
             console.log("Wiki successfully cloned")
-            var promisewiki = Promise.resolve(wikiPath);
+            /*var promisewiki = Promise.resolve(wikiPath);
             promisewiki.then(function(x){
                 findPageNames(x);
             }).then(function () {
                 displayWiki();
-            });
-            //findPageNames(wikiPath)
+            });*/
+
+            findPageNames(wikiPath, displayWiki)
+            
         }, function (err) {
             updateModalText("Clone Failed - " + err);
             console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
@@ -61,7 +63,7 @@ function cloneWiki() {
 }
 
 //Extract list of all files (pages) in the wiki
-function findPageNames(wikiPath: string) {
+function findPageNames(wikiPath: string, callback: () => void) {
 
     var EXTENSION = '.md';
 
@@ -79,8 +81,10 @@ function findPageNames(wikiPath: string) {
             }
             wikiContent.push(page);
         });
+        callback();
 
     });
+
 }
 
 function readFileContents(wikiDirectory: string) {
@@ -94,6 +98,9 @@ function displayWiki() {
     console.log("appropriate");
     console.log("The wiki name is: ",wikiContent[1].pageName);
     console.log("The entire content is: ",wikiContent);
+    wikiContent.forEach(page => {
+        console.log("Page names: ", page.pageName);
+    });
 }
 
 function updateWiki() {
