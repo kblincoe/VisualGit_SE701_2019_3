@@ -1,7 +1,5 @@
 import * as nodegit from "git";
 
-let vis = require("vis");
-let github1 = require("octonode");
 let nodeId = 1;
 let absNodeId = 1;
 let basicNodeId = 1;
@@ -15,11 +13,7 @@ let spacingX = 80;
 let parentCount = {};
 let columns: boolean[] = [];
 let edgeDic = {};
-let abstractCount = 0;
-let basicCount = 0;
 let numOfCommits = 0;
-let githubUsername = require('github-username');
-let avatarUrls = {};
 let branchIds = {};
 
 function processGraph(commits: nodegit.Commit[]) {
@@ -28,7 +22,13 @@ function processGraph(commits: nodegit.Commit[]) {
   sortCommits(commits);
   makeBranchColor();
   populateCommits();
-  document.getElementById("modal-text-box").innerHTML = "Graph finished";
+
+  let textBox = document.getElementById("modal-text-box");
+      if (textBox != null) {
+        textBox.innerHTML = "Graph finished";
+      } else {
+        console.log("Modal-text-box is missing");
+      }
 }
 
 function sortCommits(commits) {
@@ -68,10 +68,6 @@ function populateCommits() {
   commitList = [];
   parentCount = {};
   columns = [];
-  // Sort
-  // commitHistory = commits.sort(function(a, b) {
-  //   return a.timeMs() - b.timeMs();
-  // });
 
   // Plot the graph
   for (let i = 0; i < commitHistory.length; i++) {
@@ -279,7 +275,6 @@ function makeBasicNode(c, column: number) {
   let reference;
   let name = getName(c.author().toString());
   let stringer = c.author().toString().replace(/</, "%").replace(/>/, "%");
-  let email = stringer.split("%")[1];
   let flag = true;
   let count = 1;
   let id;
