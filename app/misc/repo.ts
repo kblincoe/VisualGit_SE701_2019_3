@@ -511,13 +511,22 @@ function updateLocalPath() {
   let text = document.getElementById("repoClone").value;
   let splitText = text.split(/\.|:|\//);
 
-  if (splitText.length >= 2) {
+
+  if (splitText[splitText.length -1] == "git") {
     // Get the path location for this local folder, and join it with the repo name (from the URL)
-    fullLocalPath = require("path").join(__dirname, splitText[splitText.length - 2]);
-    // Save this path location into the repoSave text field 
-    document.getElementById("repoSave").value = fullLocalPath;
-    document.getElementById("repoSave").text = fullLocalPath;
+    fullLocalPath = require("path").join(__dirname, splitText[splitText.length - 2]); 
+    updateRepoSaveText(fullLocalPath);
+  } else {
+    // Get the path location for this local folder, and join it with the repo name (from the URL)
+    fullLocalPath = require("path").join(__dirname, splitText[splitText.length - 1]); 
+    updateRepoSaveText(fullLocalPath);
   }
+}
+
+// This function updates the repoSave text field
+function updateRepoSaveText(fullLocalPath) {
+  document.getElementById("repoSave").value = fullLocalPath;
+  document.getElementById("repoSave").text = fullLocalPath;
 }
 
 // This function helps display the users chosen folder location on repoSave
