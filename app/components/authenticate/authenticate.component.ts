@@ -1,12 +1,20 @@
-import { Component } from "@angular/core";
-
+import { Component, OnInit, } from "@angular/core";
 
 @Component({
   selector: "user-auth",
   templateUrl: 'app/components/authenticate/authenticate.component.html'
 })
 
-export class AuthenticateComponent {
+export class AuthenticateComponent implements OnInit {
+  ngOnInit(): any {
+    // useSavedCredentials returns true if there is a saved credential and uses it.
+    if (useSavedCredentials()){
+      document.getElementById("rememberLogin").checked = true;
+    } else {
+      document.getElementById("rememberLogin").checked = false;
+    }
+  }
+
   switchToMainPanel(): void {
     getUserInfo(switchToAddRepositoryPanel);
   }
@@ -17,6 +25,5 @@ export class AuthenticateComponent {
   
   openGitHubPasswordResetPage() : void {
     window.open("https://github.com/password_reset", "_blank");
-
   }
 }
