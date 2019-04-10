@@ -709,21 +709,20 @@ function displayModifiedFiles() {
         removeNonExistingFiles();
         refreshColor();
 
-        function removeNonExistingFiles(){
+        function removeNonExistingFiles() {
           // If files displayed does not exist, remove them
-        let filePaths = document.getElementsByClassName('file-path');
-        for (let i = 0; i < filePaths.length; i++) {
-          if (filePaths[i].parentElement.className !== "file file-deleted") {
-            let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
-            if (fs.existsSync(filePath)) {
-              console.log("exists");
-            } else {
-              console.log("doesn't exists");
-              filePaths[i].parentElement.remove();
+          let filePaths = document.getElementsByClassName('file-path');
+          for (let i = 0; i < filePaths.length; i++) {
+            if (filePaths[i].parentElement.className !== "file file-deleted") {
+              let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
+              if (fs.existsSync(filePath)) {
+                console.log("exists");
+              } else {
+                console.log("doesn't exists");
+                filePaths[i].parentElement.remove();
+              }
             }
           }
-        }
-
         }
 
         // Add modified file to array of modified files 'modifiedFiles'
