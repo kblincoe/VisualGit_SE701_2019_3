@@ -1,8 +1,8 @@
 p, h1 {
   color: #ccc;
   font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-size: 1.2vw;
+  /*font-size: 16px;*/
+  /*font-size: 2vw;*/
 }
 
 ul{
@@ -345,7 +345,7 @@ body .add-repository-panel input {
   border-radius: 10px;
   border: 0;
   height: 10px;
-  size: 50;
+  size: 50px;
   padding: 10px;
 }
 
@@ -392,7 +392,7 @@ body .add-repository-panel .left {
 
 body .add-repository-panel .right {
   float: left;
-  width: 50%;
+  width: 70%;
   height: 100%;
 }
 
@@ -624,6 +624,7 @@ div.selected-commit-diff-panel button.close-button {
 
 /*Toolbar Styles*/
 .toolbar-Container {
+  /*max-height: 75px;*/
  }
 
 .toolbar-Icons {
@@ -631,6 +632,7 @@ div.selected-commit-diff-panel button.close-button {
   cursor: pointer;
   padding: 10px;
   margin: 0 auto;
+  max-height: 65px;
   max-width: 75px;
 }
 
