@@ -496,7 +496,6 @@ body .footer .terminal .git-command {
 /* Style the buttons that are used to open the tab content */
 .file-tab button {
   color: inherit;
-  /* color: #000000; */
   background-color: inherit;
   float: left;
   border: none;

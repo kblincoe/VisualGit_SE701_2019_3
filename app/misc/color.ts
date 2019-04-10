@@ -42,7 +42,7 @@ function changeColor(color) {
   let editorHeader = document.getElementsByClassName('editor-header');
   let editorFileTab = document.getElementById('file-tab');
   let editorEditors = document.getElementById('file-editors');
-  let editorIndentSelector = document.getElementById('indent-selector p');
+  let editorIndentSelector = document.getElementById('indent-selector-p');
   let editorIndentDropdown = document.getElementById('selected-indent');
 
   if (color === 'white') {
