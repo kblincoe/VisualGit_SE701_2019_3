@@ -206,33 +206,6 @@ body .file-panel .files-changed .files-staged .file:hover {
   opacity: 0.8;
 }
 
-body .file-panel .commit-panel .commit-message-input {
-  resize: none;
-  width: 90%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 90%;
-  margin-bottom: 5px;
-  height: 50px;
-  border-radius: 5px;
-  padding: 5px;
-}
-
-body .file-panel .commit-panel .commit-button {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  height: 30px;
-  border-radius: 10px;
-  border: 0;
-  padding: 0 15px;
-  background-color: #39c0ba;
-  color: #fff;
-}
-
 body .file-panel .staging-buttons {
   display: block;
   margin-left: auto;
@@ -438,9 +411,14 @@ body .footer p {
   margin: 0;
 }
 
+body .footer .commit-panel {
+  float: left;
+  width: 20%;
+}
+
 body .footer .commit-panel .commit-message-input {
   resize: none;
-  width: 275px;
+  width: 95%;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -451,13 +429,18 @@ body .footer .commit-panel .commit-message-input {
   padding: 5px;
 }
 
-body .footer .commit-panel .commit-button {
+body .footer .commit-panel .commit-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body .footer .commit-panel .commit-button-wrapper .commit-button {
   display: block;
-  margin-left: 35px;
-  margin-right: auto;
+  margin-left: 10px;
+  margin-right: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
-  float: left;
   height: 30px;
   border-radius: 10px;
   border: 0;
