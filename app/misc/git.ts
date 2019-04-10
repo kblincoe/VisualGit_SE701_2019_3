@@ -705,23 +705,27 @@ function displayModifiedFiles() {
         }
 
         modifiedFiles.forEach(displayModifiedFile);
-        // If files displayed does not exist, remove them
+        
+        removeNonExistingFiles();
+        refreshColor();
+
+        function removeNonExistingFiles(){
+          // If files displayed does not exist, remove them
         let filePaths = document.getElementsByClassName('file-path');
         for (let i = 0; i < filePaths.length; i++) {
           if (filePaths[i].parentElement.className !== "file file-deleted") {
             let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
             if (fs.existsSync(filePath)) {
-              // exists
               console.log("exists");
             } else {
-              // doesn't exist
               console.log("doesn't exists");
               filePaths[i].parentElement.remove();
             }
           }
         }
 
-        refreshColor();
+        }
+
         // Add modified file to array of modified files 'modifiedFiles'
         function addModifiedFile(file) {
 
