@@ -42,6 +42,7 @@ function changeColor(color) {
   let editorHeader = document.getElementsByClassName('editor-header');
   let editorFileTab = document.getElementById('file-tab');
   let editorEditors = document.getElementById('file-editors');
+  let editorIndentSelector = document.getElementById('indent-selector p');
   let editorIndentDropdown = document.getElementById('selected-indent');
 
   if (color === 'white') {
@@ -318,10 +319,11 @@ function changeColor(color) {
     editorHeader[i].className = 'editor-header ' + navbarStyle;
   }
 
-  editorFileTab!.style.color = fp.style.color;
+  editorFileTab!.style.color = repoName.style.color;
   editorFileTab!.style.backgroundColor = fp.style.backgroundColor;
   editorEditors!.style.color = diffp.style.color;
   editorEditors!.style.backgroundColor = diffp.style.backgroundColor;
+  editorIndentSelector!.style.color = repoName.style.color;
   editorIndentDropdown!.style.color = diffp.style.color;
   editorIndentDropdown!.style.backgroundColor = diffp.style.backgroundColor;
 }
