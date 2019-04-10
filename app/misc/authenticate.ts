@@ -326,17 +326,47 @@ function redirectToHomePage() {
   //LogInAfterConfirm();
 }
 
-function addIssue(name, id, onclick) {
+function closeIssue() {
+
+}
+
+function addIssue(rep,id, onclick) {
   let ul = document.getElementById(id);
   let li = document.createElement("li");
-  let a = document.createElement("a");
-  a.setAttribute("href", "#");
-  a.setAttribute("class", "list-group-item");
-  a.setAttribute("onclick", onclick + ";event.stopPropagation()");
+  let issueTitle = document.createElement("p");
+  let issueBody = document.createElement("p");
+  let assignees = document.createElement("p");
+  let comments = document.createElement("a")
+  let closeIssue = document.createElement("button");
+  closeIssue.setAttribute("onclick","closeIssue()")
+  closeIssue.innerHTML = "Close Issue"
+  closeIssue.setAttribute("class","btn btn-danger")
+  assignees.innerHTML = "Assignees: "
+  issueTitle.setAttribute("class", "issue-text");
+  issueBody.setAttribute("class","issue-text");
+  assignees.setAttribute("class","issue-text");
+  issueTitle.setAttribute("onclick", onclick + ";event.stopPropagation()");
   li.setAttribute("role", "presentation")
-  a.appendChild(document.createTextNode(name));
-  a.innerHTML = name;
-  li.appendChild(a);
+  li.setAttribute("class","list-group-item")
+  issueTitle.innerHTML = "Issue Name:" +rep["title"];
+  issueBody.innerHTML = "Body:" + rep["body"];
+  li.appendChild(issueTitle);
+  li.appendChild(issueBody);
+  if(rep["assignees"].length != 0 ) {
+    for(let i = 0;i<rep["assignees"].length; i++) {
+      assignees.innerHTML += rep["assignees"][i]["login"] 
+      if((i+1)>=rep["assignees"].length) {
+        assignees.innerHTML += "."
+      }
+      else {
+        assignees.innerHTML += ","
+      }
+    }
+    li.appendChild(assignees); 
+  }
+  if(rep["comments"].length != 0 ) {
+  }
+  li.appendChild(closeIssue);
   ul.appendChild(li);
 }
 
@@ -365,7 +395,9 @@ function displayIssues() {
           ghrepo.issues(function (err, data, head) {
               for (let i = 0; i < data.length; i++) {
                   let rep = Object.values(data)[i];
-                  addIssue(rep["title"], "issue-dropdown", "dielit");
+                  if(rep["state"] != "closed") {
+                    addIssue(rep, "issue-dropdown", "dielit");
+                  }
               }
           });
       }
