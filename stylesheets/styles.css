@@ -173,15 +173,6 @@ body .navbar .dropdown-toggle {
   margin-top: 10px;
 }*/
 
-body .pull-request-panel {
-  width: 20%;
-  height: 70vh;
-  background-color: #282828;
-  float: right;
-  z-index: 0;
-  overflow-y: auto;
-}
-
 body .file-panel {
   width: 20%;
   height: 70vh;
@@ -256,9 +247,10 @@ body .file-panel .commit-panel .commit-button:hover {
 }
 
 body .body-panel {
-  width: 60%;
+  width: calc(80% - 60px);
   float: right;
   z-index: 0;
+  transition: .5s;
 }
 
 
@@ -884,3 +876,40 @@ div.wiki-header button.close-button, div.wiki-header button.open-button {
   background-color: #39c0ba;
   color: #fff;
 }
+
+/*
+  Pull request related css.
+*/
+body .pull-request-panel {
+  width: 60px;
+  height: 70vh;
+  background-color: #282828;
+  float: right;
+  z-index: 0;
+  overflow-y: auto;
+  transition: .5s;
+}
+
+.right-pr-nav {
+  float: right;
+  width: 60px;
+  height: 100%;
+  color: white;
+}
+
+.right-pr-nav i img {
+  height: 48px;
+  width: 48px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.pr-content {
+  float: left;
+  width: calc(100% - 60px);
+  height: 100%;
+}
+
+/*
+ End of pull request css.
+*/
