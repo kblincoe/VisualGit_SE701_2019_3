@@ -177,11 +177,13 @@ function displayAuthenticatePanel() {
 function displayDiffPanelButtons() {
   document.getElementById("save-button").style.visibility = "visible";
   document.getElementById("cancel-button").style.visibility = "visible";
+  document.getElementById("open-editor-button").style.visibility = "visible"; 
 }
 
 function hideDiffPanelButtons() {
   document.getElementById("save-button").style.visibility = "hidden";
   document.getElementById("cancel-button").style.visibility = "hidden";
+  document.getElementById("open-editor-button").style.visibility = "hidden"; 
   disableSaveCancelButton();
   disableDiffPanelEditOnHide();
 }
@@ -209,18 +211,14 @@ function disableDiffPanelEditOnHide() {
   doc.contentEditable = "false";
 }
 
-function useSaved() {
-
+function useSavedCredentials() : boolean {
   let file = 'data.json';
   // check if the data.json file exists
-  fs.exists(file, (exist) => {
-    if (exist) {
-      console.log('button has been pressed: logging in with saved credentials');
-      decrypt();
-      loginWithSaved(switchToMainPanel);
-    } else {
-      // if data,json file doesn't exist show a pop up.
-      window.alert("No saved credentials exist");
-    }
-  });
+  if (fs.existsSync(file)) {
+    console.log('button has been pressed: logging in with saved credentials');
+    decrypt();
+    loginWithSaved(switchToMainPanel);
+    return true;
+  }
+  return false;
 }

@@ -419,4 +419,22 @@ export class TextEditorComponent {
     newEditorDiv.appendChild(newEditorArea);
     editors.appendChild(newEditorDiv);
   }
+
+  /*
+    Opens the file in the diff panel in the text editor
+  */
+  openDiffFile(fileName, filePath, fileContents) {
+    this.latestFileId++;
+    this.createFileEditor();
+    let fileTextArea = document.getElementById("file-text-area-" + this.latestFileId);
+
+    if (fileTextArea != null) {
+      // Add the file text to the editor and create lines.
+      (<HTMLInputElement>fileTextArea).value = (<string>fileContents);
+      this.createLineNumbers();
+      this.filePaths[this.latestFileId] = filePath;
+      this.createFileTab(fileName);
+      this.currentFileId = this.latestFileId;
+    }
+  }
 }
