@@ -331,6 +331,11 @@ function drawGraph() {
       commitPanel.style.width = "100vw";
       commitPanel.style.zIndex = "10";
     }
+
+    let bodyPanel = document.getElementById("commit-diff-panel-body");
+    if (bodyPanel != null) {
+      bodyPanel.style.display = "block";
+    }
     showDiff(commitId);
 
     let footer = document.getElementById("footer");
