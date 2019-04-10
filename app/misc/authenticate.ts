@@ -19,16 +19,11 @@ let url;
 var repoNotFound = 0;
 var signed = 0;
 var changes = 0;
-<<<<<<< HEAD
 let signedAfter = false;
 let loginScopes = [
   "repo",
   "user"
 ];
-=======
-let repoName;
-let githubName;
->>>>>>> added comment feature, #43 is done
 
 //Called then user pushes to sign out even if they have commited changes but not pushed; prompts a confirmation modal
 
@@ -332,13 +327,10 @@ function redirectToHomePage() {
   //LogInAfterConfirm();
 }
 
-<<<<<<< HEAD
 function closeIssue() {
 
 }
 
-=======
->>>>>>> added issues, issues panel lists all issues for repo
 function addIssue(rep,id, onclick) {
   let ul = document.getElementById(id);
   let li = document.createElement("li");
@@ -453,12 +445,7 @@ function createIssue() {
           $('#errorModal').modal('show');
         }
         else {
-<<<<<<< HEAD
           document.getElementById("issue-error-title").innerHTML = "Sucessfuly added new Issue" + theArray[0]["value"];
-=======
-          document.getElementById("issue-error-title").innerHTML = "Success"
-          document.getElementById("error-text-box").innerHTML = "Successfuly added new Issue " + theArray[0]["value"];
->>>>>>> added issues, issues panel lists all issues for repo
           $('#errorModal').modal('show');
         }
       }); //issue
@@ -497,8 +484,4 @@ function displayIssues() {
               }
           });
       }
-<<<<<<< HEAD
-=======
-      
->>>>>>> added issues, issues panel lists all issues for repo
 }
