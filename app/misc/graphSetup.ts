@@ -166,18 +166,38 @@ function drawGraph() {
     network.focus(callback.nodes[0], moveOptions);
   }, false);
 
-  network.on("click", function (callback) {
-      if (callback.nodes[0] == undefined) {
-      return;
-    } else {
-      let nodeId: number = callback.nodes[0];
+  network.on('click', function(properties) {
+    if (properties.nodes.length > 0) {
+      let clicknode = properties.nodes[0];
+
       if (flag === 'node') {
+        clicknode = nodes.get(clicknode);
         console.log("node clicked");
-        displaySelectedCommitDiffPanel(callback.nodes[0]);
+        displaySelectedCommitDiffPanel(properties.nodes[0]);
+      } else if (flag === 'abstract') {
+        clicknode = abNodes.get(clicknode);
+      } else if (flag === 'basic') {
+        clicknode = bsNodes.get(clicknode);
+      } else {
+        clicknode = undefined;
+      }
+
+      if (clicknode != undefined) {
+        let name = clicknode.author.name().toString();
+        let email = clicknode.author.email().toString();
+
+        document.getElementById("authorModalDetails")!.innerHTML = "Author Name: " + clicknode.author.toString() + "<br>" + "Email: " + email;
+        document.getElementById("authorModalProfileButton")!.onclick = function() {
+          window.open("https://github.com/" + name, "Author Profile");
+        }
+
+        imageForUser(name, email, function(pic) {
+          document.getElementById("authorModalImage")!.src = pic;
+          $("#authorProfileModal").modal('show');
+        })
       }
     }
-    console.log("onclick event is fired");
-  });
+  })
 
   let flag = "basic";
 
