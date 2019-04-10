@@ -2,7 +2,7 @@
     <div class="editor-header">
         <button class="open-button" (click)="openFile()">Open File</button>
         <input type="file" id="file-upload" (change)="newFileUpload()" style="display: none;" />
-        <button class="open-button" (click)="saveFile()" id="save-button">Save</button>
+        <button class="open-button" (click)="saveFile()" id="editor-save-button">Save</button>
         <div class="indent-selector">
             <p> Spaces to indent: </p>
             <select id="selected-indent" (change)="updateIndentAmount()">

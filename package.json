@@ -11,7 +11,9 @@
     "start": "tsc & electron index.js",
     "macstart": "tsc; electron index.js",
     "build": "electron-packager . --out=dist --app-version=$npm_package_version --prune --asar --overwrite --all",
-    "postinstall": "typings install"
+    "postinstall": "typings install",
+    "auto": "nodemon --watch * -e ts,html,css --exec \"npm start\"",
+    "automac": "nodemon --watch * -e ts,html,css --exec \"npm macstart\""
   },
   "keywords": [
     "VisualGit",
@@ -36,7 +38,7 @@
     "bootstrap-submenu": "2.0.4",
     "color-scheme": "0.0.5",
     "core-js": "2.4.0",
-	"crypto-js": "3.1.9-1",
+    "crypto-js": "^3.1.9-1",
     "electron-debug": "1.0.0",
     "font-awesome": "4.7.0",
     "fs-sync": "1.0.3",
@@ -61,6 +63,7 @@
     "devtron": "1.1.0",
     "electron-packager": "7.0.0",
     "electron-prebuilt": "1.2.8",
+    "nodemon": "^1.18.11",
     "xo": "0.15.0"
   }
 }
