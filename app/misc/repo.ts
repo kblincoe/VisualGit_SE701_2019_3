@@ -54,7 +54,7 @@ function downloadFunc(cloneURL, fullLocalPath) {
           return 1;
         },
         credentials: function () {
-          return cred;
+          return Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
         },
         transferProgress: function (data) {
           let bytesRatio = data.receivedObjects() / data.totalObjects();
