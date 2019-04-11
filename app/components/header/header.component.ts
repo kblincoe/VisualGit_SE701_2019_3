@@ -20,7 +20,7 @@ export class HeaderComponent   {
 
   switchToMainPanel(): void {
     console.log("skdlfalksjdfklaskfklsdk");
-    // Check if either the password/username or both fields are empty and show an appropriate message if they are
+    // Check if either the password/username or both fields are empty and show an icon and make the field red if they are
     if (document.getElementById('Password1').value == "" && document.getElementById('Email1').value == "") {
       this.emptyPassword();
       this.emptyUsername();
