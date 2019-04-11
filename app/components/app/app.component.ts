@@ -6,11 +6,12 @@ import { FooterComponent } from "../footer/footer.component";
 import { AddRepositoryComponent } from "../addRepository/add.repository.component";
 import { AuthenticateComponent } from "../authenticate/authenticate.component"
 import { TextEditorComponent } from "../textEditor/text.editor.component";
+import {selectedCommitDiffPanelComponent} from "../selectedCommitDiffPanel/selected.commit.diff.panel.component";
 
 @Component({
   selector: "my-app",
   templateUrl: 'app/components/app/app.component.html',
-  directives: [HeaderComponent, FilePanelComponent, BodyPanelComponent, FooterComponent, AddRepositoryComponent, AuthenticateComponent, TextEditorComponent]
+  directives: [HeaderComponent, FilePanelComponent, BodyPanelComponent, FooterComponent, AddRepositoryComponent, AuthenticateComponent, TextEditorComponent, selectedCommitDiffPanelComponent]
 })
 
 export class AppComponent {
