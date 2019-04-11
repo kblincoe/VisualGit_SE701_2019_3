@@ -727,7 +727,12 @@ div.wiki-header button.close-button, div.wiki-header button.open-button {
   color: #fff;
 }
 
- #open-editor-button {
+.wiki-button {
+  margin-left: 50px;
+  margin-top: 10px;
+}
+
+#open-editor-button {
   float: right;
   margin-right: 10px; 
   visibility: hidden;
