@@ -484,6 +484,7 @@ body .footer .terminal .git-command {
 
 /* Style the buttons that are used to open the tab content */
 .file-tab button {
+  color: inherit;
   background-color: inherit;
   float: left;
   border: none;
@@ -495,11 +496,13 @@ body .footer .terminal .git-command {
 
 /* Change background color of buttons on hover */
 .file-tab button:hover {
+  color: #000000;
   background-color: #ddd;
 }
 
 /* Create an active/current tablink class */
 .file-tab button.active {
+  color: #000000;
   background-color: #ccc;
 }
 
@@ -542,6 +545,8 @@ div.editor-area {
   margin-right: auto;
   width: 90%;
   height: 60vh;
+  color: inherit;
+  background-color: inherit;
 }
 
 div.editor-area textarea {
@@ -556,7 +561,10 @@ div.editor-area textarea.file {
   height: 100%;
   overflow: auto;
   white-space: nowrap;
+  color: inherit;
+  background-color: inherit;
 }
+
 div.editor-area textarea.lines {
   float: left;
   display: inline;
@@ -566,6 +574,8 @@ div.editor-area textarea.lines {
   height: 100%;
   overflow: hidden;
   text-align:right;
+  color: inherit;
+  background-color: inherit;
 }
 
 div.selected-commit-diff-panel{
@@ -644,4 +654,18 @@ div.selected-commit-diff-panel button.close-button {
 
 .diff-panel {
   background-color: #282828;
+}
+
+.error {
+  background-color: #fce4e4;
+  border: 1px solid #cc0033;
+  outline: none;
+}
+
+.error-message {
+  color: #cc0033;
+  display: none;
+  font-size: 12px;
+  line-height: 15px;
+  margin: 5px 0 0;
 }

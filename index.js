@@ -10,6 +10,7 @@ require('electron-debug')();
 
 // prevent window being garbage collected
 let mainWindow;
+let popupWindow;
 
 function onClosed() {
 	// dereference the window
@@ -23,9 +24,8 @@ function createMainWindow() {
 		icon: __dirname + "/assets/icons/Icon.png"
 	});
 
-
+	win.setMinimumSize(1000, 850);
 	win.maximize();
-
 	win.setTitle(require('./package.json').name);
 	win.loadURL(`file://${__dirname}/index.html`);
 	win.on('closed', onClosed);
@@ -138,8 +138,15 @@ function setMyMenu() {
 	{
 		label: 'Application',
             submenu: [
-                {label: "About Application", selector: "orderFrontStandardAboutPanel:"},
-                {type: "separator"},
+				      {
+						label: "About Application", selector: "orderFrontStandardAboutPanel:",
+	      	          		click () {
+								popupWindow = new BrowserWindow({width:300, height:200}),
+								popupWindow.setMenu(null),
+								popupWindow.loadURL(`file://${__dirname}/aboutApp.html`)
+							}
+				    	},
+						{type: "separator"},
                 {
                     label: "Quit", accelerator: "Command+Q", click: function () {
                         app.quit();

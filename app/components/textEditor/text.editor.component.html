@@ -4,7 +4,7 @@
         <input type="file" id="file-upload" (change)="newFileUpload()" style="display: none;" />
         <button class="open-button" (click)="saveFile()" id="editor-save-button">Save</button>
         <div class="indent-selector">
-            <p> Spaces to indent: </p>
+            <p  id="indent-selector-p"> Spaces to indent: </p>
             <select id="selected-indent" (change)="updateIndentAmount()">
                 <option value="1">1</option>
                 <option value="2">2</option>

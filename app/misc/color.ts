@@ -41,6 +41,14 @@ function changeColor(color) {
   let commitDiffPanel = document.getElementById('commit-diff-panel-body');
   let diffChangePanelText = document.getElementsByClassName('diffChangeText');
 
+  // Text editor panel
+  let editor = document.getElementById('editor-panel');
+  let editorHeader = document.getElementsByClassName('editor-header');
+  let editorFileTab = document.getElementById('file-tab');
+  let editorEditors = document.getElementById('file-editors');
+  let editorIndentSelector = document.getElementById('indent-selector-p');
+  let editorIndentDropdown = document.getElementById('selected-indent');
+
   if (color === 'white') {
     for (let i = 0; i < head.length; i++) {
       console.log(head[i]);
@@ -345,4 +353,22 @@ function changeColor(color) {
       diffChangePanelText[i].setAttribute('style', 'color:' + textColor);
     }
   }
+  
+  // Match the style of the file editor to the rest of the app
+  editor!.style.color = diffp.style.color;
+  editor!.style.backgroundColor = network.style.backgroundColor;
+
+  // Use the same css settings for the editor header as the navbar
+  let navbarStyle = head[0].className.split(" ")[1];
+  for (let i = 0; i < editorHeader.length; i++) {
+    editorHeader[i].className = 'editor-header ' + navbarStyle;
+  }
+
+  editorFileTab!.style.color = repoName.style.color;
+  editorFileTab!.style.backgroundColor = fp.style.backgroundColor;
+  editorEditors!.style.color = diffp.style.color;
+  editorEditors!.style.backgroundColor = diffp.style.backgroundColor;
+  editorIndentSelector!.style.color = repoName.style.color;
+  editorIndentDropdown!.style.color = diffp.style.color;
+  editorIndentDropdown!.style.backgroundColor = diffp.style.backgroundColor;
 }
