@@ -2,8 +2,11 @@ let cred;
 let blue = "#39c0ba";
 let gray = "#5b6969";
 let continuedWithoutSignIn = false;
+let inTheApp = false;
+
 let showUsername = true;
 let previousWindow = "repoPanel";
+
 function collapseSignPanel() {
   $("#nav-collapse1").collapse("hide");
 }
@@ -46,6 +49,10 @@ function checkSignedIn() {
   }
 }
 
+function checkIfInTheApp(){
+  return inTheApp;
+} 
+
 function switchToAddRepositoryPanelWhenNotSignedIn() {
   previousWindow = "repoPanel";
   continuedWithoutSignIn = true;
@@ -55,6 +62,7 @@ function switchToAddRepositoryPanelWhenNotSignedIn() {
 }
 
 function switchToAddRepositoryPanel() {
+  inTheApp = true
   console.log("Switching to add repo panel");
   hideAuthenticatePanel();
   hideFilePanel();

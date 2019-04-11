@@ -580,7 +580,7 @@ div.selected-commit-diff-panel .commit-diff-panel-body{
   width: 100%;
   border: 3px solid #ccc;
   background-color: #FFF;
-
+  display: none;
 }
 div.selected-commit-diff-panel button.close-button {
   display: none;
