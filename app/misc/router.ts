@@ -43,7 +43,7 @@ function checkSignedIn() {
     displayModal("You need to sign in");
     // Don't open the repo modal
     $('#repo-name').removeAttr("data-target");
-  } else {
+} else {
     // Ensure repo modal is connected
     let butt = document.getElementById("cloneButton");
     butt.disabled = true;
