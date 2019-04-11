@@ -70,13 +70,13 @@ function downloadFunc(cloneURL, fullLocalPath) {
         progressDiv.style.visibility = 'collapse';
         updateProgressBar(0);
         console.log("Repo successfully cloned");
-        displayModal("Drawing graph, please wait");
+        displayModal("Drawing graph, please don't click anything");
         refreshAll(repository);
         updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
         addCommand("git clone " + cloneURL + " " + fullLocalPath);
         repoFullPath = fullLocalPath;
         repoLocalPath = fullLocalPath;
-        displayModal("Drawing graph, please wait");
+        displayModal("Drawing graph, please don't click anything");
         refreshAll(repository);
         switchToMainPanel();
       },
@@ -176,7 +176,7 @@ function openRepository() {
         }
 
     }
-    displayModal("Drawing graph, please wait");
+    displayModal("Drawing graph, please don't click anything");
     refreshAll(repository);
     console.log("Repo successfully opened");
     updateModalText("Repository successfully opened");
@@ -256,7 +256,7 @@ function addBranchestoNode(thisB: string) {
 }
 
 function refreshAll(repository) {
-  displayModal("Drawing graph, please wait");
+  displayModal("Drawing graph, please don't click anything");
   let branch;
   bname = [];
   //Get the current branch from the repo
@@ -499,7 +499,7 @@ function checkoutLocalBranch(element) {
   console.log("name of branch being checked out: " + bn);
   Git.Repository.open(repoFullPath)
     .then(function (repo) {
-      displayModal("Drawing graph, please wait");
+      displayModal("Drawing graph, please don't click anything");
       addCommand("git checkout " + bn);
       repo.checkoutBranch("refs/heads/" + bn)
         .then(function () {
@@ -543,7 +543,7 @@ function checkoutRemoteBranch(element) {
       console.log("name of local branch " + bn);
       repos.mergeBranches(bn, "origin/" + bn)
         .then(function () {
-          displayModal("Drawing graph, please wait");
+          displayModal("Drawing graph, please don't click anything");
           refreshAll(repos);
           console.log("Pull successful");
         });
