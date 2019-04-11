@@ -363,8 +363,8 @@ body .add-repository-panel .button-clone, body .add-repository-panel .button-ope
 }
 
 body .add-repository-panel .path-textbox {
-  min-width: 30%;
-  max-width: 50%;
+  width: 50%;
+  min-width: 10%;
 }
 
 body .add-repository-panel .button-clone:hover, body .add-repository-panel .button-open:hover {
