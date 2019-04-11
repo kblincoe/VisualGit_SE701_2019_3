@@ -991,7 +991,6 @@ function displayModifiedFiles() {
             input: fs.createReadStream(fileLocation)
           });
 
-
         let lineNumber = 0;
         lineReader.on("line", function (line) {
           lineNumber++;
