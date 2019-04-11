@@ -1,9 +1,22 @@
 <div class="pull-request-panel" id="pull-request-panel">
+    <!-- Area to display PRs, comments etc. -->
+    <div class="pr-display-panel" id="pr-display-panel">
+        <div class="row pull-right">
+            <div class="col-sm-2">
+                <i class="fa fa-arrow-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nav bar on the right of the screen to show/hide PR Icon. -->
     <div class="right-pr-nav">
         <i (click)="togglePRPanel()"><img src="./assets/PullRequestIcon.svg"></i>
     </div>
+
+    <!-- Area to list all PRs. -->
     <div class="pr-list-container" id="pr-list-container">
         <ul class="list-group" id="pr-list" role="menu">
         </ul>
     </div>
+
 </div>

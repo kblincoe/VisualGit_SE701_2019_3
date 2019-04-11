@@ -1,4 +1,4 @@
-p, h1 {
+p, h1, h2, h3, h4, h5 {
   color: #ccc;
   font-family: 'Montserrat', sans-serif;
   /*font-size: 16px;*/
@@ -894,6 +894,7 @@ body .pull-request-panel {
 .right-pr-nav {
   float: right;
   height: 100%;
+  overflow: hidden;
   width: 60px;
 }
 
@@ -906,9 +907,41 @@ body .pull-request-panel {
 
 .pr-list-container {
   display: block;
+  float: right;
+  height: 100%;
+  overflow-y: auto;
+  transition: 0s;
+  width: calc(100% - 60px);
+}
+
+.pr-display-panel {
+  display: none;
   float: left;
   height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   width: calc(100% - 60px);
+}
+
+.pr-display-panel i {
+  color: inherit;
+  font-size: 3em;
+  margin-right: 20px;
+}
+
+.pr-card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 100%;
+}
+
+.pr-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.pr-card-container {
+  padding: 2px 16px;
 }
 
 /*
