@@ -13,8 +13,7 @@ function changeColor(color) {
   // Save user color selection
   if (color != null) {
     fs.writeFile(userColorFilePath, color, function(err) {
-        if (err) console.log(err);
-        console.log("Written user color to file");
+        if (err) console.log("Cannot write colour to file: " + err);
     });
   }
 
