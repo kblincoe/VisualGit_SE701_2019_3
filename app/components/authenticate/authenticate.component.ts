@@ -15,6 +15,10 @@ export class AuthenticateComponent implements OnInit {
       // @ts-ignore
       document.getElementById("rememberLogin").checked = false;
     }
+
+    document.getElementById('debuggerOn').addEventListener("click", function() {
+      console.log = function() {}
+    })
   }
 
   switchToMainPanel(): void {
