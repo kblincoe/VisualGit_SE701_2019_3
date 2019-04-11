@@ -427,7 +427,6 @@ body .footer p {
 }
 
 body .footer .commit-panel {
-  float: left;
   width: 20%;
 }
 
@@ -470,6 +469,16 @@ body .footer .commit-panel .commit-button:hover {
 
 body .footer .terminal .git-command {
   margin: 10px;
+}
+
+body .footer .terminal{
+  overflow-y: auto;
+  width: 80%;
+}
+
+body .footer{
+  display: flex;
+  flex-flow: row wrap; 
 }
 
 .file-created {
