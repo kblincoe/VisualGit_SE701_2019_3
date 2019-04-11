@@ -3,8 +3,11 @@
     <div class="pr-display-panel" id="pr-display-panel">
         <div class="row pull-right">
             <div class="col-sm-2">
-                <i class="fa fa-arrow-right"></i>
+                <i class="fa fa-arrow-right" (click)="halfExtendPRPanel()"></i>
             </div>
+        </div>
+        <div id="pr-div">
+            
         </div>
     </div>
 
@@ -15,6 +18,7 @@
 
     <!-- Area to list all PRs. -->
     <div class="pr-list-container" id="pr-list-container">
+        <p>Create a pull request</p>
         <ul class="list-group" id="pr-list" role="menu">
         </ul>
     </div>

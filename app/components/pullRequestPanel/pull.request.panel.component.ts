@@ -27,20 +27,10 @@ export class PullRequestPanelComponent {
   }
 
   showPRPanel() {
-    let prPanel = document.getElementById("pull-request-panel");
-    let bodyPanel = document.getElementById("body-panel");
-    let prListContainer = document.getElementById("pr-list-container");
-
-    if (prPanel != null && bodyPanel != null && prListContainer != null) {
-      prPanel.style.width = "20%";
-      bodyPanel.style.width = "60%";
-      prListContainer.style.width = "calc(100% - 60px)";
-      prListContainer.style.display = "block";
-      this.isShowingPRPanel = true;
-      this.getPRs((prs) => {
-        this.populatePRPanel(prs);
-      });
-    }
+    this.halfExtendPRPanel();
+    this.getPRs((prs) => {
+      this.populatePRPanel(prs);
+    });
   }
 
   hidePRPanel(): void {
@@ -175,9 +165,9 @@ export class PullRequestPanelComponent {
 
     outerRow.appendChild(column);
 
-    let prDisplayPanel = document.getElementById("pr-display-panel");
-    if (prDisplayPanel != null) {
-      prDisplayPanel.appendChild(outerRow);
+    let prDiv = document.getElementById("pr-div");
+    if (prDiv != null) {
+      prDiv.appendChild(outerRow);
     }
 
     callback();
@@ -208,9 +198,9 @@ export class PullRequestPanelComponent {
 
     outerRow.appendChild(column);
 
-    let prDisplayPanel = document.getElementById("pr-display-panel");
-    if (prDisplayPanel != null) {
-      prDisplayPanel.appendChild(outerRow);
+    let prDiv = document.getElementById("pr-div");
+    if (prDiv != null) {
+      prDiv.appendChild(outerRow);
     }
   }
 
@@ -260,9 +250,25 @@ export class PullRequestPanelComponent {
 
     outerRow.appendChild(column);
 
+    let prDiv = document.getElementById("pr-div");
+    if (prDiv != null) {
+      prDiv.appendChild(outerRow);
+    }
+  }
+
+  halfExtendPRPanel(): void {
+    let prPanel = document.getElementById("pull-request-panel");
+    let bodyPanel = document.getElementById("body-panel");
+    let prListContainer = document.getElementById("pr-list-container");
     let prDisplayPanel = document.getElementById("pr-display-panel");
-    if (prDisplayPanel != null) {
-      prDisplayPanel.appendChild(outerRow);
+
+    if (prPanel != null && bodyPanel != null && prListContainer != null && prDisplayPanel != null) {
+      prPanel.style.width = "20%";
+      bodyPanel.style.width = "60%";
+      prListContainer.style.width = "calc(100% - 60px)";
+      prListContainer.style.display = "block";
+      prDisplayPanel.style.display = "none";
+      this.isShowingPRPanel = true;
     }
   }
 
@@ -273,7 +279,10 @@ export class PullRequestPanelComponent {
     let prDisplayPanel = document.getElementById("pr-display-panel");
 
     if (prPanel != null && bodyPanel != null && prListContainer != null && prDisplayPanel != null) {
-      prDisplayPanel.innerHTML = "";
+      let prDiv = document.getElementById("pr-div");
+      if (prDiv != null) {
+        prDiv.innerHTML = "";
+      }
 
       prPanel.style.width = "80%";
       bodyPanel.style.width = "0%";
