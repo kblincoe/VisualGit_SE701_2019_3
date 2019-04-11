@@ -58,8 +58,10 @@ function ModalSignIn(callback) {
 
 
 function loginWithSaved(callback) {
+
     document.getElementById("username").value = getUsername();
     document.getElementById("password").value = getPassword(); //get decrypted username n password  
+
 }
 
 function searchRepoName() {
@@ -99,116 +101,13 @@ function searchRepoName() {
 }
 
 function getUserInfo(callback) {
-  
-  if (signedAfter === true){  // if the trys to login after clicking "continues without sign in" 
-    encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-  }
-  else {
-    encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
-  }
-
-  cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
 
-  github.auth.config({
-    username: getUsernameTemp(),
-    password: getPasswordTemp()
-  }).login({
-    "add_scopes": [
-      "user",
-      "repo"
-    ],
-    "note": Math.random().toString()
-  }, function (err, id, token, headers) {
-    if (err) {
-      if (err.toString().indexOf("OTP") !== -1)
-      {
-        document.getElementById("submitOtpButton")!.onclick = function() {
-          submitOTP(callback);
-        }
-        $("#otpModal").modal('show');
-      }
-      else {
-        displayModal(err);
-      }
-    }
-
-    if (!err) {
-      client = github.client(token);
-      var ghme = client.me();
-      processLogin(ghme, callback);
-    }
-    
-  });
-
-
-}
-
-function submitOTP(callback) {
-  github.auth.config({
-    username: getUsernameTemp(),
-    password: getPasswordTemp(),
-    otp: document.getElementById("otp")!.value
-  }).login({
-    "add_scopes": [
-      "user",
-      "repo"
-    ],
-    "note": Math.random().toString()
-  }, function (err, id, token, headers) {
-    if (err) {
-      displayModal(err);
+    if (signedAfter === true) {  // if the trys to login after clicking "continues without sign in" 
+        encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
     }
     else {
-      client = github.client(token);
-      var ghme = client.me();
-      processLogin(ghme, callback);
-    }
-  });
-}
-
-
-function processLogin(ghme, callback) {
-  ghme.info(function(err, data, head) {
-    if (err) {
-      displayModal(err);
-    } else {
-     // assigning the check box to a variable to check the value
-    let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
-
-    // username and password values taken to be stored.
-    let username: any = (<HTMLInputElement>document.getElementById("username")).value;
-    let password: any = (<HTMLInputElement>document.getElementById("password")).value;
-
-    // If password needs remembering encrypt it within data.json
-    if (rememberLogin.checked == true) {
-        encrypt(username, password);
-    }
-    // Else remove the file
-    else {
-      let credentialFile = './data.json';
-      if (fs.existsSync(credentialFile)){
-        fs.unlinkSync(credentialFile);
-      }}
-      avaterImg = Object.values(data)[2]
-      // let doc = document.getElementById("avater");
-      // doc.innerHTML = "";
-      // var elem = document.createElement("img");
-      // elem.width = 40;
-      // elem.height = 40;
-      // elem.src = avaterImg;
-      // doc.appendChild(elem);
-      // doc = document.getElementById("log");
-      // doc.innerHTML = 'sign out';
-      document.getElementById("githubname").innerHTML = data["login"]
-      var docGitUser = document.getElementById("githubname");
-      //docGitUser.innerHTML = Object.values(data)[0];
-
-      let doc = document.getElementById("avatar");
-      //doc.innerHTML = 'Sign out'; //HAD TO REMOVE THIS LINE OR THE PROGRAM BROKE.
-          signed = 1;
-
-      callback();
+        encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
     }
 
     cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
@@ -293,6 +192,7 @@ function processLogin(ghme, callback) {
             }
         }
     });
+
 }
 
 //Converts string to base 64 to be used for Basic Authorization in external API calls
