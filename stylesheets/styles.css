@@ -645,3 +645,17 @@ div.selected-commit-diff-panel button.close-button {
 .diff-panel {
   background-color: #282828;
 }
+
+.error {
+  background-color: #fce4e4;
+  border: 1px solid #cc0033;
+  outline: none;
+}
+
+.error-message {
+  color: #cc0033;
+  display: none;
+  font-size: 12px;
+  line-height: 15px;
+  margin: 5px 0 0;
+}
