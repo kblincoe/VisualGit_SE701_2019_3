@@ -130,7 +130,6 @@ function changeColor(color) {
         stagedTitle.style.color = '#fff';
         diffChangePopUp.style.backgroundColor = '#FFD7D7';
         commitDiffPanel.style.backgroundColor = '#fff';
-        diffChangePanelText.style.color = '#000000';
 
         if (modifiedMessageColor != null) {
           modifiedMessageColor.style.color = '#fff';
@@ -180,7 +179,6 @@ function changeColor(color) {
           stagedTitle.style.color = '#fff';
           diffChangePopUp.style.backgroundColor = '#B6DEFF';
           commitDiffPanel.style.backgroundColor = '#fff';
-          diffChangePanelText.style.color = '#000000';
          
           if (modifiedMessageColor != null) {
             modifiedMessageColor.style.color = '#fff';
@@ -231,7 +229,6 @@ function changeColor(color) {
           stagedTitle.style.color = '#fff';
           diffChangePopUp.style.backgroundColor = '#0066FF';
           commitDiffPanel.style.backgroundColor = '#fff';
-          diffChangePanelText.style.color = '#000000';
           
           if (modifiedMessageColor != null) {
             modifiedMessageColor.style.color = '#fff';
@@ -281,7 +278,6 @@ function changeColor(color) {
           stagedTitle.style.color = '#fff';
           diffChangePopUp.style.backgroundColor = '#ADEBAD';
           commitDiffPanel.style.backgroundColor = '#fff';
-          diffChangePanelText.style.color = '#000000';
           
           if (modifiedMessageColor != null) {
           modifiedMessageColor.style.color = '#fff';
@@ -332,7 +328,6 @@ function changeColor(color) {
     stagedTitle.style.color = '#fff';
     diffChangePopUp.style.backgroundColor = '#282828';
     commitDiffPanel.style.backgroundColor = '#282828';
-    diffChangePanelText.style.color = '#fff';
 
     if (modifiedMessageColor != null) {
       modifiedMessageColor.style.color = '#fff';
