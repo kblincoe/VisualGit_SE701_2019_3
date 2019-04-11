@@ -293,6 +293,7 @@ function drawGraph() {
                       + "\t" + line.content();
 
                     let element = document.createElement("div");
+                    element.classList.add("diffChangeText");
 
                     if (line.charAt(0) === "+") {
                       element.style.backgroundColor = "rgba(132,219,0,0.7)"
