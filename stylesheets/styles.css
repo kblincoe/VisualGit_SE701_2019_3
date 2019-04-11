@@ -669,3 +669,12 @@ div.selected-commit-diff-panel button.close-button {
   line-height: 15px;
   margin: 5px 0 0;
 }
+
+.error-icon {
+  height: 20px;
+  width: 20px;
+}
+
+#password-error-icon, #username-error-icon {
+  visibility: hidden;
+}
