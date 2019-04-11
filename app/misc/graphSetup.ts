@@ -5,23 +5,6 @@ let $ = require("jquery");
 let options, bsNodes, bsEdges, abNodes, abEdges, nodes, edges, network;
 let secP = null, fromNode = null, toNode;
 
-let nodeId = 1;
-let absNodeId = 1;
-let basicNodeId = 1;
-let abstractList = [];
-let basicList = [];
-let bDict = {};
-let commitHistory = [];
-let commitList = [];
-let spacingY = 100;
-let spacingX = 80;
-let parentCount = {};
-let columns: boolean[] = [];
-let edgeDic = {};
-let numOfCommits = 0;
-let branchIds = {};
-
-
 function drawGraph() {
     document.getElementById("modal-text-box").innerHTML = "Drawing graph, please don't click anything till done";
     $('#modal').modal('show');
@@ -246,6 +229,7 @@ function drawGraph() {
 
                 if (flag === 'node') {
                     clicknode = nodes.get(clicknode);
+					displaySelectedCommitDiffPanel(properties.nodes[0]);
                 } else if (flag === 'abstract') {
                     clicknode = abNodes.get(clicknode);
                 } else if (flag === 'basic') {
