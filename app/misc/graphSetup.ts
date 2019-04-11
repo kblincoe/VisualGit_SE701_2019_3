@@ -255,16 +255,6 @@ function drawGraph() {
       toNode = undefined;
     }
     console.log("toNode:  " + toNode);
-  //   if (toNode !== undefined) {
-  //     console.log("clicked !!!!!!!!")
-  //     network.selectNodes([toNode], [false]);
-  //     addBranchestoNode(nodes.get(toNode)['label']);
-  //     $("#branchOptions").css({
-  //     display: "block",
-  //     left: callback.pointer.DOM.x,
-  //     top: callback.pointer.DOM.y
-  //  });
-  //   }
   });
 
   function showDiff(commitId): void {
