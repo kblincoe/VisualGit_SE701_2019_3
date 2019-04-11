@@ -139,14 +139,15 @@ function setMyMenu() {
 	{
 		label: 'Application',
             submenu: [
-				      {label: "About Application", selector: "orderFrontStandardAboutPanel:",
+				      {
+						label: "About Application", selector: "orderFrontStandardAboutPanel:",
 	      	          		click () {
 								popupWindow = new BrowserWindow({width:300, height:200}),
 								popupWindow.setMenu(null),
 								popupWindow.loadURL(`file://${__dirname}/aboutApp.html`)
 							}
-				    },
-								{type: "separator"},
+				    	},
+						{type: "separator"},
                 {
                     label: "Quit", accelerator: "Command+Q", click: function () {
                         app.quit();
