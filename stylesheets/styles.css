@@ -613,3 +613,19 @@ div.editor-area textarea.lines {
 .diff-panel {
   background-color: #282828;
 }
+
+.branchModalHeader {
+  display: flex;
+}
+
+.branchModalTitle {
+  flex: 1;
+}
+
+.branchModalComponents {
+  margin: 6px;
+}
+
+.branchModalError {
+  color: darkorange;
+}
