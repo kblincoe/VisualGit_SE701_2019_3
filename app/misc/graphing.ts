@@ -310,6 +310,7 @@ function makeBasicNode(c, column: number) {
       fixed: false,
       x: (column - 1) * spacingX,
       y: (id - 1) * spacingY,
+      author: c.author()
     });
 
     let shaList = [];
@@ -392,6 +393,7 @@ function makeAbsNode(c, column: number) {
       fixed: false,
       x: (column - 1) * spacingX,
       y: (id - 1) * spacingY,
+      author: c.author()
     });
 
     if (c.toString() in bname) {
@@ -454,6 +456,7 @@ function makeNode(c, column: number) {
     fixed: false,
     x: (column - 1) * spacingX,
     y: (id - 1) * spacingY,
+    author: c.author()
   });
 
   if (c.toString() in bname) {

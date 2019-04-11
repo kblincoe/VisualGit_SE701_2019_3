@@ -163,9 +163,41 @@ function drawGraph() {
         easingFunction: "easeInOutQuad",
       }
     };
-
     network.focus(callback.nodes[0], moveOptions);
   }, false);
+
+  network.on('click', function(properties) {
+    if (properties.nodes.length > 0) {
+      let clicknode = properties.nodes[0];
+
+      if (flag === 'node') {
+        clicknode = nodes.get(clicknode);
+        console.log("node clicked");
+        displaySelectedCommitDiffPanel(properties.nodes[0]);
+      } else if (flag === 'abstract') {
+        clicknode = abNodes.get(clicknode);
+      } else if (flag === 'basic') {
+        clicknode = bsNodes.get(clicknode);
+      } else {
+        clicknode = undefined;
+      }
+
+      if (clicknode != undefined) {
+        let name = clicknode.author.name().toString();
+        let email = clicknode.author.email().toString();
+
+        document.getElementById("authorModalDetails")!.innerHTML = "Author Name: " + clicknode.author.toString() + "<br>" + "Email: " + email;
+        document.getElementById("authorModalProfileButton")!.onclick = function() {
+          window.open("https://github.com/" + name, "Author Profile");
+        }
+
+        imageForUser(name, email, function(pic) {
+          document.getElementById("authorModalImage")!.src = pic;
+          $("#authorProfileModal").modal('show');
+        })
+      }
+    }
+  })
 
   let flag = "basic";
 
@@ -234,4 +266,86 @@ function drawGraph() {
   //  });
   //   }
   });
+
+  function showDiff(commitId): void {
+    let commitPanelBody = document.getElementById("commit-diff-panel-body");
+    if (commitPanelBody != null) {
+      commitPanelBody.innerHTML = "";
+      Git.Repository.open(repoFullPath).then(function(repository){
+        return repository.getCommit(commitList[commitId-1].sha);
+      }).then(function(commit){
+        return commit.getDiff()
+      }).then(function (arrayDiff) {
+        return arrayDiff[0].patches();
+      }).then(function (patches) {
+        patches.forEach(function (patch) {
+          patch.hunks().then(function (hunks) {
+            hunks.forEach(function(hunk){
+              hunk.lines().then(function(lines){
+                let oldFilePath = patch.oldFile().path();
+                let newFilePath = patch.newFile().path();
+                lines.forEach(function(line){
+                  if(line.origin()!=62){
+                    line = String.fromCharCode(line.origin())
+                      + (line.oldLineno() != -1 ? line.oldLineno() : "")
+                      + "\t" + (line.newLineno() != -1 ? line.newLineno() : "")
+                      + "\t" + String.fromCharCode(line.origin())
+                      + "\t" + line.content();
+
+                    let element = document.createElement("div");
+
+                    if (line.charAt(0) === "+") {
+                      element.style.backgroundColor = "rgba(132,219,0,0.7)"
+                    } else if (line.charAt(0) === "-") {
+                      element.style.backgroundColor = "rgba(255,36,72,0.6)";
+                    }
+
+                    // If not a changed line, origin will be a space character, so still need to slice
+                    line = line.slice(1, line.length);
+                    element.textContent = line;
+
+                    // The spacer is needed to pad out the line to highlight the whole row
+                    let spacer = document.createElement("spacer");
+                    spacer.style.width = commitPanelBody!.scrollWidth+"px";
+                    element.appendChild(spacer);
+                    commitPanelBody.appendChild(element);
+                  }
+                })
+              })
+            })
+          })
+        })
+      });
+    }
+  }
+
+  function displaySelectedCommitDiffPanel(commitId): void {
+    let closeButton = document.getElementById("commit-close");
+    if (closeButton != null) {
+      closeButton.style.display = "inline";
+    }
+    let commitPanel = document.getElementById("selected-commit-diff-panel");
+    console.log("inside display selected commit");
+    if (commitPanel != null) {
+      commitPanel.style.height = "100vh";
+      commitPanel.style.width = "100vw";
+      commitPanel.style.zIndex = "10";
+    }
+
+    let bodyPanel = document.getElementById("commit-diff-panel-body");
+    if (bodyPanel != null) {
+      bodyPanel.style.display = "block";
+    }
+    showDiff(commitId);
+
+    let footer = document.getElementById("footer");
+    if (footer != null) {
+      footer.hidden = true;
+    }
+
+    let editorPanel = document.getElementById("editor-panel");
+    if (editorPanel != null){
+      editorPanel.hidden = true;
+    }
+  }
 }
