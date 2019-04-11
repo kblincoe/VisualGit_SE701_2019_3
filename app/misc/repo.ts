@@ -442,9 +442,8 @@ function displayBranch(name, id, onclick) {
       button.innerHTML = "Delete";
       button.classList.add('btn-danger');
 
-      // Function to execute when button is clicked
       $(button).click(function () {
-        // Display delete branch warning modal
+        // Only show valid delete branch button(s)
         if (isRemote && !isLocal) {
           document.getElementById("localDeleteButton").style.display = 'none';
           document.getElementById("remoteDeleteButton").style.display = '';
@@ -456,12 +455,11 @@ function displayBranch(name, id, onclick) {
         else{
           document.getElementById("localDeleteButton").style.display = '';
           document.getElementById("remoteDeleteButton").style.display = '';
-        }
+        }      
         
-
         $('#branch-to-delete').val(name);
         document.getElementById("displayedBranchName").innerHTML = name;
-        $('#delete-branch-modal').modal();
+        $('#delete-branch-modal').modal(); // Display delete branch warning modal
       });
       li.appendChild(button); // Add delete button to the branch dropdown list
     }
