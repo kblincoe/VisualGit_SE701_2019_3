@@ -23,7 +23,7 @@ let branchIds = {};
 
 
 function drawGraph() {
-    document.getElementById("modal-text-box").innerHTML = "Drawing graph, please don't click anything";
+    document.getElementById("modal-text-box").innerHTML = "Drawing graph, please don't click anything till done";
     $('#modal').modal('show');
     bsNodes = new vis.DataSet([]);
     bsEdges = new vis.DataSet([]);

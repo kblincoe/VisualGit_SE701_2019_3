@@ -38,44 +38,46 @@ function processGraph(commits: nodegit.Commit[]) {
 
 function sortCommits(commits) {
     var promise = new Promise((resolve, reject) => {
-		
-		var chunk = 100;
-		
-		function computeChunk() {
-			var count = chunk;
-			while (commits.length > 0 && count--) {
-				let commit = commits.shift();
-				let parents = commit.parents();
-				if (parents === null || parents.length === 0) {
-					commitHistory.push(commit);
-				} else {
-					let count = 0;
-					for (let i = 0; i < parents.length; i++) {
-						let psha = parents[i].toString();
-						for (let j = 0; j < commitHistory.length; j++) {
-							if (commitHistory[j].toString() === psha) {
-								count++;
-								break;
-							}
-						}
-						if (count < i + 1) {
-							break;
-						}
-					}
-					if (count === parents.length) {
-						commitHistory.push(commit);
-					} else {
-						commits.push(commit);
-					}
-				}
-			}
-			if (commits.length > 0) {
-				setTimeout(computeChunk, 1);
-			} else {
-				resolve();
-			}
-		}
-		computeChunk();
+
+        var chunk = 100;
+
+        function computeChunk() {
+            var count = chunk;
+
+            while (commits.length > 0 && count--) {
+                let commit = commits.shift();
+                let parents = commit.parents();
+                if (parents === null || parents.length === 0) {
+                    commitHistory.push(commit);
+                } else {
+                    let count = 0;
+                    for (let i = 0; i < parents.length; i++) {
+                        let psha = parents[i].toString();
+                        for (let j = 0; j < commitHistory.length; j++) {
+                            if (commitHistory[j].toString() === psha) {
+                                count++;
+                                break;
+                            }
+                        }
+                        if (count < i + 1) {
+                            break;
+                        }
+                    }
+                    if (count === parents.length) {
+                        commitHistory.push(commit);
+                    } else {
+                        commits.push(commit);
+                    }
+                }
+            }
+
+            if (commits.length > 0){
+                setTimeout(computeChunk, 1);
+            } else {
+                resolve();
+            }
+        }
+        computeChunk();
     })
     return promise;
 }
