@@ -95,7 +95,8 @@ function readFileContents(wikiDirectory: string) {
 
 function displayWiki() : void {
     let marked = require('marked');
-
+    let wiki_page_counter = 0;
+    
     let wiki_content = document.getElementById("wiki-content")!;
     while (wiki_content.firstChild){
         wiki_content.removeChild(wiki_content.firstChild);
@@ -109,16 +110,20 @@ function displayWiki() : void {
 
         let panel_heading = document.createElement("div");
         panel_heading.className = "panel-heading";
+        panel_heading.setAttribute("data-toggle","collapse");
+        panel_heading.setAttribute("href","#" + "wiki-" + wiki_page_counter);
         panel_heading.innerHTML = page.pageName;
 
         let panel_body = document.createElement("div");
-        panel_body.className = "panel-body";
+        panel_body.className = "panel-body collapse";
+        panel_body.id = "wiki-" + wiki_page_counter;
         panel_body.innerHTML = marked(page.pageContent);
 
         wiki_title_template.appendChild(panel_heading);
         wiki_title_template.appendChild(panel_body);
         wiki_content.appendChild(wiki_title_template);
 
+        wiki_page_counter++;
         /*let wiki_content_template =   document.createElement("div");
         wiki_content_template.className = "panel panel-default";
         let content_body = document.createElement("div");

@@ -691,6 +691,11 @@ div.selected-commit-diff-panel button.close-button {
   overflow: auto;
 }
 
+.panel-heading {
+  font-size: 22px;
+  font-weight: bold;
+}
+
 #wiki-content {
   display: block;
   margin-left: auto;
@@ -700,6 +705,7 @@ div.selected-commit-diff-panel button.close-button {
 }
 
 #wiki-content p {
+  font-size: 16px;
   color: rgb(0, 0, 0);
   font-family: 'Montserrat', sans-serif;
 }
