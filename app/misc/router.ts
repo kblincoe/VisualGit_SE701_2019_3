@@ -8,15 +8,15 @@ let showUsername = true;
 let previousWindow = "repoPanel";
 
 function collapseSignPanel() {
-  $("#nav-collapse1").collapse("hide");
+    $("#nav-collapse1").collapse("hide");
 }
 
 function switchToClonePanel() {
-  console.log("switch to clone panel");
-  hideAuthenticatePanel();
-  hideFilePanel();
-  hideGraphPanel();
-  displayClonePanel();
+    console.log("switch to clone panel");
+    hideAuthenticatePanel();
+    hideFilePanel();
+    hideGraphPanel();
+    displayClonePanel();
 }
 
 function switchToMainPanel() {
@@ -39,14 +39,17 @@ function switchToMainPanel() {
 }
 
 function checkSignedIn() {
-  if (continuedWithoutSignIn) {
-    displayModal("You need to sign in");
-    // Don't open the repo modal
-    $('#repo-name').removeAttr("data-target");
-  } else {
-    // Ensure repo modal is connected
-    $('#repo-name').attr("data-target", "#repo-modal");
-  }
+    if (continuedWithoutSignIn) {
+        displayModal("You need to sign in");
+        // Don't open the repo modal
+        $('#repo-name').removeAttr("data-target");
+    } else {
+        // Ensure repo modal is connected
+        let butt = document.getElementById("cloneButton");
+        butt.innerHTML = 'Clone';
+        butt.setAttribute('class', 'btn btn-primary');
+        $('#repo-name').attr("data-target", "#repo-modal");
+    }
 }
 
 function checkIfInTheApp(){
@@ -90,14 +93,15 @@ function hideSignInButton():void{
 }
 
 function wait(ms) {
-  var start = new Date().getTime();
-  var end = start;
-  while (end < start + ms) {
-    end = new Date().getTime();
-  }
+    var start = new Date().getTime();
+    var end = start;
+    while (end < start + ms) {
+        end = new Date().getTime();
+    }
 }
 
 function displayUsername() {
+
   console.log("Display Username called");
   document.getElementById("Button_Sign_out").style.display = "block";
   showUsername = true;
@@ -109,19 +113,19 @@ function displayUsername() {
 }
 
 function displayClonePanel() {
-  document.getElementById("add-repository-panel").style.zIndex = "10";
-  $("#open-local-repository").hide();
+    document.getElementById("add-repository-panel").style.zIndex = "10";
+    $("#open-local-repository").hide();
 }
 
 function displayFilePanel() {
-  document.getElementById("file-panel").style.zIndex = "10";
-  document.getElementById("commit-message-input").style="visibility: visible";
-  document.getElementById("commit-button").style="visiblity: visible";
-  document.getElementById("fileEdit-button").style="visiblity: visible";
+    document.getElementById("file-panel").style.zIndex = "10";
+    document.getElementById("commit-message-input").style = "visibility: visible";
+    document.getElementById("commit-button").style = "visiblity: visible";
+    document.getElementById("fileEdit-button").style = "visiblity: visible";
 }
 
 function displayGraphPanel() {
-  document.getElementById("graph-panel").style.zIndex = "10";
+    document.getElementById("graph-panel").style.zIndex = "10";
 }
 
 function displayAddRepositoryPanel() {
@@ -131,55 +135,55 @@ function displayAddRepositoryPanel() {
 }
 
 function hideFilePanel() {
-  document.getElementById("file-panel").style.zIndex = "-10";
-  document.getElementById("commit-message-input").style="visibility: hidden";
-  document.getElementById("commit-button").style="visibility: hidden";
-  document.getElementById("fileEdit-button").style="visibility: hidden";
+    document.getElementById("file-panel").style.zIndex = "-10";
+    document.getElementById("commit-message-input").style = "visibility: hidden";
+    document.getElementById("commit-button").style = "visibility: hidden";
+    document.getElementById("fileEdit-button").style = "visibility: hidden";
 }
 
 function hideGraphPanel() {
-  document.getElementById("graph-panel").style.zIndex = "-10";
+    document.getElementById("graph-panel").style.zIndex = "-10";
 }
 
 function hideAddRepositoryPanel() {
-  document.getElementById("add-repository-panel").style.zIndex = "-10";
+    document.getElementById("add-repository-panel").style.zIndex = "-10";
 }
 
 function displayDiffPanel() {
-  document.getElementById("graph-panel").style.width = "60%";
-  document.getElementById("diff-panel").style.width = "40%";
-  displayDiffPanelButtons();
+    document.getElementById("graph-panel").style.width = "60%";
+    document.getElementById("diff-panel").style.width = "40%";
+    displayDiffPanelButtons();
 }
 
 function hideDiffPanel() {
-  document.getElementById("diff-panel").style.width = "0";
-  document.getElementById("graph-panel").style.width = "100%";
-  disableDiffPanelEditOnHide();
-  hideDiffPanelButtons();
+    document.getElementById("diff-panel").style.width = "0";
+    document.getElementById("graph-panel").style.width = "100%";
+    disableDiffPanelEditOnHide();
+    hideDiffPanelButtons();
 }
 
 function hideDiffPanelIfNoChange() {
-  let filename = document.getElementById("diff-panel-file-name") == null ? null : document.getElementById("diff-panel-file-name").innerHTML;
-  let filePaths = document.getElementsByClassName('file-path');
-  let nochange = true;
-  for (let i = 0; i < filePaths.length; i++) {
-    if (filePaths[i].innerHTML === filename) {
+    let filename = document.getElementById("diff-panel-file-name") == null ? null : document.getElementById("diff-panel-file-name").innerHTML;
+    let filePaths = document.getElementsByClassName('file-path');
+    let nochange = true;
+    for (let i = 0; i < filePaths.length; i++) {
+        if (filePaths[i].innerHTML === filename) {
 
-      nochange = false;
+            nochange = false;
+        }
     }
-  }
-  if (nochange == true){
-    hideDiffPanel();
-  }
-  filename = null;
+    if (nochange == true) {
+        hideDiffPanel();
+    }
+    filename = null;
 }
 
 function hideAuthenticatePanel() {
-  document.getElementById("authenticate").style.zIndex = "-20";
+    document.getElementById("authenticate").style.zIndex = "-20";
 }
 
 function displayAuthenticatePanel() {
-  document.getElementById("authenticate").style.zIndex = "20";
+    document.getElementById("authenticate").style.zIndex = "20";
 }
 
 function displayDiffPanelButtons() {
@@ -197,26 +201,26 @@ function hideDiffPanelButtons() {
 }
 
 function disableSaveCancelButton() {
-  let saveButton = document.getElementById("save-button");
-  let cancelButton = document.getElementById("cancel-button");
-  saveButton.disabled = true;
-  saveButton.style.backgroundColor = gray;
-  cancelButton.disabled = true;
-  cancelButton.style.backgroundColor = gray;
+    let saveButton = document.getElementById("save-button");
+    let cancelButton = document.getElementById("cancel-button");
+    saveButton.disabled = true;
+    saveButton.style.backgroundColor = gray;
+    cancelButton.disabled = true;
+    cancelButton.style.backgroundColor = gray;
 }
 
 function enableSaveCancelButton() {
-  let saveButton = document.getElementById("save-button");
-  let cancelButton = document.getElementById("cancel-button");
-  saveButton.disabled = false;
-  saveButton.style.backgroundColor = blue;
-  cancelButton.disabled = false;
-  cancelButton.style.backgroundColor = blue;
+    let saveButton = document.getElementById("save-button");
+    let cancelButton = document.getElementById("cancel-button");
+    saveButton.disabled = false;
+    saveButton.style.backgroundColor = blue;
+    cancelButton.disabled = false;
+    cancelButton.style.backgroundColor = blue;
 }
 
 function disableDiffPanelEditOnHide() {
-  let doc = document.getElementById("diff-panel-body");
-  doc.contentEditable = "false";
+    let doc = document.getElementById("diff-panel-body");
+    doc.contentEditable = "false";
 }
 
 function useSavedCredentials() : boolean {
