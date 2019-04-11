@@ -304,6 +304,7 @@ function makeBranchColor(oldResult) {
             } else {
 				resolve(oldResult);
 			}
+
         }
         computeChunk();
     });
