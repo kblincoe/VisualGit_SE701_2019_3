@@ -128,6 +128,7 @@ function getUserInfo(callback) {
                 }
             }
         } else {
+          
             // assigning the check box to a variable to check the value
             let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
 
