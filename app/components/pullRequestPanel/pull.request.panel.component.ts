@@ -73,8 +73,24 @@ export class PullRequestPanelComponent {
   }
 
   getRepoOwner(callback: () => void) {
+    let gitConfigFileText = readFile.read(repoFullPath + "/.git/config", null);
+    let searchString = "[remote \"origin\"]";
+
+    gitConfigFileText = gitConfigFileText.substr(gitConfigFileText.indexOf(searchString) + searchString.length, gitConfigFileText.length);
+    gitConfigFileText = gitConfigFileText.substr(0, gitConfigFileText.indexOf(".git"));
+
+    let gitConfigFileSubstrings = gitConfigFileText.split('/');
+
+    //If the remote branch was set up using ssh, separate the elements between colons"
+    if (gitConfigFileSubstrings[0].indexOf("@") != -1) {
+      gitConfigFileSubstrings[0] = gitConfigFileSubstrings[0].substring(gitConfigFileSubstrings[0].indexOf(":") + 1);
+    }
+
+    this.repoOwner = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 2];
+    this.repoName = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 1];
+
     $.ajax({
-      url: this.apiLink + getUsername() + "/" + this.getRepoName(),
+      url: this.apiLink + this.repoOwner + "/" + this.repoName,
       type: "GET",
       beforeSend: function (xhr) {
         xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
@@ -86,7 +102,7 @@ export class PullRequestPanelComponent {
         if (response.fork) {
           this.repoOwner = response.parent.owner.login;
         } else {
-          this.repoOwner = response.owner.login;
+          this.repoOwner = this.repoOwner;
         }
         callback();
       },
@@ -108,7 +124,7 @@ export class PullRequestPanelComponent {
         which returns a 404.
       */
       $.ajax({
-        url: this.apiLink + getUsername() + "/" + this.repoOwner + this.repoName + "/pulls",
+        url: this.apiLink + this.repoOwner + "/" + this.repoName + "/pulls",
         type: "GET",
         beforeSend: function (xhr) {
           xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
@@ -237,6 +253,41 @@ export class PullRequestPanelComponent {
 
                   prDisplayPanel!.appendChild(outerRow);
                 });
+                let outerRow = document.createElement("div");
+                outerRow.className = "row";
+
+                let column = document.createElement("div");
+                column.className = "col-sm-8 col-sm-offset-2";
+
+                let card = document.createElement("div");
+                card.className = "pr-card";
+
+                let createComment = document.createElement("h3");
+                let createCommentText = document.createTextNode("Add a comment: ");
+                createComment.appendChild(createCommentText);
+
+
+                let commentInput = document.createElement("textarea");
+                commentInput.className = "pr-comment-panel";
+
+                let submitButton = document.createElement("button");
+                submitButton.innerText = "Submit Comment";
+                submitButton.onclick = (e) => {
+                  if (commentInput.value === "" || commentInput.value == null) {
+                    createCommentText.textContent = "Please enter a comment: ";
+                  } else {
+                    console.log("This is the comment: " + commentInput.value);
+                  }
+                }
+
+                card.appendChild(commentAuthor);
+                card.appendChild(commentBody);
+
+                column.appendChild(card);
+
+                outerRow.appendChild(column);
+
+                prDisplayPanel!.appendChild(outerRow);
               },
               error(xhr, status, error) {
                 console.log("The XML Http Request of the GitHub API call is: ", xhr);
@@ -253,9 +304,5 @@ export class PullRequestPanelComponent {
         prList!.appendChild(listElement);
       });
     }
-  }
-
-  dfjghfdj(): void {
-
   }
 }
