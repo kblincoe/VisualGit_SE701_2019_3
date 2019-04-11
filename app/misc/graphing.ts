@@ -278,7 +278,6 @@ function makeBranchColor(oldResult) {
         function computeChunk() {
             var count = chunk;
             while (bcList.length > 0 && count--) {
-                console.log("chunk count: " + chunk);
                 let commit = bcList.pop();
                 let oid = commit.oid.toString();
                 let cid = commit.cid;
