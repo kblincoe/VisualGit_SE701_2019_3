@@ -9,8 +9,10 @@ export class AuthenticateComponent implements OnInit {
   ngOnInit(): any {
     // useSavedCredentials returns true if there is a saved credential and uses it.
     if (useSavedCredentials()){
+      // @ts-ignore
       document.getElementById("rememberLogin").checked = true;
     } else {
+      // @ts-ignore
       document.getElementById("rememberLogin").checked = false;
     }
   }

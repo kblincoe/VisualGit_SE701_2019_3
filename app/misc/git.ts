@@ -127,7 +127,7 @@ function addAndCommit() {
     })
 
     .then(function (head) {
-      console.log("founf the current commit");
+      console.log("found the current commit");
       return repository.getCommit(head);
     })
 
@@ -377,24 +377,58 @@ function commitModal() {
   displayModal("Commit inside a modal yet to be implemented");
 }
 
-function openBranch() {
-  // TODO: implement branch functionality like sourcetree branching modal
-  displayModal("Branch yet to be implemented");
+function openBranchModal() {
+  $('#branch-modal').modal('show');
+
+  // Shows current branch inside the branch mdoal
+  let currentBranch = document.getElementById("branch-name").innerText;
+  if (currentBranch === undefined || currentBranch == 'branch') {
+    document.getElementById("currentBranchText").innerText = "Current Branch: ";
+  } else {
+    document.getElementById("currentBranchText").innerText = "Current Branch: " + currentBranch;
+  }
 }
 
 function createBranch() {
+  let branchName = document.getElementById("branch-name-input").value;
+
+  // console.log(repo.getBranch(branchName), 'this');
+
   if (typeof repoFullPath === "undefined") {
     // repository not selected
-    displayModal("Please select the repository you want to create a branch of/ Disable the Branch Icon");
-  } else {
-    let branchName = document.getElementById("branchName").value;
-    let repos;
+    document.getElementById("branchErrorText").innerText = "Warning: You are not within a Git repository. " +
+        "Open a repository to create a new branch. ";
+  }
+
+
+
+  // Check for empty branch name
+  // @ts-ignore
+  else if (branchName == '' || branchName == null) {
+    // repository not selected
+    document.getElementById("branchErrorText").innerText = "Warning: Please enter a branch name";
+  }
+
+  // Check for invalid branch name
+  // @ts-ignore
+  else if (isIllegalBranchName(branchName)) {
+    // repository not selected
+    // @ts-ignore
+    document.getElementById("branchErrorText").innerText = "Warning: Illegal branch name. ";
+  }
+
+  // TODO: check for existing branch
+  // Check for existing branch
+  // else if ( <existing branch> ) {}
+
+  else {
+    let currentRepository;
 
     console.log(branchName + " is being created");
     Git.Repository.open(repoFullPath)
       .then(function (repo) {
         // Create a new branch on head
-        repos = repo;
+        currentRepository = repo;
         addCommand("git branch " + branchName);
         return repo.getHeadCommit()
           .then(function (commit) {
@@ -408,10 +442,30 @@ function createBranch() {
             console.log("git.ts, line 337, error occurred while trying to create a new branch " + err);
           });
       }).done(function () {
-        refreshAll(repos);
-        console.log("All done!");
-      });
-    document.getElementById("branchName").value = "";
+        $('#branch-modal').modal('hide');
+        refreshAll(currentRepository);
+          checkoutLocalBranch(branchName);
+        });
+    clearBranchErrorText();
+  }
+}
+
+function clearBranchErrorText() {
+  // @ts-ignore
+  document.getElementById("branchErrorText").innerText = "";
+  // @ts-ignore
+  document.getElementById("branch-name-input").value = "";
+}
+
+function isIllegalBranchName(branchName: string) : boolean {
+  // Illegal pattern created by Tony Brix on StackOverflow
+  // https://stackoverflow.com/questions/3651860/which-characters-are-illegal-within-a-branch-name
+  let illegalPattern = new RegExp(/^[\./]|\.\.|@{|[\/\.]$|^@$|[~^:\x00-\x20\x7F\s?*[\\]/);
+
+  if (illegalPattern.exec(branchName)){
+    return true;
+  } else {
+    return false;
   }
 }
 
