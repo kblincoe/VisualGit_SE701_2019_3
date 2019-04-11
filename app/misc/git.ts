@@ -396,27 +396,32 @@ function createBranch() {
         "Open a repository to create a new branch. ";
   }
 
+  let branchName = document.getElementById("branch-name-input").value;
+
+  // console.log(repo.getBranch(branchName), 'this');
+
+
+
   // Check for empty branch name
   // @ts-ignore
-  else if (document.getElementById("branch-name-input").value == '' || document.getElementById("branch-name-input").value == null) {
+  if (branchName == '' || branchName == null) {
     // repository not selected
     document.getElementById("branchErrorText").innerText = "Warning: Please enter a branch name";
   }
 
   // Check for invalid branch name
   // @ts-ignore
-  else if (isIllegalBranchName(document.getElementById("branch-name-input").value)) {
+  else if (isIllegalBranchName(branchName)) {
     // repository not selected
     // @ts-ignore
     document.getElementById("branchErrorText").innerText = "Warning: Illegal branch name. ";
   }
 
+  // TODO: check for existing branch
   // Check for existing branch
-  // else if ( exists ){
-  // }
+  // else if ( <existing branch> ) {}
 
   else {
-    let branchName = document.getElementById("branch-name-input").value;
     let currentRepository;
 
     console.log(branchName + " is being created");
@@ -453,7 +458,8 @@ function clearBranchErrorText() {
 }
 
 function isIllegalBranchName(branchName: string) : boolean {
-  // Illegal pattern created by Tony Brix
+  // Illegal pattern created by Tony Brix on StackOverflow
+  // https://stackoverflow.com/questions/3651860/which-characters-are-illegal-within-a-branch-name
   let illegalPattern = new RegExp(/^[\./]|\.\.|@{|[\/\.]$|^@$|[~^:\x00-\x20\x7F\s?*[\\]/);
 
   if (illegalPattern.exec(branchName)){
