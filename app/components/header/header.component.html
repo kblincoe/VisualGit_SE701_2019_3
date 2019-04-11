@@ -84,10 +84,12 @@
         <form class="navbar-form navbar-right form-inline" role="form" style="width:280px;">
           <div class="form-group">
             <label class="sr-only" for="Email">User name</label>
+            <img src="./assets/error.png" class="error-icon" id="username-error-icon">
             <input type="text" class="form-control" id="Email1" placeholder="Username or Email" autofocus required style="width: 206px !important"/>
           </div>
           <div class="form-group">
             <label class="sr-only" for="Password">Password</label>
+            <img src="./assets/error.png" class="error-icon" id="password-error-icon">
             <input type="password" class="form-control" id="Password1" placeholder="Password" required />
           </div>
           <button type="submit" class="btn btn-success" (click)="switchToMainPanel()">Sign in</button>
