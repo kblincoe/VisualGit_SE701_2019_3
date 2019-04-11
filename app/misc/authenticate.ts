@@ -23,36 +23,36 @@ let signedAfter = false;
 //Called then user pushes to sign out even if they have commited changes but not pushed; prompts a confirmation modal
 
 function CommitNoPush() {
-        if (CommitButNoPush == 1) {
-                $("#modalW2").modal();
-        }
+    if (CommitButNoPush == 1) {
+        $("#modalW2").modal();
+    }
 }
 
 function signInHead(callback) {
-	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-	continuedWithoutSignIn = false;
-  signedAfter = true;
-  if (signed == 1){
-		if ((changes == 1) || (CommitButNoPush == 1)){
-			$("#modalW2").modal();
-		}
-		else {
-			getUserInfo(callback);
-		}
-	}
-	else{
-	  getUserInfo(callback);
-	}
+    encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+    continuedWithoutSignIn = false;
+    signedAfter = true;
+    if (signed == 1) {
+        if ((changes == 1) || (CommitButNoPush == 1)) {
+            $("#modalW2").modal();
+        }
+        else {
+            getUserInfo(callback);
+        }
+    }
+    else {
+        getUserInfo(callback);
+    }
 }
 
 function LogInAfterConfirm(callback) {
-        encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-        getUserInfo(callback);
+    encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+    getUserInfo(callback);
 }
 
 function ModalSignIn(callback) {
-        encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-        getUserInfo(callback);
+    encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+    getUserInfo(callback);
 }
 
 
@@ -65,219 +65,213 @@ function loginWithSaved(callback) {
 }
 
 function searchRepoName() {
-  let ul = document.getElementById("repo-dropdown");
+    let ul = document.getElementById("repo-dropdown");
 
-  ul.innerHTML = ''; // clears the dropdown menu which shows all the repos
+    ul.innerHTML = ''; // clears the dropdown menu which shows all the repos
 
-  // Gets users name and password
-  encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+    // Gets users name and password
+    encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
 
-  cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
+    cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
-  client = github.client({
-    username: getUsernameTemp(),
-    password: getPasswordTemp()
-  });
+    client = github.client({
+        username: getUsernameTemp(),
+        password: getPasswordTemp()
+    });
 
-  var ghme = client.me();
-  ghme.repos(function (err, data, head) {
     var ghme = client.me();
+    ghme.repos(function (err, data, head) {
+        var ghme = client.me();
 
-    for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
 
-      let rep = Object.values(data)[i];
-      console.log("url of repo: " + rep['html_url']);
-      
-      // Searches from the text input and adds to the list if repo name is found
-      if (parseInt(rep['forks_count']) == 0) {
-        if (rep['full_name'].search(document.getElementById("searchRep").value) != -1) {
-          displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
-          repoList[rep['full_name']] = rep['html_url'];
+            let rep = Object.values(data)[i];
+            console.log("url of repo: " + rep['html_url']);
+
+            // Searches from the text input and adds to the list if repo name is found
+            if (parseInt(rep['forks_count']) == 0) {
+                if (rep['full_name'].search(document.getElementById("searchRep").value) != -1) {
+                    displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
+                    repoList[rep['full_name']] = rep['html_url'];
+                }
+            }
+
         }
-      }
-
-    }
-  });
+    });
 }
 
 function getUserInfo(callback) {
 
-  
-  if (signedAfter === true){  // if the trys to login after clicking "continues without sign in" 
-    encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-  }
-  else {
-    encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
-  }
 
-  cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
-
-  client = github.client({
-    username: getUsernameTemp(),
-    password: getPasswordTemp()
-  });
-  var ghme = client.me();
-  ghme.info(function(err, data, head) {
-    if (err) {
-      if (err == "Error: getaddrinfo ENOTFOUND api.github.com api.github.com:443"){
-        displayModal("No internet connection");
-      }else{
-        if (err == "Error: Bad credentials" || "Error: Requires authentication"){
-          $('#username').css('border-color', 'red');
-          $('#password').css('border-color', 'red');
-          // displayModal("Error: Incorrect Username or Password");
-        }else{
-          displayModal(err);
-        }
-      }
-    } else {
-     // assigning the check box to a variable to check the value
-    let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
-
-    // username and password values taken to be stored.
-    let username: any = (<HTMLInputElement>document.getElementById("username")).value;
-    let password: any = (<HTMLInputElement>document.getElementById("password")).value;
-    if (rememberLogin.checked == true) {
-        encrypt(username, password);
+    if (signedAfter === true) {  // if the trys to login after clicking "continues without sign in" 
+        encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
     }
-      avaterImg = Object.values(data)[2]
-      // let doc = document.getElementById("avater");
-      // doc.innerHTML = "";
-      // var elem = document.createElement("img");
-      // elem.width = 40;
-      // elem.height = 40;
-      // elem.src = avaterImg;
-      // doc.appendChild(elem);
-      // doc = document.getElementById("log");
-      // doc.innerHTML = 'sign out';
-      document.getElementById("githubname").innerHTML = data["login"]
-      var docGitUser = document.getElementById("githubname");
-      //docGitUser.innerHTML = Object.values(data)[0];
-
-      let doc = document.getElementById("avatar");
-      //doc.innerHTML = 'Sign out'; //HAD TO REMOVE THIS LINE OR THE PROGRAM BROKE.
-          signed = 1;
-
-      callback();
+    else {
+        encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
     }
-  });
 
-  ghme.repos(function(err, data, head) {
-    if (err) {
-      return;
-    } else {
-       displayUsername();
-      document.getElementById("avatar").innerHTML = "Sign out"; 
-      console.log("number of repos: " + data.length);
-      for (let i = 0; i < data.length; i++) {
-        let rep = Object.values(data)[i];
-        console.log("url of repo: " + rep['html_url']);
+    cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
-        if(rep['fork'] == false) {
-          if(parseInt(rep['forks_count']) == 0) {
-            displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
-            repoList[rep['full_name']] = rep['html_url'];
-          }
-          else {
-            //Create a collapseable list for the forked repo
-            createDropDownFork(rep['full_name'],"repo-dropdown","showDropDown(this)");
-            repoList[rep['full_name']] = rep['html_url'];
-            //Reiterate through and get all the forks of the repo and add to list
-            for(let i = 0; i < data.length; i++) {
-              let rep2 = Object.values(data)[i];
-              if(rep2['name'] == rep['name']) {
-                displayBranch("&nbsp; &nbsp;" +rep2['full_name'],rep['full_name'],"selectRepo(this)")
-                repoList["&nbsp; &nbsp;"+rep2['full_name']] = rep2['html_url'];
-              }
+    client = github.client({
+        username: getUsernameTemp(),
+        password: getPasswordTemp()
+    });
+    var ghme = client.me();
+    ghme.info(function (err, data, head) {
+        if (err) {
+            if (err == "Error: getaddrinfo ENOTFOUND api.github.com api.github.com:443") {
+                displayModal("No internet connection");
+            } else {
+                if (err == "Error: Bad credentials" || "Error: Requires authentication") {
+                    $('#username').css('border-color', 'red');
+                    $('#password').css('border-color', 'red');
+                }
             }
-          }
+        } else {
+            // assigning the check box to a variable to check the value
+            let rememberLogin: any = (<HTMLInputElement>document.getElementById("rememberLogin"));
+
+            // username and password values taken to be stored.
+            let username: any = (<HTMLInputElement>document.getElementById("username")).value;
+            let password: any = (<HTMLInputElement>document.getElementById("password")).value;
+            if (rememberLogin.checked == true) {
+                encrypt(username, password);
+            }
+            avaterImg = Object.values(data)[2]
+            // let doc = document.getElementById("avater");
+            // doc.innerHTML = "";
+            // var elem = document.createElement("img");
+            // elem.width = 40;
+            // elem.height = 40;
+            // elem.src = avaterImg;
+            // doc.appendChild(elem);
+            // doc = document.getElementById("log");
+            // doc.innerHTML = 'sign out';
+            document.getElementById("githubname").innerHTML = data["login"]
+            var docGitUser = document.getElementById("githubname");
+            //docGitUser.innerHTML = Object.values(data)[0];
+
+            let doc = document.getElementById("avatar");
+            //doc.innerHTML = 'Sign out'; //HAD TO REMOVE THIS LINE OR THE PROGRAM BROKE.
+            signed = 1;
+
+            callback();
         }
-      }
-    }
-  });
+    });
+
+    ghme.repos(function (err, data, head) {
+        if (err) {
+            return;
+        } else {
+            displayUsername();
+            document.getElementById("avatar").innerHTML = "Sign out";
+            console.log("number of repos: " + data.length);
+            for (let i = 0; i < data.length; i++) {
+                let rep = Object.values(data)[i];
+                console.log("url of repo: " + rep['html_url']);
+
+                if (rep['fork'] == false) {
+                    if (parseInt(rep['forks_count']) == 0) {
+                        displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
+                        repoList[rep['full_name']] = rep['html_url'];
+                    }
+                    else {
+                        //Create a collapseable list for the forked repo
+                        createDropDownFork(rep['full_name'], "repo-dropdown", "showDropDown(this)");
+                        repoList[rep['full_name']] = rep['html_url'];
+                        //Reiterate through and get all the forks of the repo and add to list
+                        for (let i = 0; i < data.length; i++) {
+                            let rep2 = Object.values(data)[i];
+                            if (rep2['name'] == rep['name']) {
+                                displayBranch("&nbsp; &nbsp;" + rep2['full_name'], rep['full_name'], "selectRepo(this)")
+                                repoList["&nbsp; &nbsp;" + rep2['full_name']] = rep2['html_url'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
 
 }
 
 //Converts string to base 64 to be used for Basic Authorization in external API calls
 function make_base_auth(user, password) {
-  var tok = user + ':' + password;
-  var hash = btoa(tok);
-  return 'Basic ' + hash;
+    var tok = user + ':' + password;
+    var hash = btoa(tok);
+    return 'Basic ' + hash;
 }
 
 function showDropDown(ele) {
-  //If the forked Repo is clicked collapse or uncollapse the forked repo list
-  let div = document.getElementById(ele.className)
-  if(div.style.display === 'none') {
-    div.style.display = 'block';
-  }
-  else {
-    div.style.display = 'none';
-  }
+    //If the forked Repo is clicked collapse or uncollapse the forked repo list
+    let div = document.getElementById(ele.className)
+    if (div.style.display === 'none') {
+        div.style.display = 'block';
+    }
+    else {
+        div.style.display = 'none';
+    }
 
 }
 function selectRepo(ele) {
-  url = repoList[ele.innerHTML];
-  let butt = document.getElementById("cloneButton");
-  butt.innerHTML = 'Clone ' + ele.innerHTML;
-  butt.setAttribute('class', 'btn btn-primary');
-  console.log("selected " + ele.innerHTML + " as repository");
+    url = repoList[ele.innerHTML];
+    let butt = document.getElementById("cloneButton");
+    butt.innerHTML = 'Clone ' + ele.innerHTML;
+    butt.setAttribute('class', 'btn btn-primary');
+    console.log("selected " + ele.innerHTML + " as repository");
 }
 
 function cloneRepo() {
-  if (url === null) {
-    updateModalText("Web URL for repo could not be found. Try cloning by providing the repo's web URL directly in the 'Add repository' window");
-    return;
-  }
+    if (url === null) {
+        updateModalText("Web URL for repo could not be found. Try cloning by providing the repo's web URL directly in the 'Add repository' window");
+        return;
+    }
 
-  console.log("cloning " + url);
-  let splitUrl = url.split("/");
-  let local;
-  if (splitUrl.length >= 2) {
-    local = splitUrl[splitUrl.length - 1];
-  }
-  console.log("cloning " + local);
+    console.log("cloning " + url);
+    let splitUrl = url.split("/");
+    let local;
+    if (splitUrl.length >= 2) {
+        local = splitUrl[splitUrl.length - 1];
+    }
+    console.log("cloning " + local);
 
-  if (local == null) {
-    updateModalText("Error: could not define name of repo");
-    return;
-  }
+    if (local == null) {
+        updateModalText("Error: could not define name of repo");
+        return;
+    }
 
-  downloadFunc(url, local);
-  url = null;
-  $('#repo-modal').modal('hide');
+    downloadFunc(url, local);
+    url = null;
+    $('#repo-modal').modal('hide');
 
-  switchToMainPanel();
-  let butt = document.getElementById("cloneButton");
-  butt.innerHTML = 'Clone';
-  butt.setAttribute('class', 'btn btn-primary');
+    switchToMainPanel();
 }
 
 function signInOrOut() {
-  let doc = document.getElementById("avatar");
-  if(doc.innerHTML === "Sign In"){
-    doc.innerHTML = "";
-  }
-  else if(doc.innerHTML === ""){
-      doc.innerHTML = "Sign In";
-  }
-    
-  if (doc.innerHTML === "Sign out") {
-    $("#avatar").removeAttr("data-toggle");
-
-    if (changes == 1 || CommitButNoPush == 1) {
-      $("#modalW2").modal();
-    } else {
-      redirectToHomePage();
+    let doc = document.getElementById("avatar");
+    if (doc.innerHTML === "Sign In") {
+        doc.innerHTML = "";
     }
-  }
+    else if (doc.innerHTML === "") {
+        doc.innerHTML = "Sign In";
+    }
+
+    if (doc.innerHTML === "Sign out") {
+        $("#avatar").removeAttr("data-toggle");
+
+        if (changes == 1 || CommitButNoPush == 1) {
+            $("#modalW2").modal();
+        } else {
+            redirectToHomePage();
+        }
+    }
 }
 
 function redirectToHomePage() {
-  window.onbeforeunload = Confirmed;
-  window.location.href = "index.html";
-  signed = 0;
-  changes = 0;
-  CommitButNoPush = 0; 
-  //LogInAfterConfirm();
+    window.onbeforeunload = Confirmed;
+    window.location.href = "index.html";
+    signed = 0;
+    changes = 0;
+    CommitButNoPush = 0;
+    //LogInAfterConfirm();
 }
