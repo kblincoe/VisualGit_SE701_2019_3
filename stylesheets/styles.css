@@ -944,6 +944,24 @@ body .pull-request-panel {
   padding: 2px 16px;
 }
 
+.pr-comment-panel {
+  background-color: inherit;
+  color: inherit;
+  display: block;
+  float: left;
+  height: 80%;
+  margin-right: auto;
+  margin-left: auto;
+  overflow: auto;
+  resize: none;
+  white-space: nowrap;
+  width: 90%;
+}
+
+.pr-comment-submit {
+  margin-top: 10px;
+}
+
 /*
  End of pull request css.
 */

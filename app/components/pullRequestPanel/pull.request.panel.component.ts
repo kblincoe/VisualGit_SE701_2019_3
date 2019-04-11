@@ -169,12 +169,15 @@ export class PullRequestPanelComponent {
         link.onclick = (e) => {
           console.log("this is the pr");
           console.log(pr);
+
           let prPanel = document.getElementById("pull-request-panel");
           let bodyPanel = document.getElementById("body-panel");
           let prListContainer = document.getElementById("pr-list-container");
           let prDisplayPanel = document.getElementById("pr-display-panel");
 
           if (prPanel != null && bodyPanel != null && prListContainer != null && prDisplayPanel != null) {
+            prDisplayPanel.innerHTML = "";
+
             prPanel.style.width = "80%";
             bodyPanel.style.width = "0%";
             prListContainer.style.width = "25%";
@@ -275,13 +278,58 @@ export class PullRequestPanelComponent {
                 submitButton.onclick = (e) => {
                   if (commentInput.value === "" || commentInput.value == null) {
                     createCommentText.textContent = "Please enter a comment: ";
+                    console.log(this.apiLink);
                   } else {
+                    let gitConfigFileText = readFile.read(repoFullPath + "/.git/config", null);
+                    let searchString = "[remote \"origin\"]";
+                
+                    gitConfigFileText = gitConfigFileText.substr(gitConfigFileText.indexOf(searchString) + searchString.length, gitConfigFileText.length);
+                    gitConfigFileText = gitConfigFileText.substr(0, gitConfigFileText.indexOf(".git"));
+                
+                    let gitConfigFileSubstrings = gitConfigFileText.split('/');
+                
+                    //If the remote branch was set up using ssh, separate the elements between colons"
+                    if (gitConfigFileSubstrings[0].indexOf("@") != -1) {
+                      gitConfigFileSubstrings[0] = gitConfigFileSubstrings[0].substring(gitConfigFileSubstrings[0].indexOf(":") + 1);
+                    }
+                
+                    let repoOwner = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 2];
+                    let repoName = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 1];
+
+                    let jsonBody = {
+                      "body": commentInput.value,
+                      "in_reply_to": pr.id
+                    };
+                    let jsonString = JSON.stringify(jsonBody)
+                    $.ajax({
+                      url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/issues/" + pr.number + "/comments",
+                      type: "POST",
+                      beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', make_base_auth(getUsername(), getPassword()));
+                      },
+                      headers: {
+                        'Accept': 'application/vnd.github.v3+json'
+                      },
+                      contentType: "application/json",
+                      dataType: "json",
+                      data: jsonString,
+                      success: function (response: any) {
+                        link.click();
+                      },
+                      error(xhr, status, error) {
+                        console.log("The XML Http Request of the GitHub API call is: ", xhr);
+                        console.log("The status of the GitHub API call is: ", status);
+                        console.log("The error of the GitHub API call is: ", error);
+                      }
+                    })
                     console.log("This is the comment: " + commentInput.value);
                   }
                 }
+                submitButton.className = "btn btn-success pr-comment-submit";
 
-                card.appendChild(commentAuthor);
-                card.appendChild(commentBody);
+                card.appendChild(createComment);
+                card.appendChild(commentInput);
+                card.appendChild(submitButton);
 
                 column.appendChild(card);
 
