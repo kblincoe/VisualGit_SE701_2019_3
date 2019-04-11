@@ -1,6 +1,8 @@
 p, h1 {
   color: #ccc;
   font-family: 'Montserrat', sans-serif;
+  /*font-size: 16px;*/
+  /*font-size: 2vw;*/
 }
 
 ul{
@@ -27,7 +29,7 @@ ul{
 .navbar-nav.navbar-right .btn {
   position: relative; z-index: 2;
   padding: 4px 20px;
-  margin: 10px auto;
+  margin: 0 auto;
 }
 
 .navbar .navbar-collapse {
@@ -130,6 +132,12 @@ body .navbar .dropdown-menu a {
   max-height: 90vh;
   overflow: scroll;
 }
+
+#visual-git-logo{
+  width: 150px; 
+  height: 150px; 
+}
+
 /*body .navbar .repo-name {
   margin-left: 30px;
 }*/
@@ -206,33 +214,6 @@ body .file-panel .files-changed .files-staged .file:hover {
   opacity: 0.8;
 }
 
-body .file-panel .commit-panel .commit-message-input {
-  resize: none;
-  width: 90%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 90%;
-  margin-bottom: 5px;
-  height: 50px;
-  border-radius: 5px;
-  padding: 5px;
-}
-
-body .file-panel .commit-panel .commit-button {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  height: 30px;
-  border-radius: 10px;
-  border: 0;
-  padding: 0 15px;
-  background-color: #39c0ba;
-  color: #fff;
-}
-
 body .file-panel .staging-buttons {
   display: block;
   margin-left: auto;
@@ -270,7 +251,7 @@ body .body-panel .diff-panel {
 
 body .body-panel .diff-panel .diff-panel-body {
   width: 100%;
-  height: 70vh;
+  height: 67vh;
   float: left;
   background-color: #282828;
   color: #fff;
@@ -350,7 +331,7 @@ body .add-repository-panel h1 {
 }
 
 body .add-repository-panel .open-local-repo {
-  margin-top: 70px;
+  margin-top: 25px;
 }
 
 body .add-repository-panel p {
@@ -364,7 +345,7 @@ body .add-repository-panel input {
   border-radius: 10px;
   border: 0;
   height: 10px;
-  size: 50;
+  size: 50px;
   padding: 10px;
 }
 
@@ -379,6 +360,11 @@ body .add-repository-panel .button-clone, body .add-repository-panel .button-ope
   background-color: #39c0ba;
   color: #fff;
   float: right;
+}
+
+body .add-repository-panel .path-textbox {
+  width: 50%;
+  min-width: 10%;
 }
 
 body .add-repository-panel .button-clone:hover, body .add-repository-panel .button-open:hover {
@@ -415,6 +401,8 @@ body .add-repository-panel .right {
   height: 100%;
 }
 
+
+
 body .add-repository-panel .right .button {
   height: 100%;
 }
@@ -438,9 +426,14 @@ body .footer p {
   margin: 0;
 }
 
+body .footer .commit-panel {
+  float: left;
+  width: 20%;
+}
+
 body .footer .commit-panel .commit-message-input {
   resize: none;
-  width: 275px;
+  width: 95%;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -451,13 +444,18 @@ body .footer .commit-panel .commit-message-input {
   padding: 5px;
 }
 
-body .footer .commit-panel .commit-button {
+body .footer .commit-panel .commit-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body .footer .commit-panel .commit-button-wrapper .commit-button {
   display: block;
-  margin-left: 35px;
-  margin-right: auto;
+  margin-left: 10px;
+  margin-right: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
-  float: left;
   height: 30px;
   border-radius: 10px;
   border: 0;
@@ -475,15 +473,15 @@ body .footer .terminal .git-command {
 }
 
 .file-created {
-  background-color: #84db00;
+  background-color: #4c994c;
 }
 
 .file-modified {
-  background-color: #ff7514;
+  background-color: #e07b16;
 }
 
 .file-deleted {
-  background-color: #ff2448;
+  background-color: #cc3d3d;
 }
 
 .file-tab {
@@ -522,7 +520,7 @@ body .footer .terminal .git-command {
   border-top: none;
 }
 
-div.editor-header button.close-button, div.editor-header button.open-button {
+div.editor-header button.close-button, div.editor-header button.open-button, button.open-editor-button {
   display: inline;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -534,7 +532,7 @@ div.editor-header button.close-button, div.editor-header button.open-button {
   color: #fff;
 }
 
-div.editor-header button.close-button:hover, div.editor-header button.open-button:hover {
+div.editor-header button.close-button:hover, div.editor-header button.open-button:hover, button.open-editor-button:hover { 
   opacity: 0.8;
 }
 
@@ -579,6 +577,32 @@ div.editor-area textarea.lines {
   text-align:right;
 }
 
+div.selected-commit-diff-panel{
+  padding-left: 45px;
+  padding-right: 45px;
+  background-color: #282828;
+}
+
+div.selected-commit-diff-panel .commit-diff-panel-body{
+  overflow-y:scroll;
+  height:90%;
+  width: 100%;
+  border: 3px solid #ccc;
+  background-color: #FFF;
+  display: none;
+}
+div.selected-commit-diff-panel button.close-button {
+  display: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 30px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 15px;
+  background-color: #39c0ba;
+  color: #fff;
+}
+
 .close-button {
   float: right;
   margin-right: 50px;
@@ -607,16 +631,30 @@ div.editor-area textarea.lines {
 
 /*Toolbar Styles*/
 .toolbar-Container {
+  /*max-height: 75px;*/
  }
 
 .toolbar-Icons {
   text-align: center;
   cursor: pointer;
   padding: 10px;
+  margin: 0 auto;
+  max-height: 65px;
   max-width: 75px;
 }
 
 .toolbar-Text {
      font-size: 14px;
+     margin: 0 auto;
      color: white;
  }
+
+ #open-editor-button {
+  float: right;
+  margin-right: 10px; 
+  visibility: hidden;
+}
+
+.diff-panel {
+  background-color: #282828;
+}

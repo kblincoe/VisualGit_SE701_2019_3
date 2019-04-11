@@ -36,6 +36,7 @@ function changeColor(color) {
   let stagedMessageColor = document.getElementById('staged-files-message');
   let modifiedTitle = document.getElementById('unstaged-files-heading');
   let stagedTitle = document.getElementById('staged-files-heading');
+  let diffPanel = document.getElementById("diff-panel");
 
   if (color === 'white') {
     for (let i = 0; i < head.length; i++) {
@@ -63,6 +64,7 @@ function changeColor(color) {
 
     diffp.style.color = '#fff';
     diffp.style.backgroundColor = '#302f2f';
+    diffPanel.style.backgroundColor = '#302f2f';
     network.style.backgroundColor = '#D6D6D6';
     footer.style.backgroundColor = '#E3E3E3';
     arp.style.backgroundColor = '#D1D1D1';
@@ -105,6 +107,7 @@ function changeColor(color) {
         }
         diffp.style.color = '#000000'; 
         diffp.style.backgroundColor = 'white';
+        diffPanel.style.backgroundColor = 'white';
         network.style.backgroundColor = '#FFE5E5';
         footer.style.backgroundColor = '#FFD7D7'; 
         footer.style.border = '#FFD7D7';
@@ -148,6 +151,7 @@ function changeColor(color) {
           }
           diffp.style.color = '#000000'; 
           diffp.style.backgroundColor = 'white'; 
+          diffPanel.style.backgroundColor = 'white';
           network.style.backgroundColor = '#EEF6FF'; 
           footer.style.backgroundColor = '#B6DEFF'; 
           footer.style.border = '#B6DEFF'; 
@@ -191,6 +195,7 @@ function changeColor(color) {
           }
           diffp.style.color = '#000000';  
           diffp.style.backgroundColor = 'white';
+          diffPanel.style.backgroundColor = 'white';
           network.style.backgroundColor = '#CCE0FF'; 
           network.style.border = '#CCE0FF';
           footer.style.backgroundColor = '#4D94FF'; 
@@ -235,6 +240,7 @@ function changeColor(color) {
           }
           diffp.style.color = '#000000'; 
           diffp.style.backgroundColor = 'white'; 
+          diffPanel.style.backgroundColor = 'white';
           network.style.backgroundColor = '#EBFAEB'; 
           footer.style.backgroundColor = '#ADEBAD'; 
           footer.style.border = '#ADEBAD'; 
@@ -281,6 +287,7 @@ function changeColor(color) {
 
     diffp.style.color = '#fff';
     diffp.style.backgroundColor = '#282828';
+    diffPanel.style.backgroundColor = '#282828';
     network.style.backgroundColor = '#181818';
     footer.style.backgroundColor = '#282828';
     arp.style.backgroundColor = '#282828';

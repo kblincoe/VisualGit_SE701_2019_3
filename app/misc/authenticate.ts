@@ -58,10 +58,8 @@ function ModalSignIn(callback) {
 
 
 function loginWithSaved(callback) {
-
     document.getElementById("username").value = getUsername();
     document.getElementById("password").value = getPassword(); //get decrypted username n password  
-
 }
 
 function searchRepoName() {
@@ -112,11 +110,66 @@ function getUserInfo(callback) {
 
   cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
-  client = github.client({
+
+  github.auth.config({
     username: getUsernameTemp(),
     password: getPasswordTemp()
+  }).login({
+    "add_scopes": [
+      "user",
+      "repo"
+    ],
+    "note": Math.random().toString()
+  }, function (err, id, token, headers) {
+    if (err) {
+      if (err.toString().indexOf("OTP") !== -1)
+      {
+        document.getElementById("submitOtpButton")!.onclick = function() {
+          submitOTP(callback);
+        }
+        $("#otpModal").modal('show');
+      }
+      else {
+        displayModal(err);
+      }
+    }
+
+    if (!err) {
+      client = github.client(token);
+      var ghme = client.me();
+      processLogin(ghme, callback);
+    }
+    
   });
-  var ghme = client.me();
+
+
+}
+
+function submitOTP(callback) {
+  github.auth.config({
+    username: getUsernameTemp(),
+    password: getPasswordTemp(),
+    otp: document.getElementById("otp")!.value
+  }).login({
+    "add_scopes": [
+      "user",
+      "repo"
+    ],
+    "note": Math.random().toString()
+  }, function (err, id, token, headers) {
+    if (err) {
+      displayModal(err);
+    }
+    else {
+      client = github.client(token);
+      var ghme = client.me();
+      processLogin(ghme, callback);
+    }
+  });
+}
+
+
+function processLogin(ghme, callback) {
   ghme.info(function(err, data, head) {
     if (err) {
       displayModal(err);
@@ -127,9 +180,17 @@ function getUserInfo(callback) {
     // username and password values taken to be stored.
     let username: any = (<HTMLInputElement>document.getElementById("username")).value;
     let password: any = (<HTMLInputElement>document.getElementById("password")).value;
+
+    // If password needs remembering encrypt it within data.json
     if (rememberLogin.checked == true) {
         encrypt(username, password);
     }
+    // Else remove the file
+    else {
+      let credentialFile = './data.json';
+      if (fs.existsSync(credentialFile)){
+        fs.unlinkSync(credentialFile);
+      }}
       avaterImg = Object.values(data)[2]
       // let doc = document.getElementById("avater");
       // doc.innerHTML = "";
@@ -185,7 +246,6 @@ function getUserInfo(callback) {
       }
     }
   });
-
 }
 
 //Converts string to base 64 to be used for Basic Authorization in external API calls
