@@ -678,14 +678,34 @@ div.selected-commit-diff-panel button.close-button {
      margin: 0 auto;
      color: white;
  }
-.wiki-component{
-  z-index: -999;
-  width: 0%;
-  height: 0%;
+
+.wiki-panel{
+  position: absolute;
+  z-index: -10;
+  width: 0vw;
+  height: 0vh;
+  background-color: white;
 }
 
-#wiki-header {
-  padding: 5px 20px 10px;
+#wiki-body {
+  overflow: auto;
+}
+
+#wiki-content {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  height: 90vh;
+}
+
+#wiki-content p {
+  color: rgb(0, 0, 0);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.wiki-header {
+  height: 60px;
 }
 
  #open-editor-button {
@@ -826,13 +846,4 @@ div.wiki-header button.close-button, div.wiki-header button.open-button {
   padding: 0 15px;
   background-color: #39c0ba;
   color: #fff;
-}
-
-#wiki-titles {
-  float: left;
-  margin-right: 8px;
-}
-
-#wiki-content {
-  margin-left: 108px;
 }

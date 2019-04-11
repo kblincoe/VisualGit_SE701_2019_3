@@ -11,9 +11,10 @@ interface wikiPage {
 function openWiki() {
     console.log("hi");
     let wikis = document.getElementById("wiki-panel")!;
+    wikis.style.width = "100vw";
+    wikis.style.height = "100vh";
+    wikis.style.zIndex = "15";
 
-    wikis.style.width = "100%";
-    wikis.style.height = "100%";
     console.log(repoFullPath);
     if (!fs.existsSync(repoFullPath + "\\wiki")) {
         cloneWiki();
@@ -93,22 +94,39 @@ function readFileContents(wikiDirectory: string) {
 }
 
 function displayWiki() : void {
-    let wiki_titles = document.getElementById("wiki-titles")!;
-    while (wiki_titles.firstChild){
-        wiki_titles.removeChild(wiki_titles.firstChild);
+    let marked = require('marked');
+
+    let wiki_content = document.getElementById("wiki-content")!;
+    while (wiki_content.firstChild){
+        wiki_content.removeChild(wiki_content.firstChild);
     }
+
     console.log("The entire content is: ",wikiContent);
     wikiContent.forEach(page => {
         //console.log("Page names: ", page.pageName);
         let wiki_title_template =   document.createElement("div");
         wiki_title_template.className = "panel panel-default";
+
+        let panel_heading = document.createElement("div");
+        panel_heading.className = "panel-heading";
+        panel_heading.innerHTML = page.pageName;
+
         let panel_body = document.createElement("div");
         panel_body.className = "panel-body";
-        panel_body.innerHTML = page.pageName;
-        
-        wiki_title_template.appendChild(panel_body);
-        wiki_titles.appendChild(wiki_title_template);
+        panel_body.innerHTML = marked(page.pageContent);
 
+        wiki_title_template.appendChild(panel_heading);
+        wiki_title_template.appendChild(panel_body);
+        wiki_content.appendChild(wiki_title_template);
+
+        /*let wiki_content_template =   document.createElement("div");
+        wiki_content_template.className = "panel panel-default";
+        let content_body = document.createElement("div");
+        content_body.className = "content-body";
+        content_body.innerHTML = marked(page.pageContent);
+        
+        wiki_content_template.appendChild(content_body);
+        wiki_titles.appendChild(wiki_content_template);*/
     });
 }
 
