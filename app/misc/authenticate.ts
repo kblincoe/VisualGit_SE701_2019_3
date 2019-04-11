@@ -132,6 +132,7 @@ function getUserInfo(callback) {
       else {
         displayModal(err);
       }
+      document.getElementById('grey-out').style.display = 'none';
     }
 
     if (!err) {

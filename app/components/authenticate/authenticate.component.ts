@@ -33,6 +33,7 @@ export class AuthenticateComponent implements OnInit {
       notEmptyPassword();
       notEmptyUsername();
       
+      document.getElementById('grey-out').style.display = 'block';
       getUserInfo(switchToAddRepositoryPanel);
     }
   }
