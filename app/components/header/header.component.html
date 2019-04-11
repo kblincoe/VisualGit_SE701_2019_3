@@ -43,13 +43,13 @@
 
         <!--Push-->
         <li class="toolbar-Icons" onclick="pushToRemote()">
-          <a href="#"><img src="./assets/Push.svg" height="40" width="48"class="upload" title="Clean"></a>
+          <a href="#"><img src="./assets/Push.svg" height="40" width="48"class="upload" title="Push"></a>
           <span class="toolbar-Text">Push</span>
         </li>
 
         <!--Pull-->
         <li class="toolbar-Icons" onclick="pullFromRemote()">
-          <a href='#'><img src="./assets/Pull.svg" height="40" width="48" class="download" title="sync"></a>
+          <a href='#'><img src="./assets/Pull.svg" height="40" width="48" class="download" title="Sync"></a>
           <span class="toolbar-Text">Pull</span>
         </li>
 
@@ -60,7 +60,7 @@
         </li>
 
         <!--Branch-->
-        <li class="toolbar-Icons" onclick="openBranch()">
+        <li class="toolbar-Icons" onclick="openBranchModal()">
           <a href="#"><img src="./assets/Branch.svg" height="40" width="48"  class="add-repository-button" title="Branch"></a>
           <span class="toolbar-Text">Branch</span>
         </li>
@@ -289,41 +289,76 @@
   </div>
 </div>
 
-    <div id="repo-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content" id="repo-list-modal">
-          <input type="text" id="searchRep" class="form-control" placeholder="Search Repository">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" onclick="searchRepoName()">Search</button>
-          </span>
-          <ul class="list-group"id="repo-dropdown" role="menu" aria-labelledby="repo-name">
-          </ul>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary disabled" id="cloneButton" onclick="cloneRepo()">Clone</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div>
+<div id="repo-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="repo-list-modal">
+      <input type="text" id="searchRep" class="form-control" placeholder="Search Repository">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" onclick="searchRepoName()">Search</button>
+      </span>
+      <ul class="list-group"id="repo-dropdown" role="menu" aria-labelledby="repo-name">
+      </ul>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary disabled" id="cloneButton" onclick="cloneRepo()">Clone</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
 
 <div id="fetch-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content" style=" width: 602px !important">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h4 class="modal-title">Info</h4>
-        </div>
-        <div class="modal-body" id="modal-text-box">
-          Please provide the HTTP path to the original repository:
-          <input type="text" id="origin-path" style=" width: 554px !important" placeholder="https://github.com/ORIGINAL_OWNER/ORIGINAL_OWNER_REPOSITORY.git">
-        </div>
-        <div class="modal-footer">
-      <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fetchFromOrigin()">Confirm</button>  
-      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Info</h4>
+      </div>
+      <div class="modal-body" id="modal-text-box">
+        Please provide the HTTP path to the original repository:
+        <input type="text" id="origin-path" style=" width: 554px !important" placeholder="https://github.com/ORIGINAL_OWNER/ORIGINAL_OWNER_REPOSITORY.git">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="fetchFromOrigin()">Confirm</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
+  </div>
 </div>
+
+<!--Modal for creating a new branch-->
+<div id="branch-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <!---->
+    <div class="modal-content" id="rep-modal">
+      <div class="modal-header branchModalHeader">
+        <h4 class="modal-title branchModalTitle branchModalComponents" >Create a new Branch</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" onclick="clearBranchErrorText()" class="branchModalComponents">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!--Current Branch Text-->
+        <h5 type="text" id="currentBranchText" class="branchModalComponents"> Current Branch: </h5>
+        <br>
+        <input type="text" id="branch-name-input" class="form-control branchModalComponents" placeholder="New Branch">
+        <br>
+        <div class="modal-body branchModalError branchModalComponents" id="branchErrorText"></div>
+      </div>
+
+
+
+        <!--<input type="text" id="asdasda" class="form-control" placeholder="Search Repository">-->
+        <!--<span class="input-group-btn">-->
+          <!--<button class="btn btn-default" type="button" onclick="searchRepoName()">Search</button>-->
+        <!--</span>-->
+        <!--<ul class="list-group"id="adadadada" role="menu" aria-labelledby="repo-name">-->
+        <!--</ul>-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="createBranchButton" onclick="createBranch()">Create</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
 </div>
 
 <!-- Modal for deleting branches -->
@@ -341,8 +376,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-warning" onClick="deleteLocalBranch()">Delete Local Branch</button>
-        <button type="button" class="btn btn-warning" onClick="deleteRemoteBranch()">Delete Remote Branch</button>
+        <button type="button" class="btn btn-warning" id="localDeleteButton" onClick="deleteLocalBranch()">Delete Local Branch</button>
+        <button type="button" class="btn btn-warning" id="remoteDeleteButton" onClick="deleteRemoteBranch()">Delete Remote Branch</button>
       </div>
     </div>
   </div>

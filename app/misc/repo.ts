@@ -415,12 +415,15 @@ function displayBranch(name, id, onclick) {
   a.innerHTML = name;
   li.appendChild(a);
   if (id == "branch-dropdown") {
+    var isLocal = 0;
+    var isRemote = 0;
     // Add a remote branch icon for remote branches
     Git.Repository.open(repoFullPath)
     .then(function(repo) {
       Git.Reference.list(repo).then(function(array) {
         if (array.includes("refs/remotes/origin/" + name)) {
             a.innerHTML += "<img src='./assets/remote-branch.png' width='20' height='20' align='right' title='Remote'>";
+            isRemote = 1
         }
       })
     })
@@ -429,6 +432,7 @@ function displayBranch(name, id, onclick) {
     .then(function(repo) {
       repo.getBranch(name).then(function() {
         a.innerHTML += "<img src='./assets/local-branch.png' width='20' height='20' align='right' title='Local'>";
+        isLocal = 1
       })
     })
 
@@ -438,12 +442,24 @@ function displayBranch(name, id, onclick) {
       button.innerHTML = "Delete";
       button.classList.add('btn-danger');
 
-      // Function to execute when button is clicked
       $(button).click(function () {
-        // Display delete branch warning modal
+        // Only show valid delete branch button(s)
+        if (isRemote && !isLocal) {
+          document.getElementById("localDeleteButton").style.display = 'none';
+          document.getElementById("remoteDeleteButton").style.display = '';
+        }
+        else if (isLocal && !isRemote) {
+          document.getElementById("remoteDeleteButton").style.display = 'none';
+          document.getElementById("localDeleteButton").style.display = '';
+        }
+        else{
+          document.getElementById("localDeleteButton").style.display = '';
+          document.getElementById("remoteDeleteButton").style.display = '';
+        }      
+        
         $('#branch-to-delete').val(name);
         document.getElementById("displayedBranchName").innerHTML = name;
-        $('#delete-branch-modal').modal();
+        $('#delete-branch-modal').modal(); // Display delete branch warning modal
       });
       li.appendChild(button); // Add delete button to the branch dropdown list
     }
