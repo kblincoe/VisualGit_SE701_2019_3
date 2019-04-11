@@ -2,6 +2,10 @@ let cred;
 let blue = "#39c0ba";
 let gray = "#5b6969";
 let continuedWithoutSignIn = false;
+let inTheApp = false;
+
+let showUsername = true;
+let previousWindow = "repoPanel";
 
 function collapseSignPanel() {
     $("#nav-collapse1").collapse("hide");
@@ -16,10 +20,22 @@ function switchToClonePanel() {
 }
 
 function switchToMainPanel() {
-    hideAuthenticatePanel();
-    hideAddRepositoryPanel();
-    displayFilePanel();
-    displayGraphPanel();
+  hideAuthenticatePanel();
+  hideAddRepositoryPanel();
+  displayFilePanel();
+  displayGraphPanel();
+
+  $("#nav-collapse1").collapse("hide");
+  if(previousWindow == "repoPanel"){
+    if(showUsername){
+      document.getElementById("Button_Sign_out").style.display = "block";
+      document.getElementById("Button_Sign_in").style.display="none";
+    }else{
+      document.getElementById("Button_Sign_out").style.display = "none";
+      document.getElementById("Button_Sign_in").style.display="block";
+    }
+  }
+  previousWindow = "mainPanel";
 }
 
 function checkSignedIn() {
@@ -36,20 +52,44 @@ function checkSignedIn() {
     }
 }
 
+function checkIfInTheApp(){
+  return inTheApp;
+} 
+
 function switchToAddRepositoryPanelWhenNotSignedIn() {
-    document.getElementById("avatar").innerHTML = "Sign In";
-    continuedWithoutSignIn = true;
-    switchToAddRepositoryPanel();
+  previousWindow = "repoPanel";
+  continuedWithoutSignIn = true;
+  showUsername = false;
+  switchToAddRepositoryPanel();
+  
 }
 
 function switchToAddRepositoryPanel() {
-    console.log("Switching to add repo panel");
-    hideAuthenticatePanel();
-    hideFilePanel();
-    hideGraphPanel();
-    displayAddRepositoryPanel();
+  inTheApp = true
+  console.log("Switching to add repo panel");
+  hideAuthenticatePanel();
+  hideFilePanel();
+  hideGraphPanel();
+  displayAddRepositoryPanel();
+  
+  if(showUsername){
+    document.getElementById("Button_Sign_out").style.display = "block";
+    document.getElementById("Button_Sign_in").style.display = "none";
     displayUsername();
-    document.getElementById("repoOpen").value = "";
+  }else{
+    $("#nav-collapse1").collapse("hide");
+    document.getElementById("Button_Sign_out").style.display = "none";
+    document.getElementById("Button_Sign_in").style.display = "block";
+  }
+  document.getElementById("repoOpen").value = "";
+  previousWindow = "repoPanel";
+}
+
+function hideSignInButton():void{
+  document.getElementById("Button_Sign_in").style.display = "none";
+  if(previousWindow!="repoPanel"){
+    switchToMainPanel();
+  }
 }
 
 function wait(ms) {
@@ -61,11 +101,15 @@ function wait(ms) {
 }
 
 function displayUsername() {
-    console.log(getUsername());
-    let existing_username = document.getElementById("githubname").innerHTML;
-    if (getUsername() != null && existing_username == null) {
-        document.getElementById("githubname").innerHTML = getUsername();
-    }
+
+  console.log("Display Username called");
+  document.getElementById("Button_Sign_out").style.display = "block";
+  showUsername = true;
+  console.log(getUsername());
+  let existing_username = document.getElementById("githubname").innerHTML;
+  if (getUsername() != null && existing_username == null) {
+    document.getElementById("githubname").innerHTML = getUsername();
+  }
 }
 
 function displayClonePanel() {
@@ -85,8 +129,9 @@ function displayGraphPanel() {
 }
 
 function displayAddRepositoryPanel() {
-    document.getElementById("add-repository-panel").style.zIndex = "10";
-    $("#open-local-repository").show();
+  previousWindow = "repoPanel";
+  document.getElementById("add-repository-panel").style.zIndex = "10";
+  $("#open-local-repository").show();
 }
 
 function hideFilePanel() {
@@ -142,15 +187,17 @@ function displayAuthenticatePanel() {
 }
 
 function displayDiffPanelButtons() {
-    document.getElementById("save-button").style.visibility = "visible";
-    document.getElementById("cancel-button").style.visibility = "visible";
+  document.getElementById("save-button").style.visibility = "visible";
+  document.getElementById("cancel-button").style.visibility = "visible";
+  document.getElementById("open-editor-button").style.visibility = "visible"; 
 }
 
 function hideDiffPanelButtons() {
-    document.getElementById("save-button").style.visibility = "hidden";
-    document.getElementById("cancel-button").style.visibility = "hidden";
-    disableSaveCancelButton();
-    disableDiffPanelEditOnHide();
+  document.getElementById("save-button").style.visibility = "hidden";
+  document.getElementById("cancel-button").style.visibility = "hidden";
+  document.getElementById("open-editor-button").style.visibility = "hidden"; 
+  disableSaveCancelButton();
+  disableDiffPanelEditOnHide();
 }
 
 function disableSaveCancelButton() {
@@ -176,18 +223,14 @@ function disableDiffPanelEditOnHide() {
     doc.contentEditable = "false";
 }
 
-function useSaved() {
-
-    let file = 'data.json';
-    // check if the data.json file exists
-    fs.exists(file, (exist) => {
-        if (exist) {
-            console.log('button has been pressed: logging in with saved credentials');
-            decrypt();
-            loginWithSaved(switchToMainPanel);
-        } else {
-            // if data,json file doesn't exist show a pop up.
-            window.alert("No saved credentials exist");
-        }
-    });
+function useSavedCredentials() : boolean {
+  let file = 'data.json';
+  // check if the data.json file exists
+  if (fs.existsSync(file)) {
+    console.log('button has been pressed: logging in with saved credentials');
+    decrypt();
+    loginWithSaved(switchToMainPanel);
+    return true;
+  }
+  return false;
 }
