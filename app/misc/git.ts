@@ -390,21 +390,21 @@ function openBranchModal() {
 }
 
 function createBranch() {
+  let branchName = document.getElementById("branch-name-input").value;
+
+  // console.log(repo.getBranch(branchName), 'this');
+
   if (typeof repoFullPath === "undefined") {
     // repository not selected
     document.getElementById("branchErrorText").innerText = "Warning: You are not within a Git repository. " +
         "Open a repository to create a new branch. ";
   }
 
-  let branchName = document.getElementById("branch-name-input").value;
-
-  // console.log(repo.getBranch(branchName), 'this');
-
 
 
   // Check for empty branch name
   // @ts-ignore
-  if (branchName == '' || branchName == null) {
+  else if (branchName == '' || branchName == null) {
     // repository not selected
     document.getElementById("branchErrorText").innerText = "Warning: Please enter a branch name";
   }
