@@ -884,7 +884,7 @@ body .pull-request-panel {
   background-color: #282828;
   display: block;
   float: right;
-  height: 70vh;
+  height: 60vh;
   overflow-y: auto;
   transition: .5s;
   width: 60px;
