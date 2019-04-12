@@ -488,8 +488,12 @@ function displayIssues() {
 =======
       
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
 >>>>>>> added comment feature, #43 is done
 }
 >>>>>>> added comment feature, #43 is done
+=======
+}
+>>>>>>> fixed rebase errors
