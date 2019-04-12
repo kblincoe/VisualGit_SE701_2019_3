@@ -15,6 +15,7 @@ let client;
 let avaterImg;
 let repoList = {};
 let url;
+var repoNotFound = 0;
 var signed = 0;
 var changes = 0;
 let signedAfter = false;
@@ -91,9 +92,15 @@ function searchRepoName() {
         if (rep['full_name'].search(document.getElementById("searchRep").value) != -1) {
           displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
           repoList[rep['full_name']] = rep['html_url'];
+        } else {
+          repoNotFound = 1;
         }
       }
 
+    }
+    if(repoNotFound == 1){
+      ul.innerHTML = '';
+      displayBranch(document.getElementById("searchRep").value + ":" + " Is NOT a valid repository.", "repo-dropdown", "");
     }
   });
 }
