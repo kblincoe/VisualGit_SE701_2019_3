@@ -28,7 +28,7 @@ function openWiki() {
 
     let externalLinkButton = document.getElementById("wikiLinkButton")!;
     console.log(getWikiUrl()!);
-    externalLinkButton.setAttribute("href", getWikiUrl()!); 
+    externalLinkButton.setAttribute("href", getWikiUrl()! + "/wiki"); 
 }
 
 function cloneWiki() {
@@ -45,7 +45,7 @@ function cloneWiki() {
         }
     };
 
-    let cloneUrl = "https://github.com/kblincoe/VisualGit_SE701_2019_3.wiki.git";
+    let cloneUrl = getWikiUrl() + ".wiki.git";
 
     let wikiPath = repoFullPath + "\\wiki";
     console.log("The wiki path is: ", wikiPath);
@@ -206,7 +206,7 @@ function getWikiUrl(){
         let owner = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 2]
         let nameOfRepository = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 1]
 
-        var wikiUrl = "https://github.com/" + owner + "/" + nameOfRepository + "/wiki"
+        var wikiUrl = "https://github.com/" + owner + "/" + nameOfRepository;
     
         return wikiUrl;
         
