@@ -675,11 +675,16 @@ div.selected-commit-diff-panel button.close-button {
 }
 
 .toolbar-Text {
-     font-size: 14px;
-     margin: 0 auto;
-     color: white;
- }
+  font-size: 14px;
+  margin: 0 auto;
+  color: white;
+}
 
+#wiki-icon {
+  color: white;
+}
+
+/*Wiki panel Styles*/
 .wiki-panel{
   position: absolute;
   z-index: -10;
