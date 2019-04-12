@@ -26,7 +26,6 @@ function refreshColor() {
   // If user has previously saved a color, then set the app to that color
   if (fs.existsSync(userColorFilePath)) {
     fs.readFile(userColorFilePath, function (err, buffer) {
-      console.log(buffer.toString());
       let color = buffer.toString();
       changeColor(color);
     });
@@ -749,7 +748,7 @@ function displayModifiedFiles() {
 
   Git.Repository.open(repoFullPath)
     .then(function (repo) {
-      console.log("Is repo merging: " + repo.isMerging());
+
       repo.getStatus().then(function (statuses) {
 
         statuses.forEach(addModifiedFile);
@@ -771,10 +770,7 @@ function displayModifiedFiles() {
           for (let i = 0; i < filePaths.length; i++) {
             if (filePaths[i].parentElement.className !== "file file-deleted") {
               let filePath = repoFullPath + "\\" + filePaths[i].innerHTML;
-              if (fs.existsSync(filePath)) {
-                console.log("exists");
-              } else {
-                console.log("doesn't exists");
+              if (!fs.existsSync(filePath)) {
                 filePaths[i].parentElement.remove();
               }
             }
