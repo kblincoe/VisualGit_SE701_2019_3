@@ -731,6 +731,7 @@ function resetCommit(name: string) {
 }
 
 function revertCommit() {
+
   let repos;
   Git.Repository.open(repoFullPath)
   .then(function(Commits){
@@ -771,6 +772,7 @@ function revertCommit() {
       updateModalText("Error reverting commit, please commit changes as they will be overwritten, then try again");
     })
   }
+}
 
 // Makes a modal for confirmation pop up instead of actually exiting application for confirmation.
 function ExitBeforePush() {
