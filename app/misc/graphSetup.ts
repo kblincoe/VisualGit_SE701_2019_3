@@ -6,7 +6,7 @@ let options, bsNodes, bsEdges, abNodes, abEdges, nodes, edges, network;
 let secP = null, fromNode = null, toNode;
 
 function drawGraph() {
-    document.getElementById("modal-text-box").innerHTML = "Drawing graph, please don't click anything till done";
+    document.getElementById('spinner').style.display = 'block';
     $('#modal').modal('show');
     bsNodes = new vis.DataSet([]);
     bsEdges = new vis.DataSet([]);
