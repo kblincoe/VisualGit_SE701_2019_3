@@ -16,9 +16,4 @@ export class WikiComponent {
   updateWiki() : void {
     updateWiki();
   }
-
-  openWikiExternal() : void {
-    //let shell = require('electron');
-    //shell.openExternal('https://github.com/kblincoe/VisualGit_SE701_2019_3/wiki')
-  }
 }
