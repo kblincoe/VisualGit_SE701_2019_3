@@ -27,7 +27,19 @@ export class PullRequestPanelComponent {
 
   // Hides/unhides the PR panel based on it's current status.
   togglePRPanel(): void {
-    this.isShowingPRPanel ? this.hidePRPanel() : this.showPRPanel();
+    let prStatus1 = document.getElementById("pr-status-1");
+    let prStatus2 = document.getElementById("pr-status-2");
+    if (prStatus1 != null && prStatus2 != null) {
+      if (prStatus1.style.display === "none" && prStatus2.style.display === "none"){
+        prStatus1.style.display = "block";
+        prStatus2.style.display = "block";
+        this.isShowingPRPanel = false;
+        this.showPRPanel();
+      } else {
+        this.isShowingPRPanel ? this.hidePRPanel() : this.showPRPanel();
+      }
+    }
+    
   }
 
   // Shows the PR panel in it's half extended state.
