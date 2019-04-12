@@ -33,20 +33,20 @@ function CommitNoPush() {
 }
 
 function signInHead(callback) {
-	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-	continuedWithoutSignIn = false;
+  encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+  continuedWithoutSignIn = false;
   signedAfter = true;
   if (signed == 1){
-		if ((changes == 1) || (CommitButNoPush == 1)){
-			$("#modalW2").modal();
-		}
-		else {
-			getUserInfo(callback);
-		}
-	}
-	else{
-	  getUserInfo(callback);
-	}
+    if ((changes == 1) || (CommitButNoPush == 1)){
+      $("#modalW2").modal();
+    }
+    else {
+      getUserInfo(callback);
+    }
+  }
+  else{
+    getUserInfo(callback);
+  }
 }
 
 function LogInAfterConfirm(callback) {
@@ -137,7 +137,9 @@ function getUserInfo(callback) {
           $("#otpModal").modal('show');
         });
       }
-      else {
+      else if (err == "Error: getaddrinfo ENOTFOUND api.github.com api.github.com:443"){
+        displayModal("No internet connection");
+      }else{
         displayModal(err);
       }
       document.getElementById('grey-out').style.display = 'none';
@@ -234,7 +236,7 @@ function processLogin(ghme, callback) {
           }
           else {
             //Create a collapseable list for the forked repo
-            createDropDownFork(rep['full_name'],"repo-dropdown","showDropDown(this)");
+            createDropDownFork(rep['full_name'],"repo-dropdown";
             repoList[rep['full_name']] = rep['html_url'];
             //Reiterate through and get all the forks of the repo and add to list
             for(let i = 0; i < data.length; i++) {
@@ -258,22 +260,14 @@ function make_base_auth(user, password) {
   return 'Basic ' + hash;
 }
 
-function showDropDown(ele) {
-  //If the forked Repo is clicked collapse or uncollapse the forked repo list
-  let div = document.getElementById(ele.className)
-  if(div.style.display === 'none') {
-    div.style.display = 'block';
-  }
-  else {
-    div.style.display = 'none';
-  }
-
-}
 function selectRepo(ele) {
   url = repoList[ele.innerHTML];
   let butt = document.getElementById("cloneButton");
   butt.innerHTML = 'Clone ' + ele.innerHTML;
   butt.setAttribute('class', 'btn btn-primary');
+  if (butt.innerHTML != 'Clone'){
+    butt.disabled = false;
+  }
   console.log("selected " + ele.innerHTML + " as repository");
 }
 
@@ -331,3 +325,4 @@ function redirectToHomePage() {
   CommitButNoPush = 0; 
   //LogInAfterConfirm();
 }
+
