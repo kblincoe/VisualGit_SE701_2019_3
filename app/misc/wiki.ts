@@ -13,7 +13,7 @@ function openWiki() {
     if (openDisabled){
         return;
     }
-    console.log("hi");
+
     let wikis = document.getElementById("wiki-panel")!;
     wikis.style.width = "100vw";
     wikis.style.height = "100vh";
@@ -26,6 +26,9 @@ function openWiki() {
         findPageNames(repoFullPath + "\\wiki",displayWiki)
     }
 
+    let externalLinkButton = document.getElementById("wikiLinkButton")!;
+    console.log(getWikiUrl()!);
+    externalLinkButton.setAttribute("href", getWikiUrl()!); 
 }
 
 function cloneWiki() {
@@ -49,12 +52,6 @@ function cloneWiki() {
     let repository = Git.Clone.clone(cloneUrl, wikiPath, options)
         .then(function (repository) {
             console.log("Wiki successfully cloned")
-            /*var promisewiki = Promise.resolve(wikiPath);
-            promisewiki.then(function(x){
-                findPageNames(x);
-            }).then(function () {
-                displayWiki();
-            });*/
 
             findPageNames(wikiPath, displayWiki)
             
