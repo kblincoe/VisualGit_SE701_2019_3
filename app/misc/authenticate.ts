@@ -454,33 +454,6 @@ function createIssue() {
     }
 }
 
-function createIssue() {
-  var theArray = $('#newIssue').serializeArray();
-  let repoName = document.getElementById("repo-name").innerHTML
-  let githubName = document.getElementById("githubname").innerHTML
-  
-  if (repoName != "repository" && theArray != null) {
-      encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
-      cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
-      client = github.client({
-          username: getUsernameTemp(),
-          password: getPasswordTemp()
-      });
-      var ghme = client.me();
-      var ghrepo = client.repo(githubName + '/' + repoName);
-      ghrepo.issue({
-        "title": theArray[0]["value"],
-        "body": theArray[1]["value"],
-        "assignee": theArray[2]["value"]
-      }, function (err, data, head) {
-        document.getElementById("error-text-box").innerHTML = "Invalid Assignee: " + theArray[2]["value"];
-        $('#errorModal').modal('show');
-      }); //issue
-      displayIssues();
-      $('#issue-modal').modal('hide');
-    }
-}
-
 function displayIssues() {
    repoName = document.getElementById("repo-name").innerHTML
    githubName = document.getElementById("githubname").innerHTML
@@ -511,4 +484,12 @@ function displayIssues() {
               }
           });
       }
+<<<<<<< HEAD
+=======
+      
+<<<<<<< HEAD
 }
+=======
+>>>>>>> added comment feature, #43 is done
+}
+>>>>>>> added comment feature, #43 is done
