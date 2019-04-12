@@ -10,8 +10,10 @@ import { Component } from "@angular/core";
  * of the pull request panel.
  */
 export class PullRequestPanelComponent {
+  // Represents display status of entire component minus the side bar.
   isShowingPRPanel = false;
 
+  // Represents display status of file diff for a given PR.
   isShowingFileDiff = false;
 
   /*
@@ -28,11 +30,13 @@ export class PullRequestPanelComponent {
     this.isShowingPRPanel ? this.hidePRPanel() : this.showPRPanel();
   }
 
+  // Shows the PR panel in it's half extended state.
   showPRPanel() {
     this.halfExtendPRPanel();
     this.updatePRs();
   }
 
+  // Hide the entire component minus side bar.
   hidePRPanel(): void {
     let prPanel = document.getElementById("pull-request-panel");
     let bodyPanel = document.getElementById("body-panel");
@@ -50,22 +54,13 @@ export class PullRequestPanelComponent {
       bodyPanel.style.width = "calc(80% - 60px)";
 
       prDisplayPanel.style.display = "none";
-
       this.isShowingPRPanel = false;
     }
 
     this.resetFullPanel();
   }
 
-  getRepoName(): string {
-    let repoName = document.getElementById('repo-name');
-    if (repoName != null) {
-      this.repoName = repoName.innerHTML.split("/")[1];
-      return this.repoName;
-    }
-    return "";
-  }
-
+  // This function gets the owner and name of the current repo.
   getRepoOwner(callback: () => void) {
     let gitConfigFileText = readFile.read(repoFullPath + "/.git/config", null);
     let searchString = "[remote \"origin\"]";
@@ -94,6 +89,7 @@ export class PullRequestPanelComponent {
     });
   }
 
+  // This function gets all open PRs for the repo.
   getPRs(callback: (pullRequests: any[]) => void): void {
     this.getRepoOwner(() => {
       let url = this.apiLink + this.repoOwner + "/" + this.repoName + "/pulls";
@@ -103,11 +99,14 @@ export class PullRequestPanelComponent {
     });
   }
 
+  // This function adds a list of open repos to the UI. 
   populatePRPanel(pullRequests: any[]) {
     let prList = document.getElementById("pr-list");
 
     if (prList != null) {
+      // Clear existing list.
       prList.innerHTML = "";
+
       pullRequests.forEach((pr) => {
         let listElement = document.createElement("li");
         let link = document.createElement("a");
@@ -115,16 +114,20 @@ export class PullRequestPanelComponent {
         listElement.setAttribute("role", "presentation");
 
         link.innerHTML = "PR #" + pr.number + ": " + pr.title;
+
+        // Setup functionality for when a PR in the list is clicked.
         link.onclick = (e) => {
           this.resetFullPanel();
-          this.getPRDiff(pr);
+          this.getPRFileDiff(pr);
           this.fullExtendPRPanel();
           this.createInitialPRPost(pr, () => {
+            // Get the comments on the PR.
             this.gitHubGetRequest(pr.comments_url, (response) => {
               response.forEach((comment: any) => {
                 this.createCommentPost(comment);
               });
               this.createCommentInputArea(pr, () => {
+                // Simulate a click to open the newly added PR.
                 link.click();
               });
             });
@@ -138,6 +141,9 @@ export class PullRequestPanelComponent {
     }
   }
 
+  /*
+    This function creates the first post in a PR.
+  */
   createInitialPRPost(pr: any, callback: () => void): void {
     let outerRow = document.createElement("div");
     outerRow.className = "row";
@@ -177,6 +183,9 @@ export class PullRequestPanelComponent {
     callback();
   }
 
+  /*
+    This function creates comment cards for PRs.
+  */
   createCommentPost(comment: any): void {
     let outerRow = document.createElement("div");
     outerRow.className = "row";
@@ -208,6 +217,10 @@ export class PullRequestPanelComponent {
     }
   }
 
+  /*
+    This function creates an area to input
+    your own comments.
+  */
   createCommentInputArea(pr: any, callback: () => void): void {
     let outerRow = document.createElement("div");
     outerRow.className = "row";
@@ -230,6 +243,7 @@ export class PullRequestPanelComponent {
     submitButton.innerText = "Submit Comment";
     submitButton.className = "btn btn-success pr-comment-submit";
 
+    // Setting up comment submission.
     submitButton.onclick = (e) => {
       if (commentInput.value === "" || commentInput.value == null) {
         createCommentText.textContent = "Please enter a comment: ";
@@ -238,8 +252,10 @@ export class PullRequestPanelComponent {
           "body": commentInput.value,
           "in_reply_to": pr.id
         };
-        let jsonData = JSON.stringify(data)
-        let url = "https://api.github.com/repos/" + this.repoOwner + "/" + this.repoName + "/issues/" + pr.number + "/comments"
+        let jsonData = JSON.stringify(data);
+
+        // Posting new comment.
+        let url = this.apiLink + this.repoOwner + "/" + this.repoName + "/issues/" + pr.number + "/comments";
         this.gitHubPostRequest(url, jsonData, (response) => {
           callback();
         });
@@ -260,6 +276,9 @@ export class PullRequestPanelComponent {
     }
   }
 
+  /*
+    This function creates a new PR.
+  */
   createNewPullRequest() {
     let prFrom = <HTMLInputElement>document.getElementById("pr-from");
     let prTo = <HTMLInputElement>document.getElementById("pr-to");
@@ -267,7 +286,6 @@ export class PullRequestPanelComponent {
     let prBody = <HTMLInputElement>document.getElementById("pr-body");
 
     if (prFrom != null && prTo != null && prTitle != null) {
-
       if (this.isValidPR(prFrom, prTo, prTitle)) {
         if (prBody != null) {
           let url = this.apiLink + this.repoOwner + "/" + this.repoName + "/pulls";
@@ -280,6 +298,7 @@ export class PullRequestPanelComponent {
 
           let jsonData = JSON.stringify(data);
 
+          // Posting new PR.
           this.gitHubPostRequest(url, jsonData, () => {
             this.updatePRs();
             prTitle.value = "";
@@ -291,6 +310,11 @@ export class PullRequestPanelComponent {
     }
   }
 
+  /*
+    This function checks if a newly created PR is
+    valid and provides the user with feedback if it
+    isn't.
+  */
   isValidPR(prFrom: any, prTo: any, prTitle: any): boolean {
     let createPRText = <HTMLInputElement>document.getElementById("create-pr-text");
     if (prFrom.value === prTo.value) {
@@ -315,6 +339,9 @@ export class PullRequestPanelComponent {
     return true;
   }
 
+  /*
+    This function updates the current list of PRs.
+  */
   updatePRs(): void {
     this.getPRs((prs) => {
       this.populatePRPanel(prs);
@@ -341,7 +368,11 @@ export class PullRequestPanelComponent {
     });
   }
 
-  getPRDiff(pr: any): void {
+  /*
+    This function creates the HTML for file differences
+    for a PR.
+  */
+  getPRFileDiff(pr: any): void {
     this.gitHubGetRequest(pr.diff_url, (response) => {
       let prDiff = document.getElementById("pr-diff");
 
@@ -351,6 +382,9 @@ export class PullRequestPanelComponent {
     });
   }
 
+  /*
+    This function resets the status of the PR being displayed.
+  */
   resetFullPanel(): void {
     let prDiv = document.getElementById("pr-div");
     let prDiff = document.getElementById("pr-diff");
@@ -364,6 +398,10 @@ export class PullRequestPanelComponent {
     }
   }
 
+  /*
+    This function changes between showing the current PR
+    and it's file differences.
+  */
   togglePRDiff(): void {
     let prDiff = document.getElementById("pr-diff");
     let prContent = document.getElementById("pr-div");
@@ -384,6 +422,10 @@ export class PullRequestPanelComponent {
     }
   }
 
+  /*
+    This function extends the component enough to see
+    the list of PRs.
+  */
   halfExtendPRPanel(): void {
     let prPanel = document.getElementById("pull-request-panel");
     let bodyPanel = document.getElementById("body-panel");
@@ -401,6 +443,10 @@ export class PullRequestPanelComponent {
     this.resetFullPanel();
   }
 
+  /*
+    This function extends the component enough to see
+    all of it.
+  */
   fullExtendPRPanel(): void {
     let prPanel = document.getElementById("pull-request-panel");
     let bodyPanel = document.getElementById("body-panel");
@@ -421,6 +467,9 @@ export class PullRequestPanelComponent {
     }
   }
 
+  /*
+    This function gets the branches for this repo.
+  */
   getBranches(callback: (response: any[]) => void) {
     this.getRepoOwner(() => {
       let url = this.apiLink + this.repoOwner + "/" + this.repoName + "/branches";
@@ -430,6 +479,10 @@ export class PullRequestPanelComponent {
     });
   }
 
+  /*
+    This function is a generic GET request to the
+    GitHub APIs.
+  */
   gitHubGetRequest(url: string, callback: (response: any) => void) {
     $.ajax({
       url: url,
@@ -451,6 +504,10 @@ export class PullRequestPanelComponent {
     });
   }
 
+  /*
+    This function is a generic POST request to the
+    GitHub APIs.
+  */
   gitHubPostRequest(url: string, data: string, callback: (response: any) => void) {
     $.ajax({
       url: url,
