@@ -278,6 +278,8 @@ function cloneRepo() {
     return;
   }
 
+  hidePRPanel();
+
   console.log("cloning " + url);
   let splitUrl = url.split("/");
   let local;
