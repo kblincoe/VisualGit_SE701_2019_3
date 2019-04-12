@@ -181,3 +181,37 @@ function updateWiki() {
         })
 
 }
+
+function getWikiUrl(){
+
+    if (readFile.exists(repoFullPath + "/.git/config")) {
+        let gitConfigFileText = readFile.read(repoFullPath + "/.git/config", null);
+        let searchString = "[remote \"origin\"]";
+        
+        gitConfigFileText = gitConfigFileText.substr(gitConfigFileText.indexOf(searchString) + searchString.length, gitConfigFileText.length)
+        gitConfigFileText = gitConfigFileText.substr(gitConfigFileText.indexOf("url = "), gitConfigFileText.lastIndexOf("."))
+        gitConfigFileText = gitConfigFileText.replace(/ /g,"")
+                            .replace("url","")
+                            .replace("=","");
+
+        if(gitConfigFileText.includes(".g")){
+            gitConfigFileText = gitConfigFileText.replace(".g","");
+        }
+        
+        let gitConfigFileSubstrings = gitConfigFileText.split('/');
+        
+
+        //If the remote branch was set up using ssh, separate the elements between colons"
+        if (gitConfigFileSubstrings[0].indexOf("@") != -1) {
+          gitConfigFileSubstrings[0] = gitConfigFileSubstrings[0].substring(gitConfigFileSubstrings[0].indexOf(":") + 1);
+        }
+        
+        let owner = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 2]
+        let nameOfRepository = gitConfigFileSubstrings[gitConfigFileSubstrings.length - 1]
+
+        var wikiUrl = "https://github.com/" + owner + "/" + nameOfRepository + "/wiki"
+    
+        return wikiUrl;
+        
+    }
+}
