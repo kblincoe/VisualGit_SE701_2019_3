@@ -322,15 +322,18 @@ function pullFromRemote() {
     })
     .then(function () {
       let conflicsExist = false;
-
+      let tid = "";
       if (readFile.exists(repoFullPath + "/.git/MERGE_MSG")) {
-        let tid = readFile.read(repoFullPath + "/.git/MERGE_MSG", null);
+        tid = readFile.read(repoFullPath + "/.git/MERGE_MSG", null);
         conflicsExist = tid.indexOf("Conflicts") !== -1;
       }
 
       if (conflicsExist) {
-        updateModalText("Conflicts exists! Please check files list on right side and solve conflicts before you commit again!");
+        let conflictedFiles = tid.split("Conflicts:")[1];
         refreshAll(repository);
+       
+        window.alert("Conflicts exists! Please check the following files:" + conflictedFiles +
+         "\n Solve conflicts before you commit again!");
       } else {
         updateModalText("Successfully pulled from remote branch " + branch + ", and your repo is up to date now!");
         refreshAll(repository);
