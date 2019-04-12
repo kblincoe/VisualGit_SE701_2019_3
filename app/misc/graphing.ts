@@ -28,7 +28,7 @@ function processGraph(commits: nodegit.Commit[]) {
   sortCommits(commits);
   makeBranchColor();
   populateCommits();
-  document.getElementById("modal-text-box").innerHTML = "Graph finished";
+  document.getElementById('spinner').style.display = 'none';
 }
 
 function sortCommits(commits) {

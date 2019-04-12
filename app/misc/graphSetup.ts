@@ -5,7 +5,7 @@ let secP = null, fromNode = null, toNode;
 
 
 function drawGraph() {
-  document.getElementById("modal-text-box").innerHTML = "Drawing graph, please wait";
+  document.getElementById('spinner').style.display = 'block';
   $('#modal').modal('show');
   bsNodes = new vis.DataSet([]);
   bsEdges = new vis.DataSet([]);
