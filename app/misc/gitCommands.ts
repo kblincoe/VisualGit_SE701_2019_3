@@ -3,9 +3,9 @@ function addCommand(command) {
   gitCommand.className = "git-command";
   gitCommand.id = "git-command";
   gitCommand.innerHTML = command;
-  let footer = document.getElementById("terminal");
-  if (footer != null) {
-    footer.appendChild(gitCommand);
-    footer.scrollTop = footer.scrollHeight;
+  let terminal = document.getElementById("terminal");
+  if (terminal != null) {
+    terminal.appendChild(gitCommand);
+    terminal.scrollTop = terminal.scrollHeight;
   }
 }

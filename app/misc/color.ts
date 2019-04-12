@@ -36,7 +36,10 @@ function changeColor(color) {
   let stagedMessageColor = document.getElementById('staged-files-message');
   let modifiedTitle = document.getElementById('unstaged-files-heading');
   let stagedTitle = document.getElementById('staged-files-heading');
-  let diffPanel = document.getElementById("diff-panel");
+  let diffPanel = document.getElementById('diff-panel');
+  let diffChangePopUp = document.getElementById('selected-commit-diff-panel');
+  let commitDiffPanel = document.getElementById('commit-diff-panel-body');
+  let diffChangePanelText = document.getElementsByClassName('diffChangeText');
 
   // Text editor panel
   let editor = document.getElementById('editor-panel');
@@ -70,6 +73,8 @@ function changeColor(color) {
       h1[i].style.color = '#5E5E5E';
     }
 
+    changeTextColor('#fff');
+
     diffp.style.color = '#fff';
     diffp.style.backgroundColor = '#302f2f';
     diffPanel.style.backgroundColor = '#302f2f';
@@ -82,6 +87,8 @@ function changeColor(color) {
     branchName.style.color = '#000000';
     modifiedTitle.style.color = '#000000';
     stagedTitle.style.color = '#000000';
+    diffChangePopUp.style.backgroundColor = '#E3E3E3';
+    commitDiffPanel.style.backgroundColor = '#302f2f';
 
     if (modifiedMessageColor != null) {
       modifiedMessageColor.style.color = '#000000';
@@ -113,6 +120,9 @@ function changeColor(color) {
         for (var i = 0; i < h1.length; i++) {
             h1[i].style.color = '#FFA3A3'; 
         }
+
+        changeTextColor('#000000');
+
         diffp.style.color = '#000000'; 
         diffp.style.backgroundColor = 'white';
         diffPanel.style.backgroundColor = 'white';
@@ -126,6 +136,8 @@ function changeColor(color) {
         branchName.style.color = '#fff';
         modifiedTitle.style.color = '#fff';
         stagedTitle.style.color = '#fff';
+        diffChangePopUp.style.backgroundColor = '#FFD7D7';
+        commitDiffPanel.style.backgroundColor = '#fff';
 
         if (modifiedMessageColor != null) {
           modifiedMessageColor.style.color = '#fff';
@@ -157,6 +169,9 @@ function changeColor(color) {
           for (var i = 0; i < h1.length; i++) {
               h1[i].style.color = '#4EAFFE'; 
           }
+
+          changeTextColor('#000000');
+
           diffp.style.color = '#000000'; 
           diffp.style.backgroundColor = 'white'; 
           diffPanel.style.backgroundColor = 'white';
@@ -170,6 +185,8 @@ function changeColor(color) {
           branchName.style.color = '#fff';
           modifiedTitle.style.color = '#fff';
           stagedTitle.style.color = '#fff';
+          diffChangePopUp.style.backgroundColor = '#B6DEFF';
+          commitDiffPanel.style.backgroundColor = '#fff';
          
           if (modifiedMessageColor != null) {
             modifiedMessageColor.style.color = '#fff';
@@ -201,6 +218,9 @@ function changeColor(color) {
           for (var i = 0; i < h1.length; i++) {
               h1[i].style.color = '#001C83';
           }
+
+          changeTextColor('#000000');
+
           diffp.style.color = '#000000';  
           diffp.style.backgroundColor = 'white';
           diffPanel.style.backgroundColor = 'white';
@@ -215,6 +235,8 @@ function changeColor(color) {
           branchName.style.color = '#fff';
           modifiedTitle.style.color = '#fff';
           stagedTitle.style.color = '#fff';
+          diffChangePopUp.style.backgroundColor = '#0066FF';
+          commitDiffPanel.style.backgroundColor = '#fff';
           
           if (modifiedMessageColor != null) {
             modifiedMessageColor.style.color = '#fff';
@@ -246,6 +268,9 @@ function changeColor(color) {
           for (var i = 0; i < h1.length; i++) {
               h1[i].style.color = '#00990d'; 
           }
+
+          changeTextColor('#000000');
+
           diffp.style.color = '#000000'; 
           diffp.style.backgroundColor = 'white'; 
           diffPanel.style.backgroundColor = 'white';
@@ -259,6 +284,8 @@ function changeColor(color) {
           branchName.style.color = '#fff';
           modifiedTitle.style.color = '#fff';
           stagedTitle.style.color = '#fff';
+          diffChangePopUp.style.backgroundColor = '#ADEBAD';
+          commitDiffPanel.style.backgroundColor = '#fff';
           
           if (modifiedMessageColor != null) {
           modifiedMessageColor.style.color = '#fff';
@@ -293,6 +320,8 @@ function changeColor(color) {
       h1[i].style.color = '#ccc';
     }
 
+    changeTextColor('#fff');
+
     diffp.style.color = '#fff';
     diffp.style.backgroundColor = '#282828';
     diffPanel.style.backgroundColor = '#282828';
@@ -305,6 +334,8 @@ function changeColor(color) {
     branchName.style.color = '#fff';
     modifiedTitle.style.color = '#fff';
     stagedTitle.style.color = '#fff';
+    diffChangePopUp.style.backgroundColor = '#282828';
+    commitDiffPanel.style.backgroundColor = '#282828';
 
     if (modifiedMessageColor != null) {
       modifiedMessageColor.style.color = '#fff';
@@ -316,6 +347,13 @@ function changeColor(color) {
     before = 'default';
   }
 
+  /* change text color corresponding to the theme. */
+  function changeTextColor(textColor){
+    for(let i=0; i < diffChangePanelText.length; i++) {
+      diffChangePanelText[i].setAttribute('style', 'color:' + textColor);
+    }
+  }
+  
   // Match the style of the file editor to the rest of the app
   editor!.style.color = diffp.style.color;
   editor!.style.backgroundColor = network.style.backgroundColor;

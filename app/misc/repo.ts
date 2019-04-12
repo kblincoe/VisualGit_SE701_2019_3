@@ -70,13 +70,11 @@ function downloadFunc(cloneURL, fullLocalPath) {
         progressDiv.style.visibility = 'collapse';
         updateProgressBar(0);
         console.log("Repo successfully cloned");
-        displayModal("Drawing graph, please wait");
-        refreshAll(repository);
         updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
         addCommand("git clone " + cloneURL + " " + fullLocalPath);
         repoFullPath = fullLocalPath;
         repoLocalPath = fullLocalPath;
-        displayModal("Drawing graph, please wait");
+        displayModal("Drawing graph, please don't click anything till done");
         refreshAll(repository);
         switchToMainPanel();
       },
@@ -176,7 +174,7 @@ function openRepository() {
         }
 
     }
-    displayModal("Drawing graph, please wait");
+    displayModal("Drawing graph, please don't click anything till done");
     refreshAll(repository);
     console.log("Repo successfully opened");
     updateModalText("Repository successfully opened");
@@ -256,7 +254,7 @@ function addBranchestoNode(thisB: string) {
 }
 
 function refreshAll(repository) {
-  displayModal("Drawing graph, please wait");
+  displayModal("Drawing graph, please don't click anything till done");
   let branch;
   bname = [];
   //Get the current branch from the repo
@@ -467,19 +465,42 @@ function displayBranch(name, id, onclick) {
   ul.appendChild(li);
 }
 
-function createDropDownFork(name, id, onclick) {
+function createDropDownFork(name, id) {
   let ul = document.getElementById(id);
   let button = document.createElement("div");
   let div = document.createElement("ul");
-  let innerText = document.createTextNode("↨" + name + " (Forked List)");
+  let innerText = document.createTextNode( name + " (Forked List)");
   button.className = name;
   button.appendChild(innerText);
+
+  let icon = document.createElement("i");
+  icon.style.cssFloat = "right";
+  icon.style.marginRight = "20px";
+  icon.className = "fa fa-window-minimize"
+
+  button.appendChild(icon);
+
   div.setAttribute("id", name);
   div.setAttribute("role", "menu");
   div.setAttribute("class", "list-group")
-  button.setAttribute("onclick", onclick)
+  button.onclick = (e) => {
+    showDropDown(button);
+    icon.className === "fa fa-window-minimize" ? icon.className = "fa fa-plus" : icon.className = "fa fa-window-minimize";
+  }
   button.appendChild(div);
   ul.appendChild(button);
+}
+
+function showDropDown(ele) {
+  //If the forked Repo is clicked collapse or uncollapse the forked repo list
+  let div = document.getElementById(ele.className)
+  if(div.style.display === 'none') {
+    div.style.display = 'block';
+  }
+  else {
+    div.style.display = 'none';
+  }
+
 }
 
 function checkoutLocalBranch(element) {
@@ -499,7 +520,7 @@ function checkoutLocalBranch(element) {
   console.log("name of branch being checked out: " + bn);
   Git.Repository.open(repoFullPath)
     .then(function (repo) {
-      displayModal("Drawing graph, please wait");
+      displayModal("Drawing graph, please don't click anything till done");
       addCommand("git checkout " + bn);
       repo.checkoutBranch("refs/heads/" + bn)
         .then(function () {
@@ -543,7 +564,7 @@ function checkoutRemoteBranch(element) {
       console.log("name of local branch " + bn);
       repos.mergeBranches(bn, "origin/" + bn)
         .then(function () {
-          displayModal("Drawing graph, please wait");
+          displayModal("Drawing graph, please don't click anything till done");
           refreshAll(repos);
           console.log("Pull successful");
         });

@@ -15,10 +15,14 @@ let client;
 let avaterImg;
 let repoList = {};
 let url;
+var repoNotFound = 0;
 var signed = 0;
 var changes = 0;
 let signedAfter = false;
-
+let loginScopes = [
+  "repo",
+  "user"
+];
 
 //Called then user pushes to sign out even if they have commited changes but not pushed; prompts a confirmation modal
 
@@ -72,11 +76,6 @@ function searchRepoName() {
 
   cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
-  client = github.client({
-    username: getUsernameTemp(),
-    password: getPasswordTemp()
-  });
-
   var ghme = client.me();
   ghme.repos(function (err, data, head) {
     var ghme = client.me();
@@ -91,9 +90,15 @@ function searchRepoName() {
         if (rep['full_name'].search(document.getElementById("searchRep").value) != -1) {
           displayBranch(rep['full_name'], "repo-dropdown", "selectRepo(this)");
           repoList[rep['full_name']] = rep['html_url'];
+        } else {
+          repoNotFound = 1;
         }
       }
 
+    }
+    if(repoNotFound == 1){
+      ul.innerHTML = '';
+      displayBranch(document.getElementById("searchRep").value + ":" + " Is NOT a valid repository.", "repo-dropdown", "");
     }
   });
 }
@@ -110,24 +115,27 @@ function getUserInfo(callback) {
 
   cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
-
-  github.auth.config({
+  client = github.client({
     username: getUsernameTemp(),
     password: getPasswordTemp()
-  }).login({
-    "add_scopes": [
-      "user",
-      "repo"
-    ],
-    "note": Math.random().toString()
-  }, function (err, id, token, headers) {
+  });
+  var ghme = client.me();
+
+  ghme.info(function(err, data, head) {
     if (err) {
       if (err.toString().indexOf("OTP") !== -1)
       {
-        document.getElementById("submitOtpButton")!.onclick = function() {
-          submitOTP(callback);
-        }
-        $("#otpModal").modal('show');
+        github.auth.config({
+          username: getUsernameTemp(),
+          password: getPasswordTemp()
+        }).login({"scopes": loginScopes,
+          "note": Math.random().toString()
+        }, function (err, id, token, headers) {
+          document.getElementById("submitOtpButton")!.onclick = function() {
+            submitOTP(callback);
+          }
+          $("#otpModal").modal('show');
+        });
       }
       else if (err == "Error: getaddrinfo ENOTFOUND api.github.com api.github.com:443"){
         displayModal("No internet connection");
@@ -138,8 +146,6 @@ function getUserInfo(callback) {
     }
 
     if (!err) {
-      client = github.client(token);
-      var ghme = client.me();
       processLogin(ghme, callback);
     }
     
@@ -153,11 +159,7 @@ function submitOTP(callback) {
     username: getUsernameTemp(),
     password: getPasswordTemp(),
     otp: document.getElementById("otp")!.value
-  }).login({
-    "add_scopes": [
-      "user",
-      "repo"
-    ],
+  }).login({"scopes": loginScopes,
     "note": Math.random().toString()
   }, function (err, id, token, headers) {
     if (err) {
@@ -234,7 +236,7 @@ function processLogin(ghme, callback) {
           }
           else {
             //Create a collapseable list for the forked repo
-            createDropDownFork(rep['full_name'],"repo-dropdown","showDropDown(this)");
+            createDropDownFork(rep['full_name'],"repo-dropdown";
             repoList[rep['full_name']] = rep['html_url'];
             //Reiterate through and get all the forks of the repo and add to list
             for(let i = 0; i < data.length; i++) {
@@ -258,22 +260,14 @@ function make_base_auth(user, password) {
   return 'Basic ' + hash;
 }
 
-function showDropDown(ele) {
-  //If the forked Repo is clicked collapse or uncollapse the forked repo list
-  let div = document.getElementById(ele.className)
-  if(div.style.display === 'none') {
-    div.style.display = 'block';
-  }
-  else {
-    div.style.display = 'none';
-  }
-
-}
 function selectRepo(ele) {
   url = repoList[ele.innerHTML];
   let butt = document.getElementById("cloneButton");
   butt.innerHTML = 'Clone ' + ele.innerHTML;
   butt.setAttribute('class', 'btn btn-primary');
+  if (butt.innerHTML != 'Clone'){
+    butt.disabled = false;
+  }
   console.log("selected " + ele.innerHTML + " as repository");
 }
 
