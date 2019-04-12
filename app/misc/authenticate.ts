@@ -445,7 +445,8 @@ function createIssue() {
           $('#errorModal').modal('show');
         }
         else {
-          document.getElementById("issue-error-title").innerHTML = "Sucessfuly added new Issue" + theArray[0]["value"];
+          document.getElementById("issue-error-title").innerHTML = "Success";
+          document.getElementById("error-text-box").innerHTML = "Successfuly added new Issue: " + theArray[0]["value"];
           $('#errorModal').modal('show');
         }
       }); //issue
@@ -484,3 +485,4 @@ function displayIssues() {
               }
           });
       }
+    }
