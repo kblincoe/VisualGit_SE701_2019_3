@@ -467,19 +467,42 @@ function displayBranch(name, id, onclick) {
   ul.appendChild(li);
 }
 
-function createDropDownFork(name, id, onclick) {
+function createDropDownFork(name, id) {
   let ul = document.getElementById(id);
   let button = document.createElement("div");
   let div = document.createElement("ul");
-  let innerText = document.createTextNode("↨" + name + " (Forked List)");
+  let innerText = document.createTextNode( name + " (Forked List)");
   button.className = name;
   button.appendChild(innerText);
+
+  let icon = document.createElement("i");
+  icon.style.cssFloat = "right";
+  icon.style.marginRight = "20px";
+  icon.className = "fa fa-window-minimize"
+
+  button.appendChild(icon);
+
   div.setAttribute("id", name);
   div.setAttribute("role", "menu");
   div.setAttribute("class", "list-group")
-  button.setAttribute("onclick", onclick)
+  button.onclick = (e) => {
+    showDropDown(button);
+    icon.className === "fa fa-window-minimize" ? icon.className = "fa fa-plus" : icon.className = "fa fa-window-minimize";
+  }
   button.appendChild(div);
   ul.appendChild(button);
+}
+
+function showDropDown(ele) {
+  //If the forked Repo is clicked collapse or uncollapse the forked repo list
+  let div = document.getElementById(ele.className)
+  if(div.style.display === 'none') {
+    div.style.display = 'block';
+  }
+  else {
+    div.style.display = 'none';
+  }
+
 }
 
 function checkoutLocalBranch(element) {
