@@ -663,6 +663,7 @@ div.selected-commit-diff-panel button.close-button {
 }
 
 .toolbar-Icons:hover {
+  
   text-align: center;
   cursor: pointer;
   padding: 10px;
