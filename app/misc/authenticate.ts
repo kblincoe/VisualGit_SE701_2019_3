@@ -19,7 +19,10 @@ var repoNotFound = 0;
 var signed = 0;
 var changes = 0;
 let signedAfter = false;
-
+let loginScopes = [
+  "repo",
+  "user"
+];
 
 //Called then user pushes to sign out even if they have commited changes but not pushed; prompts a confirmation modal
 
@@ -73,11 +76,6 @@ function searchRepoName() {
 
   cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
-  client = github.client({
-    username: getUsernameTemp(),
-    password: getPasswordTemp()
-  });
-
   var ghme = client.me();
   ghme.repos(function (err, data, head) {
     var ghme = client.me();
@@ -117,24 +115,27 @@ function getUserInfo(callback) {
 
   cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
 
-
-  github.auth.config({
+  client = github.client({
     username: getUsernameTemp(),
     password: getPasswordTemp()
-  }).login({
-    "add_scopes": [
-      "user",
-      "repo"
-    ],
-    "note": Math.random().toString()
-  }, function (err, id, token, headers) {
+  });
+  var ghme = client.me();
+
+  ghme.info(function(err, data, head) {
     if (err) {
       if (err.toString().indexOf("OTP") !== -1)
       {
-        document.getElementById("submitOtpButton")!.onclick = function() {
-          submitOTP(callback);
-        }
-        $("#otpModal").modal('show');
+        github.auth.config({
+          username: getUsernameTemp(),
+          password: getPasswordTemp()
+        }).login({"scopes": loginScopes,
+          "note": Math.random().toString()
+        }, function (err, id, token, headers) {
+          document.getElementById("submitOtpButton")!.onclick = function() {
+            submitOTP(callback);
+          }
+          $("#otpModal").modal('show');
+        });
       }
       else {
         displayModal(err);
@@ -143,8 +144,6 @@ function getUserInfo(callback) {
     }
 
     if (!err) {
-      client = github.client(token);
-      var ghme = client.me();
       processLogin(ghme, callback);
     }
     
@@ -158,11 +157,7 @@ function submitOTP(callback) {
     username: getUsernameTemp(),
     password: getPasswordTemp(),
     otp: document.getElementById("otp")!.value
-  }).login({
-    "add_scopes": [
-      "user",
-      "repo"
-    ],
+  }).login({"scopes": loginScopes,
     "note": Math.random().toString()
   }, function (err, id, token, headers) {
     if (err) {
