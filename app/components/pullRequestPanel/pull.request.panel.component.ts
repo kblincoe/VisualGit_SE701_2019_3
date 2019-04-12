@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { createProvider } from "@angular/core/src/di/provider_util";
 
 @Component({
   selector: "pull-request-panel",
@@ -12,6 +11,8 @@ import { createProvider } from "@angular/core/src/di/provider_util";
  */
 export class PullRequestPanelComponent {
   isShowingPRPanel = false;
+
+  isShowingFileDiff = false;
 
   /*
     Stores the base link for all the API calls
@@ -52,6 +53,8 @@ export class PullRequestPanelComponent {
 
       this.isShowingPRPanel = false;
     }
+
+    this.resetFullPanel();
   }
 
   getRepoName(): string {
@@ -113,6 +116,8 @@ export class PullRequestPanelComponent {
 
         link.innerHTML = "PR #" + pr.number + ": " + pr.title;
         link.onclick = (e) => {
+          this.resetFullPanel();
+          this.getPRDiff(pr);
           this.fullExtendPRPanel();
           this.createInitialPRPost(pr, () => {
             this.gitHubGetRequest(pr.comments_url, (response) => {
@@ -277,6 +282,8 @@ export class PullRequestPanelComponent {
 
           this.gitHubPostRequest(url, jsonData, () => {
             this.updatePRs();
+            prTitle.value = "";
+            prBody.value = "";
           });
         }
       }
@@ -334,6 +341,49 @@ export class PullRequestPanelComponent {
     });
   }
 
+  getPRDiff(pr: any): void {
+    this.gitHubGetRequest(pr.diff_url, (response) => {
+      let prDiff = document.getElementById("pr-diff");
+
+      if (prDiff != null) {
+        prDiff.innerHTML = Diff2Html.getPrettyHtml(response, { inputFormat: "diff", showFiles: true, matching: "lines" });
+      }
+    });
+  }
+
+  resetFullPanel(): void {
+    let prDiv = document.getElementById("pr-div");
+    let prDiff = document.getElementById("pr-diff");
+    let prToggleButton = document.getElementById("pr-diff-button");
+
+    if (prDiv != null && prDiff != null && prToggleButton != null) {
+      prDiff.style.display = "none";
+      prDiv.style.display = "block";
+      prToggleButton.textContent = "Show file differences";
+      this.isShowingFileDiff = false;
+    }
+  }
+
+  togglePRDiff(): void {
+    let prDiff = document.getElementById("pr-diff");
+    let prContent = document.getElementById("pr-div");
+    let prToggleButton = document.getElementById("pr-diff-button");
+
+    if (prDiff != null && prContent != null && prToggleButton != null) {
+      if (!this.isShowingFileDiff) {
+        prContent.style.display = "none";
+        prDiff.style.display = "block";
+        prToggleButton.innerText = "Hide file differences"
+        this.isShowingFileDiff = true;
+      } else {
+        prContent.style.display = "block";
+        prDiff.style.display = "none";
+        prToggleButton.textContent = "Show file differences";
+        this.isShowingFileDiff = false;
+      }
+    }
+  }
+
   halfExtendPRPanel(): void {
     let prPanel = document.getElementById("pull-request-panel");
     let bodyPanel = document.getElementById("body-panel");
@@ -348,6 +398,7 @@ export class PullRequestPanelComponent {
       prDisplayPanel.style.display = "none";
       this.isShowingPRPanel = true;
     }
+    this.resetFullPanel();
   }
 
   fullExtendPRPanel(): void {

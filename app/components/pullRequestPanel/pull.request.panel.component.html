@@ -1,12 +1,18 @@
 <div class="pull-request-panel" id="pull-request-panel">
     <!-- Area to display PRs, comments etc. -->
     <div class="pr-display-panel" id="pr-display-panel">
-        <div class="row pull-right">
+        <div class="row">
+            <div class="col-sm-10">
+                <button id="pr-diff-button" class="btn btn-success" (click)="togglePRDiff()">Show file differences</button>
+            </div>
             <div class="col-sm-2">
                 <i class="fa fa-arrow-right" (click)="halfExtendPRPanel()"></i>
             </div>
         </div>
         <div id="pr-div">
+
+        </div>
+        <div id="pr-diff">
 
         </div>
     </div>

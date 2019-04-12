@@ -974,6 +974,17 @@ body .pull-request-panel {
 .pr-list-container label {
   color: white;
 }
+
+#pr-diff {
+  display: none;
+  margin: auto;
+  width: 90%;
+}
+
+#pr-list {
+  margin: auto;
+  width: 90%;
+}
 /*
  End of pull request css.
 */
