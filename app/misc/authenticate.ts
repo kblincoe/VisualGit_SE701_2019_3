@@ -33,20 +33,20 @@ function CommitNoPush() {
 }
 
 function signInHead(callback) {
-	encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
-	continuedWithoutSignIn = false;
+  encryptTemp(document.getElementById("Email1").value, document.getElementById("Password1").value);
+  continuedWithoutSignIn = false;
   signedAfter = true;
   if (signed == 1){
-		if ((changes == 1) || (CommitButNoPush == 1)){
-			$("#modalW2").modal();
-		}
-		else {
-			getUserInfo(callback);
-		}
-	}
-	else{
-	  getUserInfo(callback);
-	}
+    if ((changes == 1) || (CommitButNoPush == 1)){
+      $("#modalW2").modal();
+    }
+    else {
+      getUserInfo(callback);
+    }
+  }
+  else{
+    getUserInfo(callback);
+  }
 }
 
 function LogInAfterConfirm(callback) {
@@ -137,7 +137,9 @@ function getUserInfo(callback) {
           $("#otpModal").modal('show');
         });
       }
-      else {
+      else if (err == "Error: getaddrinfo ENOTFOUND api.github.com api.github.com:443"){
+        displayModal("No internet connection");
+      }else{
         displayModal(err);
       }
       document.getElementById('grey-out').style.display = 'none';
@@ -323,3 +325,4 @@ function redirectToHomePage() {
   CommitButNoPush = 0; 
   //LogInAfterConfirm();
 }
+
