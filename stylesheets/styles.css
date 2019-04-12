@@ -962,6 +962,10 @@ body .pull-request-panel {
   margin-top: 10px;
 }
 
+.pr-list-container {
+  overflow-x: hidden;
+}
+
 .pr-list-container .pr-card {
   margin: auto;
   width: 90%;
