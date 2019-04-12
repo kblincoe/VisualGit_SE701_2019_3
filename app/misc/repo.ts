@@ -70,8 +70,8 @@ function downloadFunc(cloneURL, fullLocalPath) {
         progressDiv.style.visibility = 'collapse';
         updateProgressBar(0);
         console.log("Repo successfully cloned");
-        displayModal("Drawing graph, please don't click anything till done");
-        refreshAll(repository);
+        // displayModal("Drawing graph, please don't click anything till done");
+        // refreshAll(repository);
         updateModalText("Clone Successful, repository saved under: " + fullLocalPath);
         addCommand("git clone " + cloneURL + " " + fullLocalPath);
         repoFullPath = fullLocalPath;
