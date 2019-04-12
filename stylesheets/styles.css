@@ -962,6 +962,18 @@ body .pull-request-panel {
   margin-top: 10px;
 }
 
+.pr-list-container .pr-card {
+  margin: auto;
+  width: 90%;
+}
+
+.pr-list-container #pr-body {
+  resize: none;
+}
+
+.pr-list-container label {
+  color: white;
+}
 /*
  End of pull request css.
 */

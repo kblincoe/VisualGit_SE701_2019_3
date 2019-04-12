@@ -7,7 +7,7 @@
             </div>
         </div>
         <div id="pr-div">
-            
+
         </div>
     </div>
 
@@ -18,7 +18,63 @@
 
     <!-- Area to list all PRs. -->
     <div class="pr-list-container" id="pr-list-container">
-        <p>Create a pull request</p>
+        <div class="pr-card">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 id="create-pr-text">Create a pull request</h3>
+                </div>
+            </div>
+            <form>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p>From:</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <select id="pr-from">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 pull-right">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p>To:</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <select id="pr-to">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="pr-title" id="new-pr-title">Title:</label>
+                            <input type="text" class="form-control" aria-placeholder="Enter the title here" id="pr-title">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label for="pr-body">Body:</label>
+                            <textarea id="pr-body" class="form-control" aria-placeholder="Enter the body here"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 col-sm-offset-4">
+                            <button class="btn btn-success" (click)="createNewPullRequest()">Create Pull Request</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <h3>Open Pull Requests:</h3>
         <ul class="list-group" id="pr-list" role="menu">
         </ul>
     </div>

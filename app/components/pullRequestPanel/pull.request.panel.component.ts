@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { createProvider } from "@angular/core/src/di/provider_util";
 
 @Component({
   selector: "pull-request-panel",
@@ -28,9 +29,7 @@ export class PullRequestPanelComponent {
 
   showPRPanel() {
     this.halfExtendPRPanel();
-    this.getPRs((prs) => {
-      this.populatePRPanel(prs);
-    });
+    this.updatePRs();
   }
 
   hidePRPanel(): void {
@@ -256,6 +255,85 @@ export class PullRequestPanelComponent {
     }
   }
 
+  createNewPullRequest() {
+    let prFrom = <HTMLInputElement>document.getElementById("pr-from");
+    let prTo = <HTMLInputElement>document.getElementById("pr-to");
+    let prTitle = <HTMLInputElement>document.getElementById("pr-title");
+    let prBody = <HTMLInputElement>document.getElementById("pr-body");
+
+    if (prFrom != null && prTo != null && prTitle != null) {
+
+      if (this.isValidPR(prFrom, prTo, prTitle)) {
+        if (prBody != null) {
+          let url = this.apiLink + this.repoOwner + "/" + this.repoName + "/pulls";
+          let data = {
+            "title": prTitle.value,
+            "head": prFrom.value,
+            "base": prTo.value,
+            "body": prBody.value
+          };
+
+          let jsonData = JSON.stringify(data);
+
+          this.gitHubPostRequest(url, jsonData, () => {
+            this.updatePRs();
+          });
+        }
+      }
+
+    }
+  }
+
+  isValidPR(prFrom: any, prTo: any, prTitle: any): boolean {
+    let createPRText = <HTMLInputElement>document.getElementById("create-pr-text");
+    if (prFrom.value === prTo.value) {
+      if (createPRText != null) {
+        createPRText.innerText = "Pick two different branches!"
+      }
+      return false;
+    } else {
+      createPRText.innerText = "Create a pull request"
+    }
+
+    let prTitleLabel = <HTMLInputElement>document.getElementById("new-pr-title");
+    if (prTitle.value === "" || prTitle.value == null) {
+      if (prTitleLabel != null) {
+        prTitleLabel.innerText = "Please enter a title"
+      }
+      return false
+    } else if (prTitleLabel != null) {
+      prTitleLabel.innerText = "Title:"
+    }
+
+    return true;
+  }
+
+  updatePRs(): void {
+    this.getPRs((prs) => {
+      this.populatePRPanel(prs);
+    });
+
+    this.getBranches((branches) => {
+      let prTo = document.getElementById("pr-to");
+      let prFrom = document.getElementById("pr-from");
+      if (prTo != null && prFrom != null) {
+        branches.forEach((branch: any) => {
+          let optionA = document.createElement("option");
+          let optionTextA = document.createTextNode(branch.name);
+          optionA.appendChild(optionTextA);
+          optionA.value = branch.name;
+          prTo!.appendChild(optionA);
+
+          let optionB = document.createElement("option");
+          let optionTextB = document.createTextNode(branch.name);
+          optionB.appendChild(optionTextB);
+          optionB.value = branch.name;
+          prFrom!.appendChild(optionB);
+        });
+      }
+    });
+  }
+
   halfExtendPRPanel(): void {
     let prPanel = document.getElementById("pull-request-panel");
     let bodyPanel = document.getElementById("body-panel");
@@ -290,6 +368,15 @@ export class PullRequestPanelComponent {
       prDisplayPanel.style.width = "calc(75% - 60px)"
       prDisplayPanel.style.display = "block";
     }
+  }
+
+  getBranches(callback: (response: any[]) => void) {
+    this.getRepoOwner(() => {
+      let url = this.apiLink + this.repoOwner + "/" + this.repoName + "/branches";
+      this.gitHubGetRequest(url, (response) => {
+        callback(response);
+      });
+    });
   }
 
   gitHubGetRequest(url: string, callback: (response: any) => void) {
