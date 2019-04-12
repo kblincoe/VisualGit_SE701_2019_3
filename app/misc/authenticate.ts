@@ -274,6 +274,9 @@ function selectRepo(ele) {
   let butt = document.getElementById("cloneButton");
   butt.innerHTML = 'Clone ' + ele.innerHTML;
   butt.setAttribute('class', 'btn btn-primary');
+  if (butt.innerHTML != 'Clone'){
+    butt.disabled = false;
+  }
   console.log("selected " + ele.innerHTML + " as repository");
 }
 
