@@ -15,6 +15,51 @@ let modifiedFiles;
 let warnbool;
 var CommitButNoPush = 0;
 let stagedFiles: any;
+let vis = require("vis");
+let commitHistory = [];
+let commitToRevert = 0;
+let commitHead = 0;
+let commitID = 0;
+
+
+
+function passReferenceCommits(){
+  Git.Repository.open(repoFullPath)
+  .then(function(commits){
+    sortedListOfCommits(commits);
+  })
+}
+
+function sortedListOfCommits(commits){
+
+    while (commits.length > 0) {
+      let commit = commits.shift();
+      let parents = commit.parents();
+      if (parents === null || parents.length === 0) {
+        commitHistory.push(commit);
+      } else {
+        let count = 0;
+        for (let i = 0; i < parents.length; i++) {
+          let psha = parents[i].toString();
+          for (let j = 0; j < commitHistory.length; j++) {
+            if (commitHistory[j].toString() === psha) {
+              count++;
+              break;
+            }
+          }
+          if (count < i + 1) {
+            break;
+          }
+        }
+        if (count === parents.length) {
+          commitHistory.push(commit);
+        } else {
+          commits.push(commit);
+      }
+    }
+  }
+  
+}
 
 function cloneFromRemote() {
   switchToClonePanel();
@@ -685,27 +730,34 @@ function resetCommit(name: string) {
     });
 }
 
-function revertCommit(name: string) {
+function revertCommit() {
   let repos;
   Git.Repository.open(repoFullPath)
-    .then(function (repo) {
+  .then(function(Commits){
+    sortedListOfCommits(Commits);
+     console.log("Commits; "+ commitHistory[0]);
+    })
+    
+    Git.Repository.open(repoFullPath)
+    .then(function(repo){
       repos = repo;
-      console.log("Reverting commit");
-      addCommand("git revert " + name + "~1");
-      return Git.Reference.nameToId(repo, name);
+      return repos;
+      console.log("This is repos "+ repos);
     })
-    .then(function (id) {
-      console.log("Looking for repository with id: " + id);
-      return Git.Commit.lookup(repos, id);
-    })
-    .then(function (commit) {
-      let revertOptions = new Git.RevertOptions();
-      if (commit.parents().length > 1) {
-        revertOptions.mainline = 1;
-      }
-      return Git.Revert.revert(repos, commit, revertOptions);
-    })
-    .then(function (number) {
+    .then(function(Commits){
+      let index = returnSelectedNodeValue()-1;
+      let commitToRevert = commitHistory[index].sha().substr(0,7);
+      addCommand("git revert "+ commitToRevert);
+
+    let revertOptions = new Git.RevertOptions();
+    revertOptions.mainline = 0;
+    if(commitHistory[index].parents().length > 1) {
+      revertOptions.mainline = 1;
+    }
+    
+    revertOptions.mergeInMenu = 1;
+    return Git.Revert.revert(repos, commitHistory[index],revertOptions)
+    .then(function(number) {
       console.log("Reverting to " + number);
       if (number === -1) {
         updateModalText("Revert failed, please check if you have pushed the commit.");
@@ -713,10 +765,12 @@ function revertCommit(name: string) {
         updateModalText("Revert successfully.");
       }
       refreshAll(repos);
-    }, function (err) {
-      updateModalText(err);
-    });
-}
+    })
+    .catch(function (err) {
+      console.log(err);
+      updateModalText("Error reverting commit, please commit changes as they will be overwritten, then try again");
+    })
+  }
 
 // Makes a modal for confirmation pop up instead of actually exiting application for confirmation.
 function ExitBeforePush() {

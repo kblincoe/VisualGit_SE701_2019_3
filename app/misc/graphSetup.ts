@@ -5,6 +5,15 @@ let $ = require("jquery");
 let options, bsNodes, bsEdges, abNodes, abEdges, nodes, edges, network;
 let secP = null, fromNode = null, toNode;
 
+let GraphNodeID = 0;
+
+
+ 
+ function returnSelectedNodeValue():number{
+    let returnValue = GraphNodeID;
+    GraphNodeID = 0;
+    return returnValue;
+  }
 function drawGraph() {
     document.getElementById('spinner').style.display = 'block';
     $('#modal').modal('show');
@@ -254,6 +263,22 @@ function drawGraph() {
                 }
             }
         })
+
+        network.on("oncontext", function(params) {
+    
+            if(GraphNodeID != 0){
+              GraphNodeID = 0;
+            }else{
+              //console.log("Please right click and select the appropriate ID");
+            }
+          });
+        
+    
+        
+          network.on("click", function (params) {
+              GraphNodeID = parseInt(params.nodes.toString());
+              console.log("Graph Node ID is: " + GraphNodeID);
+          });
     })
 }
 
