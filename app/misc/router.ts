@@ -25,6 +25,8 @@ function switchToMainPanel() {
   displayFilePanel();
   displayGraphPanel();
 
+  openDisabled = false;
+
   $("#nav-collapse1").collapse("hide");
   if(previousWindow == "repoPanel"){
     if(showUsername){

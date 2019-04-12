@@ -2,6 +2,7 @@ let pageTitles = {}
 let path = require('path');
 let wikiPath = "";
 let wikiContent: wikiPage[] = [];
+let openDisabled = true;
 
 interface wikiPage {
     pageName: string;
@@ -9,6 +10,9 @@ interface wikiPage {
 }
 
 function openWiki() {
+    if (openDisabled){
+        return;
+    }
     console.log("hi");
     let wikis = document.getElementById("wiki-panel")!;
     wikis.style.width = "100vw";
