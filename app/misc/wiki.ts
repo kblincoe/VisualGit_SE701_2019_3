@@ -56,7 +56,7 @@ function cloneWiki() {
             findPageNames(wikiPath, displayWiki)
             
         }, function (err) {
-            updateModalText("Clone Failed - " + err);
+            updateModalText("Clone Failed. Wiki does not exist for this repository or you do not have permission to access the wiki. ");
             console.log("repo.ts, line 64, failed to clone repo: " + err); // TODO show error on screen
             switchToAddRepositoryPanel();
         }
