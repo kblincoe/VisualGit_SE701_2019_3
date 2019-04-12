@@ -18,11 +18,16 @@ let url;
 var repoNotFound = 0;
 var signed = 0;
 var changes = 0;
+<<<<<<< HEAD
 let signedAfter = false;
 let loginScopes = [
   "repo",
   "user"
 ];
+=======
+let repoName;
+let githubName;
+>>>>>>> added comment feature, #43 is done
 
 //Called then user pushes to sign out even if they have commited changes but not pushed; prompts a confirmation modal
 
@@ -336,16 +341,15 @@ function addIssue(rep,id, onclick) {
   let issueTitle = document.createElement("p");
   let issueBody = document.createElement("p");
   let assignees = document.createElement("p");
-  let comments = document.createElement("a")
   let closeIssue = document.createElement("button");
-  closeIssue.setAttribute("onclick","closeIssue()")
-  closeIssue.innerHTML = "Close Issue"
-  closeIssue.setAttribute("class","btn btn-danger")
+  closeIssue.innerHTML = "Comments"
+  closeIssue.setAttribute("onclick",onclick)
+  closeIssue.setAttribute("id",rep["number"]);
+  closeIssue.setAttribute("class","btn btn-primary")
   assignees.innerHTML = "Assignees: "
   issueTitle.setAttribute("class", "issue-text");
   issueBody.setAttribute("class","issue-text");
   assignees.setAttribute("class","issue-text");
-  issueTitle.setAttribute("onclick", onclick + ";event.stopPropagation()");
   li.setAttribute("role", "presentation")
   li.setAttribute("class","list-group-item")
   issueTitle.innerHTML = "Issue Name:" +rep["title"];
@@ -370,12 +374,62 @@ function addIssue(rep,id, onclick) {
   ul.appendChild(li);
 }
 
+function addComment(rep,id) {
+  let ul = document.getElementById(id);
+  let li = document.createElement("li");
+  let button = document.createElement("button");
+  let comment = document.createElement("p");
+  li.setAttribute("role", "presentation")
+  li.setAttribute("class","list-group-item")
+  comment.innerHTML = rep["user"]["login"] +":" + rep["body"];
+  comment.setAttribute("class","issue-text");
+  li.appendChild(comment);
+  ul.appendChild(li);
+
+}
+
+$('#commentModal').on('hidden.bs.modal', function () {
+  var comment = document.getElementById("#comment-list");
+  comment.innerHTML = "";
+})
+
+
+let issueId = 0;
+function commentOnIssue(ele) {
+  repoName = document.getElementById("repo-name").innerHTML
+  githubName = document.getElementById("githubname").innerHTML
+  $('#commentModal').modal('show');
+  issueId = ele["id"];
+  let ul = document.getElementById("comment-list");
+  ul.innerHTML = ''; // clears the dropdown menu which shows all the issues
+  var ghissue= client.issue(githubName + '/' + repoName,ele["id"]);
+  ghissue.comments(function (err, data, head) {
+    for (let i = 0; i < data.length; i++) {
+      let rep = Object.values(data)[i];
+        addComment(rep, "comment-list");
+  }
+  });
+}
+
+
+function createCommentForIssue() {
+  var theArray = $('#newComment').serializeArray();
+  repoName = document.getElementById("repo-name").innerHTML
+  githubName = document.getElementById("githubname").innerHTML
+  var ghissue= client.issue(githubName + '/' + repoName,issueId);
+  ghissue.createComment({
+    body: theArray[0]["value"]
+  }, function (err, data, head) {
+    let ele = {id:issueId}; 
+    commentOnIssue(ele)
+  });
+}
+
 
 function createIssue() {
   var theArray = $('#newIssue').serializeArray();
-  let repoName = document.getElementById("repo-name").innerHTML
-  let githubName = document.getElementById("githubname").innerHTML
-  
+  repoName = document.getElementById("repo-name").innerHTML
+  githubName = document.getElementById("githubname").innerHTML
   if (repoName != "repository" && theArray != null) {
       encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
       cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
@@ -390,17 +444,23 @@ function createIssue() {
         "body": theArray[1]["value"],
         "assignee": theArray[2]["value"]
       }, function (err, data, head) {
-        document.getElementById("error-text-box").innerHTML = "Invalid Assignee: " + theArray[2]["value"];
-        $('#errorModal').modal('show');
+        if(err != null) {
+          document.getElementById("error-text-box").innerHTML = "Invalid Assignee: " + theArray[2]["value"];
+          $('#errorModal').modal('show');
+        }
+        else {
+          document.getElementById("issue-error-title").innerHTML = "Sucessfuly added new Issue" + theArray[0]["value"];
+          $('#errorModal').modal('show');
+        }
       }); //issue
-      displayIssues();
       $('#issue-modal').modal('hide');
+      displayIssues();
     }
 }
 
 function displayIssues() {
-  let repoName = document.getElementById("repo-name").innerHTML
-      let githubName = document.getElementById("githubname").innerHTML
+   repoName = document.getElementById("repo-name").innerHTML
+   githubName = document.getElementById("githubname").innerHTML
       if (repoName != "repository") {
 
           let ul = document.getElementById("issue-dropdown");
@@ -423,7 +483,7 @@ function displayIssues() {
               for (let i = 0; i < data.length; i++) {
                   let rep = Object.values(data)[i];
                   if(rep["state"] != "closed") {
-                    addIssue(rep, "issue-dropdown", "dielit");
+                    addIssue(rep, "issue-dropdown", "commentOnIssue(this)");
                   }
               }
           });
