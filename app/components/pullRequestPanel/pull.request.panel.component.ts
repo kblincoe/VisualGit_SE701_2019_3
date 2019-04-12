@@ -351,6 +351,8 @@ export class PullRequestPanelComponent {
       let prTo = document.getElementById("pr-to");
       let prFrom = document.getElementById("pr-from");
       if (prTo != null && prFrom != null) {
+        prTo.innerHTML = "";
+        prFrom.innerHTML = "";
         branches.forEach((branch: any) => {
           let optionA = document.createElement("option");
           let optionTextA = document.createTextNode(branch.name);
@@ -530,5 +532,34 @@ export class PullRequestPanelComponent {
         console.log("The error of the GitHub API call is: ", error);
       }
     });
+  }
+
+  resetComponent(): void{
+    this.hidePRPanel();
+
+    let prDiv = document.getElementById("pr-div");
+    if (prDiv != null) {
+      prDiv.innerHTML = "";
+    }
+
+    let prDiff = document.getElementById("pr-diff");
+    if (prDiff != null) {
+      prDiff.innerHTML = "";
+    }
+
+    let prList = document.getElementById("pr-list");
+    if (prList != null) {
+      prList.innerHTML = "";
+    }
+
+    let prFrom = document.getElementById("pr-from");
+    if (prFrom != null) {
+      prFrom.innerHTML = "";
+    }
+
+    let prTo = document.getElementById("pr-to");
+    if (prTo != null) {
+      prTo.innerHTML = "";
+    }
   }
 }
