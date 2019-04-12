@@ -681,4 +681,29 @@ function openRepository() {
 
       prDisplayPanel.style.display = "none";
     }
+
+    let prDiv = document.getElementById("pr-div");
+    if (prDiv != null) {
+      prDiv.innerHTML = "";
+    }
+
+    let prDiff = document.getElementById("pr-diff");
+    if (prDiff != null) {
+      prDiff.innerHTML = "";
+    }
+
+    let prList = document.getElementById("pr-list");
+    if (prList != null) {
+      prList.innerHTML = "";
+    }
+
+    let prFrom = document.getElementById("pr-from");
+    if (prFrom != null) {
+      prFrom.innerHTML = "";
+    }
+
+    let prTo = document.getElementById("pr-to");
+    if (prTo != null) {
+      prTo.innerHTML = "";
+    }
   }
