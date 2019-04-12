@@ -100,6 +100,7 @@ function searchRepoName() {
     if(repoNotFound == 1){
       ul.innerHTML = '';
       displayBranch(document.getElementById("searchRep").value + ":" + " Is NOT a valid repository.", "repo-dropdown", "");
+      repNotFound = 0;
     }
   });
 }
