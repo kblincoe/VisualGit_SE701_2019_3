@@ -27,7 +27,7 @@ function processGraph(commits: nodegit.Commit[]) {
             .then(function(data) {
                 let textBox = document.getElementById("modal-text-box");
                 if (textBox != null) {
-                    textBox.innerHTML = "Graph finished";
+                    document.getElementById('spinner').style.display = 'none';
                 } else {
                     console.log("Modal-text-box is missing");
                 }
