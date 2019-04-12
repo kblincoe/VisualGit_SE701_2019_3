@@ -15,4 +15,13 @@ export class FooterComponent {
       editor.style.zIndex = "10";
     }
   }
+  displayIssuePanel(): void {
+    let issue = document.getElementById("issue-panel");
+    displayIssues();
+    if(issue != null) {
+      issue.style.height = "100vh"
+      issue.style.width = "100vw"
+      issue.style.zIndex = "10";
+    } 
+  }
 }

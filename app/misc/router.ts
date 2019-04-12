@@ -123,6 +123,7 @@ function displayFilePanel() {
   document.getElementById("commit-message-input").style="visibility: visible";
   document.getElementById("commit-button").style="visiblity: visible";
   document.getElementById("fileEdit-button").style="visiblity: visible";
+  document.getElementById("Issues-button").style="visiblity: visible";
 }
 
 function displayGraphPanel() {
@@ -140,6 +141,7 @@ function hideFilePanel() {
   document.getElementById("commit-message-input").style="visibility: hidden";
   document.getElementById("commit-button").style="visibility: hidden";
   document.getElementById("fileEdit-button").style="visibility: hidden";
+  document.getElementById("Issues-button").style="visibility: hidden";
 }
 
 function hideGraphPanel() {

@@ -9,7 +9,8 @@ let Git = require("nodegit");
 let repo;
 
 let github = require("octonode");
-
+let repoName;
+let githubName;
 let aid, atoken;
 let client;
 let avaterImg;
@@ -326,3 +327,162 @@ function redirectToHomePage() {
   //LogInAfterConfirm();
 }
 
+function closeIssue() {
+
+}
+
+function addIssue(rep,id, onclick) {
+  let ul = document.getElementById(id);
+  let li = document.createElement("li");
+  let issueTitle = document.createElement("p");
+  let issueBody = document.createElement("p");
+  let assignees = document.createElement("p");
+  let closeIssue = document.createElement("button");
+  closeIssue.innerHTML = "Comments"
+  closeIssue.setAttribute("onclick",onclick)
+  closeIssue.setAttribute("id",rep["number"]);
+  closeIssue.setAttribute("class","btn btn-primary")
+  assignees.innerHTML = "Assignees: "
+  issueTitle.setAttribute("class", "issue-text");
+  issueBody.setAttribute("class","issue-text");
+  assignees.setAttribute("class","issue-text");
+  li.setAttribute("role", "presentation")
+  li.setAttribute("class","list-group-item")
+  issueTitle.innerHTML = "Issue Name:" +rep["title"];
+  issueBody.innerHTML = "Body:" + rep["body"];
+  li.appendChild(issueTitle);
+  li.appendChild(issueBody);
+  if(rep["assignees"].length != 0 ) {
+    for(let i = 0;i<rep["assignees"].length; i++) {
+      assignees.innerHTML += rep["assignees"][i]["login"] 
+      if((i+1)>=rep["assignees"].length) {
+        assignees.innerHTML += "."
+      }
+      else {
+        assignees.innerHTML += ","
+      }
+    }
+    li.appendChild(assignees); 
+  }
+  if(rep["comments"].length != 0 ) {
+  }
+  li.appendChild(closeIssue);
+  ul.appendChild(li);
+}
+
+function addComment(rep,id) {
+  let ul = document.getElementById(id);
+  let li = document.createElement("li");
+  let button = document.createElement("button");
+  let comment = document.createElement("p");
+  li.setAttribute("role", "presentation")
+  li.setAttribute("class","list-group-item")
+  comment.innerHTML = rep["user"]["login"] +":" + rep["body"];
+  comment.setAttribute("class","issue-text");
+  li.appendChild(comment);
+  ul.appendChild(li);
+
+}
+
+$('#commentModal').on('hidden.bs.modal', function () {
+  var comment = document.getElementById("#comment-list");
+  comment.innerHTML = "";
+})
+
+
+let issueId = 0;
+function commentOnIssue(ele) {
+  repoName = document.getElementById("repo-name").innerHTML
+  githubName = document.getElementById("githubname").innerHTML
+  $('#commentModal').modal('show');
+  issueId = ele["id"];
+  let ul = document.getElementById("comment-list");
+  ul.innerHTML = ''; // clears the dropdown menu which shows all the issues
+  var ghissue= client.issue(githubName + '/' + repoName,ele["id"]);
+  ghissue.comments(function (err, data, head) {
+    for (let i = 0; i < data.length; i++) {
+      let rep = Object.values(data)[i];
+        addComment(rep, "comment-list");
+  }
+  });
+}
+
+
+function createCommentForIssue() {
+  var theArray = $('#newComment').serializeArray();
+  repoName = document.getElementById("repo-name").innerHTML
+  githubName = document.getElementById("githubname").innerHTML
+  var ghissue= client.issue(githubName + '/' + repoName,issueId);
+  ghissue.createComment({
+    body: theArray[0]["value"]
+  }, function (err, data, head) {
+    let ele = {id:issueId}; 
+    commentOnIssue(ele)
+  });
+}
+
+
+function createIssue() {
+  var theArray = $('#newIssue').serializeArray();
+  repoName = document.getElementById("repo-name").innerHTML
+  githubName = document.getElementById("githubname").innerHTML
+  if (repoName != "repository" && theArray != null) {
+      encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+      cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
+      client = github.client({
+          username: getUsernameTemp(),
+          password: getPasswordTemp()
+      });
+      var ghme = client.me();
+      var ghrepo = client.repo(githubName + '/' + repoName);
+      ghrepo.issue({
+        "title": theArray[0]["value"],
+        "body": theArray[1]["value"],
+        "assignee": theArray[2]["value"]
+      }, function (err, data, head) {
+        if(err != null) {
+          document.getElementById("error-text-box").innerHTML = "Invalid Assignee: " + theArray[2]["value"];
+          $('#errorModal').modal('show');
+        }
+        else {
+          document.getElementById("issue-error-title").innerHTML = "Success";
+          document.getElementById("error-text-box").innerHTML = "Successfuly added new Issue: " + theArray[0]["value"];
+          $('#errorModal').modal('show');
+        }
+      }); //issue
+      $('#issue-modal').modal('hide');
+      displayIssues();
+    }
+}
+
+function displayIssues() {
+   repoName = document.getElementById("repo-name").innerHTML
+   githubName = document.getElementById("githubname").innerHTML
+      if (repoName != "repository") {
+
+          let ul = document.getElementById("issue-dropdown");
+
+          ul.innerHTML = ''; // clears the dropdown menu which shows all the issues
+
+          // Gets users name and password
+          encryptTemp(document.getElementById("username").value, document.getElementById("password").value);
+
+          cred = Git.Cred.userpassPlaintextNew(getUsernameTemp(), getPasswordTemp());
+
+          client = github.client({
+              username: getUsernameTemp(),
+              password: getPasswordTemp()
+          });
+
+          var ghme = client.me();
+          var ghrepo = client.repo(githubName + '/' + repoName);
+          ghrepo.issues(function (err, data, head) {
+              for (let i = 0; i < data.length; i++) {
+                  let rep = Object.values(data)[i];
+                  if(rep["state"] != "closed") {
+                    addIssue(rep, "issue-dropdown", "commentOnIssue(this)");
+                  }
+              }
+          });
+      }
+    }

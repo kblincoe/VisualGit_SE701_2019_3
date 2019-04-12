@@ -5,9 +5,20 @@ p, h1 {
   /*font-size: 2vw;*/
 }
 
+.issue-text {
+  color: #000;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.issue-text {
+  color: #000;
+  font-family: 'Montserrat', sans-serif;
+}
+
 ul{
   list-style-type: none;
 }
+
 
 .btn:focus {
   outline: 0;
@@ -788,4 +799,11 @@ div.selected-commit-diff-panel button.close-button {
 
 #password-error-icon, #username-error-icon {
   visibility: hidden;
+}
+  .issue-panel {
+  position: absolute;
+  z-index: -10;
+  height: 0vh;
+  width: 0vw;
+  background-color: white;
 }
